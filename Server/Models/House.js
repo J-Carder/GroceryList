@@ -2,10 +2,14 @@ const mongoose = require('mongoose')
 
 const HouseSchema = new mongoose.Schema({
   lists: {
-    type: [string],
+    type: [String],
   },
   name: {
-    type: string,
+    type: String,
+    required: true
+  },
+  passphrase: {
+    type: String,
     required: true
   }
 })

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Context } from './App';
+import { Context } from '../App';
 
 
 const fetchGetQuery = async () => {

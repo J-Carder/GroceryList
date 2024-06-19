@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { Context } from './App';
+import { Context } from '../App';
 
 const fetchGetQuery = async () => {
   const req = await fetch("http://localhost:3001/people")

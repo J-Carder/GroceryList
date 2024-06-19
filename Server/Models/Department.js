@@ -6,7 +6,7 @@ const DepartmentsSchema = new mongoose.Schema({
     required: true
   },
   apartOfHouse: {
-    type: string,
+    type: String,
     required: true
   }
 })

@@ -5,6 +5,8 @@ const dotenv = require('dotenv');
 const ItemModel = require('./Models/Item');
 const DepartmentModel = require("./Models/Department");
 const PeopleModel = require("./Models/Person");
+const HouseModel = require('./Models/House');
+const ListModel = require('./Models/List');
 
 // init dotenv
 dotenv.config()
@@ -57,7 +59,8 @@ app.post("/items", async (req, res) => {
   await ItemModel.create({
     item: req.body.item,
     department: req.body.department,
-    wantedBy: req.body.wantedBy
+    wantedBy: req.body.wantedBy,
+    apartOfList: req.body.apartOfList
   })
 
   res.json({success: true})
@@ -77,7 +80,7 @@ app.get("/departments", async (req, res) => {
   }
 })
 
-
+// probably not needed
 app.put("/departments/:id", async (req, res) => {
   const {id} = req.params
   const department = req.body.department
@@ -92,10 +95,10 @@ app.delete("/departments/:id", async (req, res) => {
 })
 
 app.post("/departments", async (req, res) => {
-  const department = req.body.department
 
   await DepartmentModel.create({
-    department: department
+    department: req.body.department,
+    apartOfHouse: req.body.apartOfHouse
   })
 
   res.json({success: true})
@@ -114,7 +117,7 @@ app.get("/people", async (req, res) => {
   }
 })
 
-
+// probably not needed
 app.put("/people/:id", async (req, res) => {
   const {id} = req.params
   const name = req.body.name
@@ -129,10 +132,10 @@ app.delete("/people/:id", async (req, res) => {
 })
 
 app.post("/people", async (req, res) => {
-  const name = req.body.name
 
   await PeopleModel.create({
-    name: name
+    name: req.body.name,
+    apartOfHouse: apartOfHouse
   })
 
   res.json({success: true})
@@ -142,34 +145,33 @@ app.post("/people", async (req, res) => {
 // -----   HOUSE ROUTES   ----- //
 // ---------------------------- //
 
-app.get("/people", async (req, res) => {
+app.get("/houses", async (req, res) => {
   try {
-    let query = await PeopleModel.find()
+    let query = await HouseModel.find()
     res.json(query)
   } catch (e) {
     res.json(e)
   }
 })
 
-
-app.put("/people/:id", async (req, res) => {
+// TODO: this
+app.put("/houses/:id", async (req, res) => {
   const {id} = req.params
-  const name = req.body.name
-  const query = await PeopleModel.findByIdAndUpdate({_id: id}, {name: name})
+  // const name = req.body.name
+  // const query = await HouseModel.findByIdAndUpdate({_id: id}, {name: name})
   res.json({success: true})
 })
 
-app.delete("/people/:id", async (req, res) => {
+app.delete("/house/:id", async (req, res) => {
   const {id} = req.params
-  const query = await PeopleModel.findByIdAndDelete({_id: id})
+  const query = await HouseModel.findByIdAndDelete({_id: id})
   res.json({success: true})
 })
 
-app.post("/people", async (req, res) => {
-  const name = req.body.name
-
-  await PeopleModel.create({
-    name: name
+app.post("/house", async (req, res) => {
+  await HouseModel.create({
+    name: req.body.name,
+    passphrase: req.body.passphrase
   })
 
   res.json({success: true})
@@ -179,45 +181,48 @@ app.post("/people", async (req, res) => {
 // -----   LIST ROUTES    ----- //
 // ---------------------------- //
 
-app.get("/people", async (req, res) => {
+app.get("/lists", async (req, res) => {
   try {
-    let query = await PeopleModel.find()
+    let query = await ListModel.find()
     res.json(query)
   } catch (e) {
     res.json(e)
   }
 })
 
-
-app.put("/people/:id", async (req, res) => {
+// TODO: this
+app.put("/lists/:id", async (req, res) => {
   const {id} = req.params
-  const name = req.body.name
-  const query = await PeopleModel.findByIdAndUpdate({_id: id}, {name: name})
+  // const name = req.body.name
+  // const query = await PeopleModel.findByIdAndUpdate({_id: id}, {name: name})
   res.json({success: true})
 })
 
-app.delete("/people/:id", async (req, res) => {
+app.delete("/lists/:id", async (req, res) => {
   const {id} = req.params
   const query = await PeopleModel.findByIdAndDelete({_id: id})
   res.json({success: true})
 })
 
-app.post("/people", async (req, res) => {
-  const name = req.body.name
+app.post("/lists", async (req, res) => {
 
   await PeopleModel.create({
-    name: name
+    name: req.body.name,
+    apartOfHouse: req.body.apartOfHouse
   })
 
   res.json({success: true})
 })
 
 // ---------------------------- //
+// -----   START SERVER   ----- //
+// ---------------------------- //
+
+app.listen(process.env.PORT, () => {
+  console.log("--- Server is UP and running ---")
+})
+
+// ---------------------------- //
 // ---------------------------- //
 
 
-
-
-app.listen(process.env.PORT, () => {
-  console.log("server is running")
-})

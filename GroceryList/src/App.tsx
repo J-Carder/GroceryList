@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Home from './Home'
+import Home from './Components/Home'
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query"
-import Settings from './Settings';
+import Settings from './Components/Settings';
 
 const queryClient = new QueryClient();
 

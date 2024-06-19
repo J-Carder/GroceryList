@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Create from './Create'
-import './Home.css'
+import '../css/Home.css'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 const fetchGetQuery = async () => {
