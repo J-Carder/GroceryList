@@ -1,0 +1,8 @@
+move everything to react-query
+make sure no dups
+make css styles
+make Progressive Web App
+
+
+DONE:
+useContext for props

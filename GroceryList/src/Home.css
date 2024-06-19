@@ -1,0 +1,17 @@
+.item div, .item p {
+  display: inline;
+}
+
+.item {
+  border: 1px solid grey;
+  padding: 1px;
+  margin: 2px;
+}
+
+.em {
+  font-style: italic;
+}
+
+.bold {
+  font-weight: bold;
+}
