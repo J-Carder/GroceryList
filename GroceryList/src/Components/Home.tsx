@@ -70,6 +70,9 @@ function Home({setPage}) {
     <div>
       <h2>Grocery List</h2>
       <button onClick={() => setPage("settings")}>Settings</button>
+      <h3>List:</h3>
+      <select name="list" id="list">
+      </select>
       <Create />
       {
         items.length === 0 ? 

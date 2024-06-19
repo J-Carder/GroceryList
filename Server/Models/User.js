@@ -16,6 +16,9 @@ const UsersSchema = new mongoose.Schema({
   admin: {
     type: Boolean,
     default: false
+  },
+  houses: {
+    type: [String],
   }
 })
 

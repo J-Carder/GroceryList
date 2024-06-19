@@ -1,10 +1,11 @@
-move everything to react-query
-make sure no dups
+TODO:
 make css styles
 make Progressive Web App
 validation
 
-
+IN PROGRESS:
+move everything to react-query
+make sure no dups
 
 DONE:
 useContext for props
