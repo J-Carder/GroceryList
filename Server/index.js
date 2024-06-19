@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const GroceryListModel = require('./Models/GroceryList');
-const DepartmentModel = require("./Models/Departments");
-const PeopleModel = require("./Models/People");
+const DepartmentModel = require("./Models/Department");
+const PeopleModel = require("./Models/Person");
 
 // init dotenv
 dotenv.config()

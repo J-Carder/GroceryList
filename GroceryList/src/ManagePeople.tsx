@@ -86,7 +86,7 @@ function ManagePeople() {
   const handleDelete = (id : string) => {
     deleteMutation.mutate(id);
     try {
-      setPersonSelectedVal(personList[0])
+      setPersonSelectedVal(personListVal[0])
     } catch {
       setPersonSelectedVal("")
     }

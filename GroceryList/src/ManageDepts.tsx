@@ -87,7 +87,7 @@ function ManageDepts() {
   const handleDelete = (id : string) => {
     deleteMutation.mutate(id);
     try {
-      setDepartmentSelectedVal(departmentList[0])
+      setDepartmentSelectedVal(departmentListVal[0])
     } catch {
       setDepartmentSelectedVal("")
     }
