@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const GroceryListModel = require('./Models/GroceryList');
+const ItemModel = require('./Models/Item');
 const DepartmentModel = require("./Models/Department");
 const PeopleModel = require("./Models/Person");
 
@@ -23,7 +23,7 @@ mongoose.connect(process.env.DB)
 
 app.get("/items", async (req, res) => {
   try {
-    let query = await GroceryListModel.find()
+    let query = await ItemModel.find()
     res.json(query)
   } catch (e) {
     res.json(e)
@@ -32,7 +32,7 @@ app.get("/items", async (req, res) => {
 
 app.get("/items/:id", async (req, res) => {
   try {
-    let query = await GroceryListModel.findById(req.params.id)
+    let query = await ItemModel.findById(req.params.id)
     res.json(query)
   } catch (e) {
     res.json(e)
@@ -42,19 +42,19 @@ app.get("/items/:id", async (req, res) => {
 app.put("/items/:id", async (req, res) => {
   const {id} = req.params
   const completed = req.body.completed
-  const query = await GroceryListModel.findByIdAndUpdate({_id: id}, {completed: completed})
+  const query = await ItemModel.findByIdAndUpdate({_id: id}, {completed: completed})
   res.json({success: true})
 })
 
 app.delete("/items/:id", async (req, res) => {
   const {id} = req.params
-  const query = await GroceryListModel.findByIdAndDelete({_id: id})
+  const query = await ItemModel.findByIdAndDelete({_id: id})
   res.json({success: true})
 })
 
 app.post("/items", async (req, res) => {
 
-  await GroceryListModel.create({
+  await ItemModel.create({
     item: req.body.item,
     department: req.body.department,
     wantedBy: req.body.wantedBy
@@ -139,7 +139,83 @@ app.post("/people", async (req, res) => {
 })
 
 // ---------------------------- //
+// -----   HOUSE ROUTES   ----- //
 // ---------------------------- //
+
+app.get("/people", async (req, res) => {
+  try {
+    let query = await PeopleModel.find()
+    res.json(query)
+  } catch (e) {
+    res.json(e)
+  }
+})
+
+
+app.put("/people/:id", async (req, res) => {
+  const {id} = req.params
+  const name = req.body.name
+  const query = await PeopleModel.findByIdAndUpdate({_id: id}, {name: name})
+  res.json({success: true})
+})
+
+app.delete("/people/:id", async (req, res) => {
+  const {id} = req.params
+  const query = await PeopleModel.findByIdAndDelete({_id: id})
+  res.json({success: true})
+})
+
+app.post("/people", async (req, res) => {
+  const name = req.body.name
+
+  await PeopleModel.create({
+    name: name
+  })
+
+  res.json({success: true})
+})
+
+// ---------------------------- //
+// -----   LIST ROUTES    ----- //
+// ---------------------------- //
+
+app.get("/people", async (req, res) => {
+  try {
+    let query = await PeopleModel.find()
+    res.json(query)
+  } catch (e) {
+    res.json(e)
+  }
+})
+
+
+app.put("/people/:id", async (req, res) => {
+  const {id} = req.params
+  const name = req.body.name
+  const query = await PeopleModel.findByIdAndUpdate({_id: id}, {name: name})
+  res.json({success: true})
+})
+
+app.delete("/people/:id", async (req, res) => {
+  const {id} = req.params
+  const query = await PeopleModel.findByIdAndDelete({_id: id})
+  res.json({success: true})
+})
+
+app.post("/people", async (req, res) => {
+  const name = req.body.name
+
+  await PeopleModel.create({
+    name: name
+  })
+
+  res.json({success: true})
+})
+
+// ---------------------------- //
+// ---------------------------- //
+
+
 
 
 app.listen(process.env.PORT, () => {

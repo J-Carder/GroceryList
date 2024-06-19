@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 
-
-const GroceryListSchema = new mongoose.Schema({
+const ItemSchema = new mongoose.Schema({
   item: {
     type: String,
     required: true
@@ -17,8 +16,12 @@ const GroceryListSchema = new mongoose.Schema({
   department: {
     type: String,
     default: ""
-  } 
+  }, 
+  apartOfList: {
+    type: String,
+    required: true
+  }
 })
 
-const GroceryListModel = mongoose.model("items", GroceryListSchema)
-module.exports = GroceryListModel
+const ItemModel = mongoose.model("items", ItemSchema)
+module.exports = ItemModel
