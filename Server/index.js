@@ -48,6 +48,22 @@ mongoose.connect(process.env.DB)
 
 initialize(passport, getUserByEmail, getUserById)
 
+const checkAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  } 
+
+  res.status(401).json({msg: "Must be authenticated"});
+}
+
+const checkNotAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return res.json({msg: "Can't access, authenticated"});
+  } 
+
+  return next();
+}
+
 // ---------------------------- //
 // ----- TODO LIST ROUTES ----- //
 // ---------------------------- //
@@ -261,16 +277,18 @@ app.post("/lists", async (req, res) => {
 // -----   AUTH ROUTES    ----- //
 // ---------------------------- //
 
-app.delete("/logout", (req, res) => {
+app.delete("/logout", checkAuthenticated, (req, res) => {
   req.logout((err) => {
     if (err) { return next(err); }
     res.json({ msg: "Logged out"});
   });
 });
 
-app.post("/login", passport.authenticate("local"))
+app.post("/login", checkNotAuthenticated, passport.authenticate("local"), (req, res) => {
+  res.json({msg: "Authenticated"})
+});
 
-app.post("/register", async (req, res) => {
+app.post("/register", checkNotAuthenticated, async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
     await UsersModel.create({
@@ -284,21 +302,6 @@ app.post("/register", async (req, res) => {
   }
 })
 
-const checkAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  } 
-
-  res.json({msg: "Not authenticated"});
-}
-
-const checkNotAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return res.json({msg: "Authenticated"});
-  } 
-
-  return next();
-}
 
 // ---------------------------- //
 // -----   START SERVER   ----- //

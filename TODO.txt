@@ -2,6 +2,7 @@ TODO:
 make css styles
 make Progressive Web App
 validation
+use EMS instead of common JS (server)
 
 IN PROGRESS:
 move everything to react-query
