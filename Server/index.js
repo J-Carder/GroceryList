@@ -1,20 +1,45 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const dotenv = require('dotenv');
 const ItemModel = require('./Models/Item');
 const DepartmentModel = require("./Models/Department");
 const PeopleModel = require("./Models/Person");
 const HouseModel = require('./Models/House');
 const ListModel = require('./Models/List');
+const bcrypt = require("bcrypt");
+const UsersModel = require('./Models/User');
+const passport = require("passport");
+const flash = require("express-flash");
+const session = require("express-session");
+const initializePassport = require("./Passport")
 
-// init dotenv
-dotenv.config()
+const getUserByEmail = async (email) => {
+  return await UsersModel.findOne({email: email});
+}
+
+const getUserById = async (id) => {
+  return await UsersModel.findById(id);
+}
+
+initializePassport(passport, getUserByEmail, getUserById)
 
 const app = express()
+
 // middleware
 app.use(cors())
 app.use(express.json())
+app.use(flash())
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
 
 // connect to mongoDB
 mongoose.connect(process.env.DB)
@@ -142,12 +167,21 @@ app.post("/people", async (req, res) => {
 })
 
 // ---------------------------- //
-// -----   HOUSE ROUTES   ----- //
+// -----   HOUSES ROUTES   ----- //
 // ---------------------------- //
 
 app.get("/houses", async (req, res) => {
   try {
     let query = await HouseModel.find()
+    res.json(query)
+  } catch (e) {
+    res.json(e)
+  }
+})
+
+app.get("/houses/:id", async (req, res) => {
+  try {
+    let query = await HouseModel.findById({ id: req.params.id })
     res.json(query)
   } catch (e) {
     res.json(e)
@@ -162,13 +196,18 @@ app.put("/houses/:id", async (req, res) => {
   res.json({success: true})
 })
 
-app.delete("/house/:id", async (req, res) => {
+app.delete("/houses/:id", async (req, res) => {
   const {id} = req.params
-  const query = await HouseModel.findByIdAndDelete({_id: id})
-  res.json({success: true})
+  const houseToDelete = await HouseModel.findById(id);
+  if (req.body.passphrase == houseToDelete.passphrase) {
+    const query = await HouseModel.findByIdAndDelete({_id: id});
+    res.json({ msg: "Success"});
+  } else {
+    res.status(401).json({ msg: "Wrong passphrase"});
+  }
 })
 
-app.post("/house", async (req, res) => {
+app.post("/houses", async (req, res) => {
   await HouseModel.create({
     name: req.body.name,
     passphrase: req.body.passphrase
@@ -213,6 +252,47 @@ app.post("/lists", async (req, res) => {
 
   res.json({success: true})
 })
+
+// ---------------------------- //
+// -----   AUTH ROUTES    ----- //
+// ---------------------------- //
+
+app.delete("/logout", (req, res) => {
+  req.logout();
+})
+
+app.post("/login", passport.authenticate("local", {
+}))
+
+app.post("/register", async (req, res) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10)
+    await UsersModel.create({
+      username: req.body.username,
+      password: hashedPassword,
+      email: req.body.email
+    })
+    res.json({ msg: "Registered new user"})
+  } catch {
+    res.json({ msg: "Error"})
+  }
+})
+
+const checkAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  } 
+
+  res.json({msg: "Not authenticated"});
+}
+
+const checkNotAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return res.json({msg: "Authenticated"});
+  } 
+
+  return next();
+}
 
 // ---------------------------- //
 // -----   START SERVER   ----- //

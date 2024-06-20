@@ -98,6 +98,7 @@ function ManagePeople() {
       setPeopleText("");
     }
   }
+
   if (peopleStatus === "pending") {
     return <h1>loading</h1>
   }
