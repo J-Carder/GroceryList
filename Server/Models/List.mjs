@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose from "mongoose";
 
 const ListSchema = new mongoose.Schema({
   name: {
@@ -12,4 +12,4 @@ const ListSchema = new mongoose.Schema({
 })
 
 const ListModel = mongoose.model("lists", ListSchema)
-module.exports = ListModel
+export default ListModel;
