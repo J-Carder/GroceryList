@@ -15,7 +15,8 @@ const UsersModel = require('./Models/User');
 const passport = require("passport");
 const flash = require("express-flash");
 const session = require("express-session");
-const initializePassport = require("./Passport")
+const initialize = require("./Passport")
+const mongoStore = require('express-session-mongo');
 
 const getUserByEmail = async (email) => {
   return await UsersModel.findOne({email: email});
@@ -25,24 +26,27 @@ const getUserById = async (id) => {
   return await UsersModel.findById(id);
 }
 
-initializePassport(passport, getUserByEmail, getUserById)
 
 const app = express()
 
 // middleware
 app.use(cors())
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 app.use(flash())
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
 }))
 app.use(passport.initialize())
 app.use(passport.session())
 
+
 // connect to mongoDB
 mongoose.connect(process.env.DB)
+
+initialize(passport, getUserByEmail, getUserById)
 
 // ---------------------------- //
 // ----- TODO LIST ROUTES ----- //
@@ -258,11 +262,13 @@ app.post("/lists", async (req, res) => {
 // ---------------------------- //
 
 app.delete("/logout", (req, res) => {
-  req.logout();
-})
+  req.logout((err) => {
+    if (err) { return next(err); }
+    res.json({ msg: "Logged out"});
+  });
+});
 
-app.post("/login", passport.authenticate("local", {
-}))
+app.post("/login", passport.authenticate("local"))
 
 app.post("/register", async (req, res) => {
   try {
@@ -304,5 +310,3 @@ app.listen(process.env.PORT, () => {
 
 // ---------------------------- //
 // ---------------------------- //
-
-
