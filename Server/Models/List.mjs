@@ -5,10 +5,10 @@ const ListSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  apartOfHouse: {
-    type: String,
-    required: true
-  },
+  // apartOfHouse: {
+  //   type: String,
+  //   required: true
+  // },
 })
 
 const ListModel = mongoose.model("lists", ListSchema)

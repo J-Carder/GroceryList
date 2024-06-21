@@ -6,7 +6,7 @@ function AddItem({setPage}) {
 
   const queryClient = useQueryClient()
 
-  const [item, setItem] = useState("brug");
+  const [item, setItem] = useState("");
   const {personSelected, personList, departmentSelected, departmentList} = useContext(Context);
 
   const [personSelectedVal, setPersonSelectedVal] = personSelected;
@@ -15,9 +15,13 @@ function AddItem({setPage}) {
   const [departmentSelectedVal, setDepartmentSelectedVal] = departmentSelected;
   const [departmentListVal, setDepartmentListVal] = departmentList;
 
+  const {selectedList} = useContext(Context);
+
+  const [selectedListVal, setSelectedListVal] = selectedList;
+
 
   const fetchGetDepts = async () => {
-    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API1}/departments`)
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/departments`)
     return req.json();
   }
 
@@ -36,7 +40,7 @@ function AddItem({setPage}) {
               item: item,
               wantedBy: personSelectedVal,
               department: departmentSelectedVal,
-              apartOfList: "default"
+              apartOfList: selectedListVal
             })
           });
       return req.json();
@@ -44,12 +48,12 @@ function AddItem({setPage}) {
 
   const deptQuery = useQuery({
     queryFn: fetchGetDepts,
-    queryKey: ["deptGetQuery"]
+    queryKey: ["deptGetQuery"],
   })
 
   const peopleQuery = useQuery({
     queryFn: fetchGetPeople,
-    queryKey: ["peopleGetQuery"]
+    queryKey: ["peopleGetQuery"],
   })
 
   const addItemQuery = useMutation({
@@ -61,7 +65,7 @@ function AddItem({setPage}) {
   })
 
   const handleAdd = async () => {
-    if (item != "") {
+    if (item != "" && selectedListVal != "") {
       addItemQuery.mutate(); 
     } else {
       // TODO: send error cuz of blank string
@@ -98,21 +102,22 @@ function AddItem({setPage}) {
       setDepartmentSelectedVal("")
     }
 
-  }, [peopleQuery.data, deptQuery.data]);
+  }, [peopleQuery.isSuccess, deptQuery.isSuccess]);
 
   return (
     <div>
+      <h1>Add to list</h1>
       <input type="text" value={item} onChange={(e) => setItem(e.target.value)} onKeyDown={handleKeyDown} />
       <button onClick={handleAdd}>Add</button>
 
       <div className="categories">
         <h3>Wanted by:</h3>
         <select name="wantedBy" id="wantedBy" value={personSelectedVal} onChange={e => handlePersonChange(e.target.value)}>
-          { peopleQuery.isSuccess && personListVal.map(person => <option key={person._id}>{person.name}</option>)  } 
+          { personListVal.map(person => <option key={person._id}>{person.name}</option>)  } 
         </select>
         <h3>Department</h3>
         <select name="dept" id="dept" value={departmentSelectedVal} onChange={e => handleDepartmentChange(e.target.value)}>
-          { deptQuery.isSuccess && departmentListVal.map(dept => <option key={dept._id}>{dept.department}</option>) } 
+          { departmentListVal.map(dept => <option key={dept._id}>{dept.department}</option>) } 
         </select>
       </div>
     </div>

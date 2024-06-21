@@ -16,9 +16,10 @@ function App() {
   const [departmentSelected, setDepartmentSelected] = useState("");
   const [personList, setPersonList] = useState([]);
   const [departmentList, setDepartmentList] = useState([]);
+  const [selectedList, setSelectedList] = useState("");
 
   return (
-    <Context.Provider value={{ personSelected: [personSelected, setPersonSelected], personList: [personList, setPersonList], departmentSelected: [departmentSelected, setDepartmentSelected], departmentList: [departmentList, setDepartmentList]}}>
+    <Context.Provider value={{ personSelected: [personSelected, setPersonSelected], personList: [personList, setPersonList], departmentSelected: [departmentSelected, setDepartmentSelected], departmentList: [departmentList, setDepartmentList], selectedList: [selectedList, setSelectedList]}}>
       <QueryClientProvider client={queryClient}>
         <Authenticate />
         { page == "home" ?

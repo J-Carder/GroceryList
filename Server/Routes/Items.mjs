@@ -6,9 +6,10 @@ import ItemModel from "../Models/Item.mjs"
 
 const items = (app) => {
 
-  app.get("/items", async (req, res) => {
+  app.get("/items/:apartOfList", async (req, res) => {
     try {
-      let query = await ItemModel.find()
+      let {apartOfList} = req.params
+      let query = await ItemModel.find({apartOfList: apartOfList })
       res.json(query)
     } catch (e) {
       res.json(e)

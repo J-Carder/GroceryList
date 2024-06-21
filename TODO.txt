@@ -5,9 +5,9 @@ validation
 catch exceptions instead of crashing server
 
 IN PROGRESS:
-move everything to react-query
 
 DONE:
+move everything to react-query
 useContext for props
 make sure no dups
 use EMS instead of common JS (server)

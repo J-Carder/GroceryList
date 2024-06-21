@@ -1,74 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import AddItem from './AddItem'
 import '../css/Home.css'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-
-const fetchGetQuery = async () => {
-  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items`)
-  return req.json();
-}
-
-const fetchDeleteQuery = async (id : string) => {
-  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${id}`, {
-          method: 'delete',
-        });
-    return req.json();
-}
-
-const fetchUpdateQuery = async ({id, checked}) => {
-  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${id}`, {
-        method: 'put',
-        headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ 
-            completed: checked 
-           })
-          }
-        );
-    return req.json();
-}
+import ManageLists from './ManageLists'
+import { Context } from '../App'
 
 function Home({setPage}) {
 
   const queryClient = useQueryClient()
 
-    //////////////////////////////////////
 
-    const updateLocal = (
-        id: string,
-        completed: boolean
-      ) => {
-        queryClient.setQueryData(['getQuery'], itemsList => {
-          return itemsList.map(item => {
-            if (item._id === id) {
-              return {...item, completed};
-            }
-            return item;
-          });
-        });
-      };  
-    
-    const updateMutation = useMutation({
-      mutationFn: fetchUpdateQuery,
-      onMutate: async (payload) => {
-        await queryClient.cancelQueries(["getQuery"]);
-        updateLocal(payload.id, payload.completed);
-      },
-      onSuccess: (data) => {
-        updateLocal(data.id, data.completed);
-          // queryClient.invalidateQueries({ queryKey: ["getQuery"]})
-      }
-    });
-
-
-    //////////////////////////////////////
-
-  const {data: items, status} = useQuery({
-    queryFn: fetchGetQuery,
-    queryKey: ["getQuery"]
-  })
-  
   // const updateMutation = useMutation({
   //   mutationFn: fetchUpdateQuery,
   //   onSuccess: () => {
@@ -76,6 +17,50 @@ function Home({setPage}) {
   //   }
   // });
   
+
+
+  const [itemsList, setItemsList] = useState([]);
+  const {selectedList} = useContext(Context);
+  const [selectedListVal, setSelectedListVal] = selectedList;
+
+  const fetchGetQuery = async () => {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${selectedListVal}`)
+    return req.json();
+  }
+
+  const {data: items, status} = useQuery({
+    queryFn: fetchGetQuery,
+    queryKey: ["getQuery"],
+    enabled: selectedListVal != ""
+  })
+
+  useEffect(() => {
+    status == "success" && setItemsList(items)
+  }, [items])
+
+ 
+
+  const fetchDeleteQuery = async (id : string) => {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${id}`, {
+            method: 'delete',
+          });
+      return req.json();
+  }
+
+  const fetchUpdateQuery = async ({id, checked}) => {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${id}`, {
+          method: 'put',
+          headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ 
+              completed: checked 
+            })
+            }
+          );
+      return req.json();
+  }
+
   const deleteMutation = useMutation({
     mutationFn: fetchDeleteQuery,
     onSuccess: () => {
@@ -91,27 +76,48 @@ function Home({setPage}) {
     deleteMutation.mutate(id);
   }
 
-  const [itemsList, setItemsList] = useState([]);
+  //////////////////////////////////////
+
+  const updateLocal = (
+      id: string,
+      completed: boolean
+    ) => {
+      queryClient.setQueryData(['getQuery'], itemsList => {
+        return itemsList.map(item => {
+          if (item._id === id) {
+            return {...item, completed};
+          }
+          return item;
+        });
+      });
+    };  
+  
+  const updateMutation = useMutation({
+    mutationFn: fetchUpdateQuery,
+    onMutate: async (payload) => {
+      await queryClient.cancelQueries(["getQuery"]);
+      updateLocal(payload.id, payload.completed);
+    },
+    onSuccess: (data) => {
+      updateLocal(data.id, data.completed);
+        // queryClient.invalidateQueries({ queryKey: ["getQuery"]})
+    }
+  });
+
+
+  //////////////////////////////////////
 
   useEffect(() => {
-    status == "success" && setItemsList(items)
-  }, [items])
+    queryClient.invalidateQueries({queryKey: ["getQuery"]});
+  }, [selectedListVal])
 
-  if (status === "pending") {
-    return <h1>loading</h1>
-  }
-
-  if (status === "error") {
-    return <h1>error!</h1>
-  }
 
   return (
     <div>
       <h2>Grocery List</h2>
       <button onClick={() => setPage("settings")}>Settings</button>
-      <h3>List:</h3>
-      <select name="list" id="list">
-      </select>
+      <ManageLists />
+      <hr />
       <AddItem />
       {
         itemsList.length === 0 ? 

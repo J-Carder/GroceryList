@@ -96,7 +96,6 @@ function ManageDepts() {
   const handleKeyDown = (e) => {
     if (e.key == "Enter") {
       handleAdd();
-      setDeptText("");
     }
   }
 

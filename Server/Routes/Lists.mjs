@@ -25,15 +25,14 @@ const lists = (app) => {
 
   app.delete("/lists/:id", async (req, res) => {
     const {id} = req.params
-    const query = await PeopleModel.findByIdAndDelete({_id: id})
+    const query = await ListModel.findByIdAndDelete({_id: id})
     res.json({success: true})
   })
 
   app.post("/lists", async (req, res) => {
 
-    await PeopleModel.create({
-      name: req.body.name,
-      apartOfHouse: req.body.apartOfHouse
+    await ListModel.create({
+      name: req.body.name
     })
 
     res.json({success: true})
