@@ -1,5 +1,6 @@
 import UsersModel from "../Models/User.mjs";
 import bcrypt from "bcrypt";
+import { omit, pick } from "../helpers.mjs";
 
 // ---------------------------- //
 // -----   AUTH ROUTES    ----- //
@@ -15,7 +16,10 @@ const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
   });
 
   app.post("/login", checkNotAuthenticated, passport.authenticate("local"), (req, res) => {
-    res.json({msg: "Authenticated"})
+    res.json({
+      msg: "Authenticated",
+      user: pick(req.user, "name")
+    })
   });
 
   app.post("/register", checkNotAuthenticated, async (req, res) => {

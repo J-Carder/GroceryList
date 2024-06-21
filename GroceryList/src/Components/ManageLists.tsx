@@ -14,7 +14,7 @@ const fetchAddQuery = async (listName : string) => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name: listName })
+            body: JSON.stringify({ name: listName, apartOfHouse: "default" })
           });
       return req.json();
   } 
