@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Create from './Create'
+import AddItem from './AddItem'
 import '../css/Home.css'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
@@ -73,7 +73,7 @@ function Home({setPage}) {
       <h3>List:</h3>
       <select name="list" id="list">
       </select>
-      <Create />
+      <AddItem />
       {
         items.length === 0 ? 
         <div><h2>Empty!</h2></div>

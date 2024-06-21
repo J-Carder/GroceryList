@@ -1,18 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Context } from '../App'
 
-const fetchGetDepts = async () => {
-  const req = await fetch("http://localhost:3001/departments")
-  return req.json();
-}
 
-const fetchGetPeople = async () => {
-  const req = await fetch("http://localhost:3001/people")
-  return req.json();
-}
 
-function Create({setPage}) {
+function AddItem({setPage}) {
 
   const queryClient = useQueryClient()
   const [item, setItem] = useState("");
@@ -24,6 +16,32 @@ function Create({setPage}) {
   const [departmentSelectedVal, setDepartmentSelectedVal] = departmentSelected;
   const [departmentListVal, setDepartmentListVal] = departmentList;
 
+
+  const fetchGetDepts = async () => {
+    const req = await fetch("http://localhost:3001/departments")
+    return req.json();
+  }
+
+  const fetchGetPeople = async () => {
+    const req = await fetch("http://localhost:3001/people")
+    return req.json();
+  }
+
+  const fetchAddQuery = async () => {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items`, {
+            method: 'post',
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ 
+              item: item,
+              wantedBy: personSelectedVal,
+              department: departmentSelectedVal
+            })
+          });
+      return req.json();
+  }
+
   const deptQuery = useQuery({
     queryFn: fetchGetDepts,
     queryKey: ["deptGetQuery"]
@@ -34,21 +52,16 @@ function Create({setPage}) {
     queryKey: ["peopleGetQuery"]
   })
 
+  const addItemQuery = useMutation({
+    mutationFn: fetchAddQuery,
+    onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["getQuery"]})
+    }
+  })
+
   const handleAdd = async () => {
     if (item != "") {
-      await fetch("http://localhost:3001/items", {
-          method: 'post',
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ 
-            item: item,
-            wantedBy: personSelectedVal,
-            department: departmentSelectedVal
-           })
-        }
-      )
-      queryClient.invalidateQueries({ queryKey: ["getQuery"] })
+      addItemQuery.mutate(); 
       setItem("")
     } else {
       // TODO: send error cuz of blank string
@@ -71,8 +84,9 @@ function Create({setPage}) {
   }
 
   useEffect(() => {
-    peopleQuery.isSuccess && setPersonListVal(peopleQuery.data)
-    deptQuery.isSuccess && setDepartmentListVal(deptQuery.data)
+    peopleQuery.isSuccess && setPersonListVal(peopleQuery.data);
+    deptQuery.isSuccess && setDepartmentListVal(deptQuery.data);
+
     try {
       peopleQuery.isSuccess && setPersonSelectedVal(peopleQuery.data[0].name)
     } catch (e) {
@@ -84,7 +98,6 @@ function Create({setPage}) {
     } catch (e) {
       setDepartmentSelectedVal("")
     }
-    console.log("fired")
 
   }, [peopleQuery.data, deptQuery.data]);
 
@@ -107,4 +120,4 @@ function Create({setPage}) {
   )
 }
 
-export default Create
+export default AddItem

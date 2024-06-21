@@ -1,4 +1,5 @@
 import UsersModel from "../Models/User.mjs";
+import bcrypt from "bcrypt";
 
 // ---------------------------- //
 // -----   AUTH ROUTES    ----- //
@@ -19,9 +20,9 @@ const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
 
   app.post("/register", checkNotAuthenticated, async (req, res) => {
     try {
-      const hashedPassword = await bcrypt.hash(req.body.password, 10)
+      const hashedPassword = await bcrypt.hash(req.body.password, 15)
       await UsersModel.create({
-        username: req.body.username,
+        name: req.body.name,
         password: hashedPassword,
         email: req.body.email
       })

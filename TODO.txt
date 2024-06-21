@@ -2,11 +2,12 @@ TODO:
 make css styles
 make Progressive Web App
 validation
-use EMS instead of common JS (server)
+catch exceptions instead of crashing server
 
 IN PROGRESS:
 move everything to react-query
-make sure no dups
 
 DONE:
 useContext for props
+make sure no dups
+use EMS instead of common JS (server)

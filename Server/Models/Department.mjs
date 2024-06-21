@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 const DepartmentsSchema = new mongoose.Schema({
   department: {
     type: String,
-    required: true
+    required: true,
   },
   apartOfHouse: {
     type: String,
-    required: true
+    required: true,
   }
 })
 

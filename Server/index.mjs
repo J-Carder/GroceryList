@@ -18,6 +18,7 @@ import items from "./Routes/Items.mjs";
 import departments from "./Routes/Departments.mjs";
 import houses from "./Routes/Houses.mjs";
 import lists from "./Routes/Lists.mjs";
+import people from "./Routes/People.mjs";
 import auth from "./Routes/Auth.mjs";
 
 const getUserByEmail = async (email) => {
@@ -80,6 +81,7 @@ items(app);
 departments(app);
 houses(app);
 lists(app);
+people(app);
 auth(app, checkAuthenticated, checkNotAuthenticated, passport);
 
 // ---------------------------- //
