@@ -3,13 +3,13 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { Context } from '../App';
 
 const fetchGetQuery = async () => {
-  const req = await fetch("http://localhost:3001/people")
+  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people`)
   return req.json();
 }
 
 const fetchAddQuery = async (newName : string) => {
   if (newName != "") {
-    const req = await fetch("http://localhost:3001/people", {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people`, {
             method: 'post',
             headers: {
               "Content-Type": "application/json",
@@ -21,7 +21,7 @@ const fetchAddQuery = async (newName : string) => {
 }
 
 const fetchUpdateQuery = async (id : string, newName : string) => {
-  const req = await fetch(`http://localhost:3001/people/${id}`, {
+  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people/${id}`, {
           method: 'put',
           headers: {
             "Content-Type": "application/json",
@@ -32,7 +32,7 @@ const fetchUpdateQuery = async (id : string, newName : string) => {
 }
 
 const fetchDeleteQuery = async (id : string) => {
-  const req = await fetch(`http://localhost:3001/people/${id}`, {
+  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people/${id}`, {
           method: 'delete',
           headers: {
             "Content-Type": "application/json",

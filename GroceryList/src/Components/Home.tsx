@@ -1,62 +1,101 @@
 import React, { useEffect, useState } from 'react'
 import AddItem from './AddItem'
 import '../css/Home.css'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 const fetchGetQuery = async () => {
-  const req = await fetch("http://localhost:3001/items")
+  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items`)
   return req.json();
+}
+
+const fetchDeleteQuery = async (id : string) => {
+  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${id}`, {
+          method: 'delete',
+        });
+    return req.json();
+}
+
+const fetchUpdateQuery = async ({id, checked}) => {
+  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${id}`, {
+        method: 'put',
+        headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ 
+            completed: checked 
+           })
+          }
+        );
+    return req.json();
 }
 
 function Home({setPage}) {
 
   const queryClient = useQueryClient()
 
+    //////////////////////////////////////
+
+    const updateLocal = (
+        id: string,
+        completed: boolean
+      ) => {
+        queryClient.setQueryData(['getQuery'], itemsList => {
+          return itemsList.map(item => {
+            if (item._id === id) {
+              return {...item, completed};
+            }
+            return item;
+          });
+        });
+      };  
+    
+    const updateMutation = useMutation({
+      mutationFn: fetchUpdateQuery,
+      onMutate: async (payload) => {
+        await queryClient.cancelQueries(["getQuery"]);
+        updateLocal(payload.id, payload.completed);
+      },
+      onSuccess: (data) => {
+        updateLocal(data.id, data.completed);
+          // queryClient.invalidateQueries({ queryKey: ["getQuery"]})
+      }
+    });
+
+
+    //////////////////////////////////////
+
   const {data: items, status} = useQuery({
     queryFn: fetchGetQuery,
     queryKey: ["getQuery"]
   })
   
-  const handleEdit = (id) => {
-
-      (async () => {
-
-        const req2 = await fetch("http://localhost:3001/items/" + id);
-        const data2 = await req2.json()
-
-        const req = await fetch("http://localhost:3001/items/" + id, 
-        { 
-        method: 'put',
-        headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ 
-            completed: !data2.completed
-           })
-        }
-      )
-        const data = await req.json()
-
-        queryClient.invalidateQueries({ queryKey: ["getQuery"] })
-      })();
-
+  // const updateMutation = useMutation({
+  //   mutationFn: fetchUpdateQuery,
+  //   onSuccess: () => {
+  //       queryClient.invalidateQueries({ queryKey: ["getQuery"]})
+  //   }
+  // });
+  
+  const deleteMutation = useMutation({
+    mutationFn: fetchDeleteQuery,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getQuery"]})
+    }
+  });
+  
+  const handleEdit = (id, checked) => {
+    updateMutation.mutate({ id: id, checked: checked });
   }
-
 
   const handleDelete = (id) => {
-
-      (async () => {
-        const req = await fetch("http://localhost:3001/items/" + id, 
-        { 
-        method: 'delete',
-        }
-      )
-        const data = await req.json()
-
-        queryClient.invalidateQueries({ queryKey: ["getQuery"] })
-      })();
-
+    deleteMutation.mutate(id);
   }
+
+  const [itemsList, setItemsList] = useState([]);
+
+  useEffect(() => {
+    status == "success" && setItemsList(items)
+  }, [items])
 
   if (status === "pending") {
     return <h1>loading</h1>
@@ -75,12 +114,12 @@ function Home({setPage}) {
       </select>
       <AddItem />
       {
-        items.length === 0 ? 
+        itemsList.length === 0 ? 
         <div><h2>Empty!</h2></div>
         :
-        items.map(item => 
+        itemsList.map(item => 
           <div className="item" key={item._id}>
-            <input type="checkbox" onClick={() => handleEdit(item._id)} checked={item.completed} readOnly/>
+            <input type="checkbox" onClick={(e) => handleEdit(item._id, e.target.checked)} checked={item.completed} readOnly/>
             <p className="itemContent"> <span className="bold">{item.item}</span>
               {item.department != "" ? <> <span className="em">in</span> {item.department}</> : ""}
               {item.wantedBy != "" ? <> <span className="em">by</span> {item.wantedBy}</> : ""}
@@ -93,4 +132,4 @@ function Home({setPage}) {
   )
 }
 
-export default Home
+export default Home;

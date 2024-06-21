@@ -16,13 +16,13 @@ const ManageHouses = () => {
   const [deleteMsg, setDeleteMsg] = useState("")
 
   const fetchGetQuery = async () => {
-    const req = await fetch("http://localhost:3001/houses")
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/houses`)
     return req.json();
   }
 
   const fetchAddQuery = async ({name, passphrase}) => {
     if (name != "" && passphrase != "") {
-      const req = await fetch("http://localhost:3001/houses", {
+      const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/houses`, {
               method: 'post',
               headers: {
                 "Content-Type": "application/json",
@@ -35,7 +35,7 @@ const ManageHouses = () => {
 
   /// TODO: this
   const fetchUpdateQuery = async (id : string, newName : string) => {
-    const req = await fetch(`http://localhost:3001/houses/${id}`, {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/houses/${id}`, {
             method: 'put',
             headers: {
               "Content-Type": "application/json",
@@ -46,7 +46,7 @@ const ManageHouses = () => {
   }
 
   const fetchDeleteQuery = async ({id, passphrase}) => {
-    const req = await fetch(`http://localhost:3001/houses/${id}`, {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/houses/${id}`, {
             method: 'delete',
             headers: {
               "Content-Type": "application/json",

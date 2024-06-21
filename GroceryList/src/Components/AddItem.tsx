@@ -2,12 +2,11 @@ import React, { useEffect, useState, useContext } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Context } from '../App'
 
-
-
 function AddItem({setPage}) {
 
   const queryClient = useQueryClient()
-  const [item, setItem] = useState("");
+
+  const [item, setItem] = useState("brug");
   const {personSelected, personList, departmentSelected, departmentList} = useContext(Context);
 
   const [personSelectedVal, setPersonSelectedVal] = personSelected;
@@ -18,12 +17,12 @@ function AddItem({setPage}) {
 
 
   const fetchGetDepts = async () => {
-    const req = await fetch("http://localhost:3001/departments")
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API1}/departments`)
     return req.json();
   }
 
   const fetchGetPeople = async () => {
-    const req = await fetch("http://localhost:3001/people")
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people`)
     return req.json();
   }
 
@@ -36,7 +35,8 @@ function AddItem({setPage}) {
             body: JSON.stringify({ 
               item: item,
               wantedBy: personSelectedVal,
-              department: departmentSelectedVal
+              department: departmentSelectedVal,
+              apartOfList: "default"
             })
           });
       return req.json();
@@ -56,13 +56,13 @@ function AddItem({setPage}) {
     mutationFn: fetchAddQuery,
     onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["getQuery"]})
+        setItem("");
     }
   })
 
   const handleAdd = async () => {
     if (item != "") {
       addItemQuery.mutate(); 
-      setItem("")
     } else {
       // TODO: send error cuz of blank string
     }
@@ -71,7 +71,6 @@ function AddItem({setPage}) {
   const handleKeyDown = (e) => {
     if (e.key == "Enter") {
       handleAdd();
-      setItem("")
     }
   }
 
@@ -94,7 +93,7 @@ function AddItem({setPage}) {
     }
 
     try {
-      deptQuery.isSuccess &&setDepartmentSelectedVal(deptQuery.data[0].department)
+      deptQuery.isSuccess && setDepartmentSelectedVal(deptQuery.data[0].department)
     } catch (e) {
       setDepartmentSelectedVal("")
     }
