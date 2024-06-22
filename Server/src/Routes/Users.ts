@@ -1,3 +1,5 @@
+import { get } from "http";
+import HouseModel from "../Models/House.js";
 import UsersModel from "../Models/User.js"
 
 // ---------------------------- //
@@ -7,9 +9,31 @@ import UsersModel from "../Models/User.js"
 const users = (app, checkAuthenticated, checkNotAuthenticated) => {
 
   app.delete("/users/house", checkAuthenticated, async (req, res) => {
-    const userEmail = req.user.email;
-    const query = await UsersModel.findOneAndUpdate({email: userEmail}, {houses: []})
-    res.json({success: true})
+    try {
+      const userEmail = req.user.email;
+      const query = await UsersModel.findOneAndUpdate({email: userEmail}, {houses: []})
+      res.json({success: true})
+    } catch (e) {
+      res.json({msg: "Error"})
+    }
+  })
+
+
+  app.post("/users/house/:name", checkAuthenticated, async (req, res) => {
+    try {
+
+      const passphrase = req.body.passphrase;
+      const getHouse = await HouseModel.findOne({name: req.params.name});
+
+      if (passphrase == getHouse.passphrase) {
+        await UsersModel.findOneAndUpdate({name: req.params.name}, {houses: [req.params.name]})
+      } else {
+        return res.json({msg: "Wrong passphrase"})
+      }
+      res.json({msg: "Joined"})
+    } catch (e) {
+      res.json({msg: "Error"})
+    }
   })
 } 
 

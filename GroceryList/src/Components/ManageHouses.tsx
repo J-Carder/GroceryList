@@ -109,10 +109,14 @@ const ManageHouses = () => {
         })
         return req.json();
       },
-      onSuccess: () => {
-        let tempVal = userVal;
-        delete tempVal.houses
-        setUserVal(tempVal);
+      onSuccess: (data) => {
+        if (data.msg == "Error") {
+          console.log("error")
+        } else {
+          let tempVal = userVal;
+          delete tempVal.houses
+          setUserVal(tempVal);
+        }
       }
     }
   )
@@ -121,8 +125,33 @@ const ManageHouses = () => {
     leaveHouseMutation.mutate();
   }
 
-  const handleJoinHouse = () => {
+  const joinHouseMutation = useMutation({
+    mutationFn: async () => {
+          const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/users/house/${joinHouseName}`, {
+          method: "post",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            passphrase: joinHousePassphrase
+          })
+        })
+        return req.json();
+    },
+    onSuccess: (data) => {
+      if (data.msg != "Joined") {
+        console.log("Error");
+      } else {
+        let tempVal = userVal;
+        tempVal.houses = [joinHouseName]
+        setUserVal(tempVal);
+      }
+    }
+  })
 
+  const handleJoinHouse = () => {
+    joinHouseMutation.mutate();
   }
 
   const handleDelete = async () => {
