@@ -6,21 +6,20 @@ if (process.env.NODE_ENV !== "production") {
 import express from "express";
 import mongoose from 'mongoose';
 import cors from 'cors';
-import UsersModel from './Models/User.mjs';
+import UsersModel from './Models/User.js';
 import passport from "passport";
 import flash from "express-flash";
 import session from "express-session";
-import initialize from "./Routes/Passport.mjs";
-import mongoStore from 'express-session-mongo';
+import initialize from "./Routes/Passport.js";
 import cookieParser from "cookie-parser";
 
 // route imports
-import items from "./Routes/Items.mjs";
-import departments from "./Routes/Departments.mjs";
-import houses from "./Routes/Houses.mjs";
-import lists from "./Routes/Lists.mjs";
-import people from "./Routes/People.mjs";
-import auth from "./Routes/Auth.mjs";
+import items from "./Routes/Items.js";
+import departments from "./Routes/Departments.js";
+import houses from "./Routes/Houses.js";
+import lists from "./Routes/Lists.js";
+import people from "./Routes/People.js";
+import auth from "./Routes/Auth.js";
 
 const getUserByEmail = async (email) => {
   return await UsersModel.findOne({email: email});

@@ -1,4 +1,4 @@
-import DepartmentModel from "../Models/Department.mjs"
+import DepartmentModel from "../Models/Department.js"
 
 // ---------------------------- //
 // -----   DEPTS ROUTES   ----- //

@@ -1,4 +1,4 @@
-import ItemModel from "../Models/Item.mjs"
+import ItemModel from "../Models/Item.js"
 
 // ---------------------------- //
 // -----   ITEM ROUTES    ----- //

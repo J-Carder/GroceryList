@@ -1,6 +1,6 @@
-import UsersModel from "../Models/User.mjs";
+import UsersModel from "../Models/User.js";
 import bcrypt from "bcrypt";
-import { omit, pick } from "../helpers.mjs";
+import { omit, pick } from "../helpers.js";
 
 // ---------------------------- //
 // -----   AUTH ROUTES    ----- //
@@ -8,7 +8,7 @@ import { omit, pick } from "../helpers.mjs";
 
 const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
 
-  app.delete("/logout", checkAuthenticated, (req, res) => {
+  app.delete("/logout", checkAuthenticated, (req, res, next) => {
     req.logout((err) => {
       if (err) { return next(err); }
       res.json({ msg: "Logged out"});
@@ -26,7 +26,6 @@ const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
   app.post("/register", checkNotAuthenticated, async (req, res) => {
     try {
       const hashedPassword = await bcrypt.hash(req.body.password, 15);
-      console.log(req.body.name, hashedPassword, req.body.email)
       await UsersModel.create({
         name: req.body.name,
         password: hashedPassword,

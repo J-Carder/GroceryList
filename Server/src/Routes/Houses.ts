@@ -1,4 +1,4 @@
-import HouseModel from "../Models/House.mjs"
+import HouseModel from "../Models/House.js"
 
 // ---------------------------- //
 // -----   HOUSES ROUTES   ----- //

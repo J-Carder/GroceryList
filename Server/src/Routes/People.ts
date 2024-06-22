@@ -1,4 +1,4 @@
-import PeopleModel from "../Models/Person.mjs"
+import PeopleModel from "../Models/Person.js"
 
 // ---------------------------- //
 // -----   PEOPLE ROUTES  ----- //
@@ -33,7 +33,7 @@ const people = (app, checkAuthenticated, checkNotAuthenticated) => {
 
     await PeopleModel.create({
       name: req.body.name,
-      apartOfHouse: apartOfHouse
+      apartOfHouse: req.body.apartOfHouse
     })
 
     res.json({success: true})

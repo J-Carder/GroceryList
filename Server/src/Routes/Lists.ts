@@ -1,4 +1,4 @@
-import ListModel from "../Models/List.mjs"
+import ListModel from "../Models/List.js"
 
 // ---------------------------- //
 // -----   LIST ROUTES    ----- //
