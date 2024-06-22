@@ -25,15 +25,16 @@ const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
 
   app.post("/register", checkNotAuthenticated, async (req, res) => {
     try {
-      const hashedPassword = await bcrypt.hash(req.body.password, 15)
+      const hashedPassword = await bcrypt.hash(req.body.password, 15);
+      console.log(req.body.name, hashedPassword, req.body.email)
       await UsersModel.create({
         name: req.body.name,
         password: hashedPassword,
         email: req.body.email
       })
       res.json({ msg: "Registered new user"})
-    } catch {
-      res.json({ msg: "Error"})
+    } catch (e) {
+      res.json({ msg: e})
     }
   })
 }

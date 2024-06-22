@@ -42,8 +42,9 @@ const Authenticate = () => {
             },
             credentials: "include",
             body: JSON.stringify({
-              email: loginEmail,
-              password: loginPwd
+              name: registerName,
+              email: registerEmail,
+              password: registerPwd
             })
           });
       return req.json();
@@ -54,7 +55,7 @@ const Authenticate = () => {
     onSuccess: (data) => {
         if (data.msg == "Authenticated") {
           setAuthenticatedVal(true);
-          setUserVal(data.user)
+          setUserVal(data.user);
         }
         // queryClient.invalidateQueries({ queryKey: [""]})
     }
@@ -62,7 +63,10 @@ const Authenticate = () => {
 
   const registerMutation = useMutation({
     mutationFn: fetchRegisterQuery,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if (data.msg == "Registered new user") {
+        setIsLogin(true);
+      }
         // queryClient.invalidateQueries({ queryKey: [""]})
     }
   }) 
@@ -72,7 +76,8 @@ const Authenticate = () => {
   }
 
   const handleRegister = () => {
-
+    console.log(registerEmail, registerName, registerPwd)
+    registerMutation.mutate();
   }
 
   return (

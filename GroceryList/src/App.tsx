@@ -3,6 +3,7 @@ import Home from "./Components/Home";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import Settings from "./Components/Settings";
 import Authenticate from './Components/Authenticate';
+import Logout from './Components/Logout';
 
 
 const queryClient = new QueryClient();
@@ -23,6 +24,11 @@ function App() {
   return (
     <Context.Provider value={{ personSelected: [personSelected, setPersonSelected], personList: [personList, setPersonList], departmentSelected: [departmentSelected, setDepartmentSelected], departmentList: [departmentList, setDepartmentList], selectedList: [selectedList, setSelectedList], user: [user, setUser], authenticated: [authenticated, setAuthenticated]}}>
       <QueryClientProvider client={queryClient}>
+        { authenticated ? 
+          <Logout />
+        :
+          ""
+        }
         {
           !authenticated ?
         <Authenticate />
