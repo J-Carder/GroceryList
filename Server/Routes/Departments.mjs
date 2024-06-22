@@ -4,9 +4,9 @@ import DepartmentModel from "../Models/Department.mjs"
 // -----   DEPTS ROUTES   ----- //
 // ---------------------------- //
 
-const departments = (app) => {
+const departments = (app, checkAuthenticated, checkNotAuthenticated) => {
 
-  app.get("/departments", async (req, res) => {
+  app.get("/departments", checkAuthenticated, async (req, res) => {
     try {
       let query = await DepartmentModel.find()
       res.json(query)
@@ -16,20 +16,20 @@ const departments = (app) => {
   })
 
   // probably not needed
-  app.put("/departments/:id", async (req, res) => {
+  app.put("/departments/:id", checkAuthenticated, async (req, res) => {
     const {id} = req.params
     const department = req.body.department
     const query = await DepartmentModel.findByIdAndUpdate({_id: id}, {department: department})
     res.json({success: true})
   })
 
-  app.delete("/departments/:id", async (req, res) => {
+  app.delete("/departments/:id", checkAuthenticated, async (req, res) => {
     const {id} = req.params
     const query = await DepartmentModel.findByIdAndDelete({_id: id})
     res.json({success: true})
   })
 
-  app.post("/departments", async (req, res) => {
+  app.post("/departments", checkAuthenticated, async (req, res) => {
 
     await DepartmentModel.create({
       department: req.body.department,

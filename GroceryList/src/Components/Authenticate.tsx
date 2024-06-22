@@ -24,6 +24,7 @@ const Authenticate = () => {
             headers: {
               "Content-Type": "application/json",
             },
+            credentials: "include",
             body: JSON.stringify({
               email: loginEmail,
               password: loginPwd
@@ -34,11 +35,12 @@ const Authenticate = () => {
 
 
   const fetchRegisterQuery = async () => {
-    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/login`, {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/register`, {
             method: 'post',
             headers: {
               "Content-Type": "application/json",
             },
+            credentials: "include",
             body: JSON.stringify({
               email: loginEmail,
               password: loginPwd

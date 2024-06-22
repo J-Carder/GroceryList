@@ -3,7 +3,12 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Context } from '../App';
 
 const fetchGetQuery = async () => {
-  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/lists`)
+  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/lists`, 
+    {
+      method: "get",
+      credentials: "include"
+    }
+  )
   return req.json();
 }
 

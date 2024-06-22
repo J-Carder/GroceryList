@@ -36,6 +36,7 @@ function AddItem({setPage}) {
             headers: {
               "Content-Type": "application/json",
             },
+            credentials: "include",
             body: JSON.stringify({ 
               item: item,
               wantedBy: personSelectedVal,

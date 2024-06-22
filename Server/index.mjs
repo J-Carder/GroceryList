@@ -12,6 +12,7 @@ import flash from "express-flash";
 import session from "express-session";
 import initialize from "./Routes/Passport.mjs";
 import mongoStore from 'express-session-mongo';
+import cookieParser from "cookie-parser";
 
 // route imports
 import items from "./Routes/Items.mjs";
@@ -36,10 +37,11 @@ const app = express()
 // -----     MIDDLEWARE   ----- //
 // ---------------------------- //
 
-app.use(cors())
+app.use(cors({credentials: true, origin: "http://localhost:5173"}));
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(flash())
+app.use(cookieParser())
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
@@ -59,9 +61,10 @@ initialize(passport, getUserByEmail, getUserById)
 const checkAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
-  } 
+  }
 
-  res.status(401).json({msg: "Must be authenticated"});
+  return res.status(401).json({msg: "Must be authenticated"});
+  // res.cookie('connect.sid', "s%3ArkHjIgVDFifbwCCqMd6anL7dbZVqtdX8.zSsNAlWrg%2Fvfae52phpmyZKoymdNMe2b0ruwmx28V3o", { path: "/", httpOnly: true }).send();
 }
 
 const checkNotAuthenticated = (req, res, next) => {
@@ -77,11 +80,11 @@ const checkNotAuthenticated = (req, res, next) => {
 // -----      ROUTES      ----- //
 // ---------------------------- //
 
-items(app);
-departments(app);
-houses(app);
-lists(app);
-people(app);
+items(app, checkAuthenticated, checkNotAuthenticated);
+departments(app, checkAuthenticated, checkNotAuthenticated);
+houses(app, checkAuthenticated, checkNotAuthenticated);
+lists(app, checkAuthenticated, checkNotAuthenticated);
+people(app, checkAuthenticated, checkNotAuthenticated);
 auth(app, checkAuthenticated, checkNotAuthenticated, passport);
 
 // ---------------------------- //

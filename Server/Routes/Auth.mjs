@@ -15,10 +15,11 @@ const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
     });
   });
 
+  // BAD ROUTE - cookie SHOULD be attached 
   app.post("/login", checkNotAuthenticated, passport.authenticate("local"), (req, res) => {
     res.json({
       msg: "Authenticated",
-      user: pick(req.user, "name")
+      user: req.user
     })
   });
 

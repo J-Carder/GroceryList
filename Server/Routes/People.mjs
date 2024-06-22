@@ -4,8 +4,9 @@ import PeopleModel from "../Models/Person.mjs"
 // -----   PEOPLE ROUTES  ----- //
 // ---------------------------- //
 
-const people = (app) => {
-  app.get("/people", async (req, res) => {
+const people = (app, checkAuthenticated, checkNotAuthenticated) => {
+
+  app.get("/people", checkAuthenticated, async (req, res) => {
     try {
       let query = await PeopleModel.find()
       res.json(query)
@@ -15,20 +16,20 @@ const people = (app) => {
   })
 
   // probably not needed
-  app.put("/people/:id", async (req, res) => {
+  app.put("/people/:id", checkAuthenticated, async (req, res) => {
     const {id} = req.params
     const name = req.body.name
     const query = await PeopleModel.findByIdAndUpdate({_id: id}, {name: name})
     res.json({success: true})
   })
 
-  app.delete("/people/:id", async (req, res) => {
+  app.delete("/people/:id", checkAuthenticated, async (req, res) => {
     const {id} = req.params
     const query = await PeopleModel.findByIdAndDelete({_id: id})
     res.json({success: true})
   })
 
-  app.post("/people", async (req, res) => {
+  app.post("/people", checkAuthenticated, async (req, res) => {
 
     await PeopleModel.create({
       name: req.body.name,
