@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import "../css/Auth.css";
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Context } from '../App';
 
 const Authenticate = () => {
@@ -50,6 +50,18 @@ const Authenticate = () => {
       return req.json();
   }
 
+  const fetchIsAuthQuery = async () => {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/authenticated`, {
+          credentials: "include",
+        });
+    return req.json();
+  }
+
+  const isAuthQuery = useQuery({
+    queryFn: fetchIsAuthQuery,
+    queryKey: ["isAuthQuery"]
+  })
+
   const loginMutation = useMutation({
     mutationFn: fetchLoginQuery,
     onSuccess: (data) => {
@@ -70,6 +82,10 @@ const Authenticate = () => {
         // queryClient.invalidateQueries({ queryKey: [""]})
     }
   }) 
+
+  useEffect(() => {
+    isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setAuthenticatedVal(true)
+  }, [isAuthQuery.isSuccess])
 
   const handleLogin = () => {
     loginMutation.mutate();

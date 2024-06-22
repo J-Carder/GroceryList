@@ -37,5 +37,9 @@ const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
       res.json({ msg: e})
     }
   })
+
+  app.get("/authenticated", checkAuthenticated, async (req, res) => {
+    res.json({ msg: "Authenticated"});
+  })
 }
 export default auth;
