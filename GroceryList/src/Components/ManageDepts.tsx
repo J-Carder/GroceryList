@@ -4,7 +4,9 @@ import { Context } from '../App';
 
 
 const fetchGetQuery = async () => {
-  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/departments`)
+  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/departments`, {
+    credentials: "include"
+  })
   return req.json();
 }
 
@@ -15,6 +17,7 @@ const fetchAddQuery = async (newDept : string) => {
             headers: {
               "Content-Type": "application/json",
             },
+            credentials: "include",
             body: JSON.stringify({ department: newDept })
           });
       return req.json();
@@ -27,6 +30,7 @@ const fetchUpdateQuery = async (id : string, newDept : string) => {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({ department: newDept })
         });
     return req.json();
@@ -35,6 +39,7 @@ const fetchUpdateQuery = async (id : string, newDept : string) => {
 const fetchDeleteQuery = async (id : string) => {
   const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/departments/${id}`, {
           method: 'delete',
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },

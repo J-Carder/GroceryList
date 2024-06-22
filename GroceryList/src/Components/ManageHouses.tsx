@@ -16,7 +16,9 @@ const ManageHouses = () => {
   const [deleteMsg, setDeleteMsg] = useState("")
 
   const fetchGetQuery = async () => {
-    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/houses`)
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/houses`, {
+      credentials: "include"
+    })
     return req.json();
   }
 
@@ -27,6 +29,7 @@ const ManageHouses = () => {
               headers: {
                 "Content-Type": "application/json",
               },
+              credentials: "include",
               body: JSON.stringify({ name: name, passphrase: passphrase })
             });
         return req.json();
@@ -40,6 +43,7 @@ const ManageHouses = () => {
             headers: {
               "Content-Type": "application/json",
             },
+            credentials: "include",
             body: JSON.stringify({ name: newName })
           });
       return req.json();
@@ -51,12 +55,11 @@ const ManageHouses = () => {
             headers: {
               "Content-Type": "application/json",
             },
+            credentials: "include",
             body: JSON.stringify({passphrase: passphrase})
           });
       return req.json();
   }
-
-
 
   const housesQuery = useQuery({
     queryFn: fetchGetQuery,

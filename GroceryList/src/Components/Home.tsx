@@ -24,7 +24,9 @@ function Home({setPage}) {
   const [selectedListVal, setSelectedListVal] = selectedList;
 
   const fetchGetQuery = async () => {
-    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${selectedListVal}`)
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${selectedListVal}`, {
+      credentials: "include",
+    })
     return req.json();
   }
 
@@ -43,6 +45,7 @@ function Home({setPage}) {
   const fetchDeleteQuery = async (id : string) => {
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${id}`, {
             method: 'delete',
+            credentials: "include",
           });
       return req.json();
   }
@@ -53,6 +56,7 @@ function Home({setPage}) {
           headers: {
               "Content-Type": "application/json",
             },
+            credentials: "include",
             body: JSON.stringify({ 
               completed: checked 
             })

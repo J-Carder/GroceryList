@@ -21,12 +21,16 @@ function AddItem({setPage}) {
 
 
   const fetchGetDepts = async () => {
-    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/departments`)
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/departments`, {
+      credentials: "include"
+    })
     return req.json();
   }
 
   const fetchGetPeople = async () => {
-    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people`)
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people`, {
+      credentials: "include"
+    })
     return req.json();
   }
 

@@ -19,6 +19,7 @@ const fetchAddQuery = async (listName : string) => {
             headers: {
               "Content-Type": "application/json",
             },
+            credentials: "include",
             body: JSON.stringify({ name: listName, apartOfHouse: "default" })
           });
       return req.json();
@@ -31,6 +32,7 @@ const fetchDeleteQuery = async (id : string) => {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include"
         });
     return req.json();
 }

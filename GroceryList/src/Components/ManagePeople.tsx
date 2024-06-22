@@ -3,7 +3,9 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { Context } from '../App';
 
 const fetchGetQuery = async () => {
-  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people`)
+  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people`, {
+    credentials: "include"
+  })
   return req.json();
 }
 
@@ -14,6 +16,7 @@ const fetchAddQuery = async (newName : string) => {
             headers: {
               "Content-Type": "application/json",
             },
+            credentials: "include",
             body: JSON.stringify({ name: newName })
           });
       return req.json();
@@ -26,6 +29,7 @@ const fetchUpdateQuery = async (id : string, newName : string) => {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({ name: newName })
         });
     return req.json();
@@ -37,6 +41,7 @@ const fetchDeleteQuery = async (id : string) => {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include"
         });
     return req.json();
 }
