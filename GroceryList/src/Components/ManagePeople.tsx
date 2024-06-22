@@ -23,7 +23,7 @@ const fetchAddQuery = async (newName : string) => {
   }
 }
 
-const fetchUpdateQuery = async (id : string, newName : string) => {
+const fetchUpdateQuery = async ({id, newName}) => {
   const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people/${id}`, {
           method: 'put',
           headers: {

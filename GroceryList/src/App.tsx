@@ -8,7 +8,17 @@ import Logout from './Components/Logout';
 
 const queryClient = new QueryClient();
 
-export const Context = React.createContext();
+interface Props {
+  personSelected: Array<any>
+  departmentSelected: Array<any>
+  authenticated: Array<any>
+  personList: Array<any>
+  departmentList: Array<any>
+  selectedList: Array<any>
+  user: Array<any>
+}
+
+export const Context = React.createContext<Props>({} as Props);
 
 function App() {
 

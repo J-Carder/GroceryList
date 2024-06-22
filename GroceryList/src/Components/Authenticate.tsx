@@ -85,6 +85,7 @@ const Authenticate = () => {
 
   useEffect(() => {
     isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setAuthenticatedVal(true)
+    isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setUserVal(isAuthQuery.data.user)
   }, [isAuthQuery.isSuccess])
 
   const handleLogin = () => {

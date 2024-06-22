@@ -4,6 +4,7 @@ import '../css/Home.css'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import ManageLists from './ManageLists'
 import { Context } from '../App'
+import ManageHouses from './ManageHouses'
 
 function Home({setPage}) {
 
@@ -19,7 +20,7 @@ function Home({setPage}) {
   
 
 
-  const [itemsList, setItemsList] = useState([]);
+  const [itemsList, setItemsList] = useState<Array<any>>([]);
   const {selectedList} = useContext(Context);
   const [selectedListVal, setSelectedListVal] = selectedList;
 
@@ -72,8 +73,8 @@ function Home({setPage}) {
     }
   });
   
-  const handleEdit = (id, checked) => {
-    updateMutation.mutate({ id: id, checked: checked });
+  const handleEdit = (id, e) => {
+    updateMutation.mutate({ id: id, checked: e.target.value });
   }
 
   const handleDelete = (id) => {
@@ -86,7 +87,7 @@ function Home({setPage}) {
       id: string,
       completed: boolean
     ) => {
-      queryClient.setQueryData(['getQuery'], itemsList => {
+      queryClient.setQueryData(['getQuery'], (itemsList : Array<any>) => {
         return itemsList.map(item => {
           if (item._id === id) {
             return {...item, completed};
@@ -99,8 +100,8 @@ function Home({setPage}) {
   const updateMutation = useMutation({
     mutationFn: fetchUpdateQuery,
     onMutate: async (payload) => {
-      await queryClient.cancelQueries(["getQuery"]);
-      updateLocal(payload.id, payload.completed);
+      await queryClient.cancelQueries({queryKey: ["getQuery"]});
+      updateLocal(payload.id, payload.checked);
     },
     onSuccess: (data) => {
       updateLocal(data.id, data.completed);
@@ -120,6 +121,7 @@ function Home({setPage}) {
     <div>
       <h2>Grocery List</h2>
       <button onClick={() => setPage("settings")}>Settings</button>
+      <ManageHouses />
       <ManageLists />
       <hr />
       <AddItem />
@@ -129,7 +131,7 @@ function Home({setPage}) {
         :
         itemsList.map(item => 
           <div className="item" key={item._id}>
-            <input type="checkbox" onClick={(e) => handleEdit(item._id, e.target.checked)} checked={item.completed} readOnly/>
+            <input type="checkbox" onClick={(e) => handleEdit(item._id, e)} checked={item.completed} readOnly/>
             <p className="itemContent"> <span className="bold">{item.item}</span>
               {item.department != "" ? <> <span className="em">in</span> {item.department}</> : ""}
               {item.wantedBy != "" ? <> <span className="em">by</span> {item.wantedBy}</> : ""}

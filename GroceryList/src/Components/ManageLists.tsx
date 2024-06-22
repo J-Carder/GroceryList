@@ -43,7 +43,7 @@ const ManageLists = () => {
 
   const queryClient = useQueryClient();
   const [listName, setListName] = useState("");
-  const [lists, setLists] = useState([]);
+  const [lists, setLists] = useState<Array<any>>([]);
 
   const {selectedList} = useContext(Context);
 

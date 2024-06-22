@@ -1,4 +1,6 @@
+import HouseModel from "../Models/House.js";
 import ItemModel from "../Models/Item.js"
+import ListModel from "../Models/List.js";
 
 // ---------------------------- //
 // -----   ITEM ROUTES    ----- //
@@ -8,11 +10,22 @@ const items = (app, checkAuthenticated, checkNotAuthenticated) => {
 
   app.get("/items/:apartOfList", checkAuthenticated, async (req, res) => {
     try {
+      // query param 
       let {apartOfList} = req.params
+      // the houses the user has attached to them
+      let apartOfHouses = req.user.houses;
+      // the house the list they are requesting is apart of
+      let houseRequested = (await ListModel.findById(apartOfList)).apartOfHouse
+      if (!apartOfHouses.includes(houseRequested)) {
+        // if they don't have this house error
+        return res.status(401).json({msg: "Not authorized 1"})
+      }
+
       let query = await ItemModel.find({apartOfList: apartOfList })
       res.json(query)
     } catch (e) {
-      res.json(e)
+      console.log(e);
+      res.json([])
     }
   })
 

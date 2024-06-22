@@ -1,5 +1,6 @@
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { Context } from '../App';
 
 
 const ManageHouses = () => {
@@ -12,8 +13,11 @@ const ManageHouses = () => {
   const [joinHousePassphrase, setJoinHousePassphrase] = useState("");
   const [deletePassphrase, setDeletePassphrase] = useState("");
   const [selectedHouse, setSelectedHouse] = useState("");
-  const [housesList, setHousesList] = useState([]);
-  const [deleteMsg, setDeleteMsg] = useState("")
+  const [housesList, setHousesList] = useState<Array<any>>([]);
+
+  const {user} = useContext(Context);
+
+  const [userVal, setUserVal] = user;
 
   const fetchGetQuery = async () => {
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/houses`, {
@@ -37,7 +41,7 @@ const ManageHouses = () => {
   }
 
   /// TODO: this
-  const fetchUpdateQuery = async (id : string, newName : string) => {
+  const fetchUpdateQuery = async ({id, newName}) => {
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/houses/${id}`, {
             method: 'put',
             headers: {
@@ -96,6 +100,27 @@ const ManageHouses = () => {
     }
   }
 
+  const leaveHouseMutation = useMutation(
+    {
+      mutationFn: async () => {
+        const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/users/house`, {
+          method: "delete",
+          credentials: "include"
+        })
+        return req.json();
+      },
+      onSuccess: () => {
+        let tempVal = userVal;
+        delete tempVal.houses
+        setUserVal(tempVal);
+      }
+    }
+  )
+
+  const handleLeaveHouse = () => {
+    leaveHouseMutation.mutate();
+  }
+
   const handleJoinHouse = () => {
 
   }
@@ -124,19 +149,17 @@ const ManageHouses = () => {
   return (
     <div>
       <h3>Current house</h3>
-      <select value={selectedHouse} onChange={e => setSelectedHouse(e.target.value)}>
-        { housesList.length > 0 ? housesList.map(house => <option key={house._id}>{house.name}</option>) : ""}
-      </select>
-      <input type="text" placeholder="passphrase" value={deletePassphrase} onChange={e => setDeletePassphrase(e.target.value)}/>
-      <button onClick={handleDelete}>Delete current house</button>
-      <p>{deleteMsg}</p>
+      <p>{userVal?.houses && userVal?.houses[0]}</p>
 
-      <h3>Add new house</h3>
+      {/* <h3>Add new house</h3>
       <div>
         <input type="text" placeholder="House name" value={newHouseName} onChange={e => setNewHouseName(e.target.value)}/>
         <input type="text" placeholder="Passphrase" value={newHousePassphrase} onChange={e => setNewHousePassphrase(e.target.value)}/>
         <button onClick={handleAddHouse}>Add</button>
-      </div>
+      </div> */}
+
+      <h3>Leave current house</h3>
+      <button onClick={handleLeaveHouse}>Leave</button>
 
       <h3>Join a house</h3>
       <div>

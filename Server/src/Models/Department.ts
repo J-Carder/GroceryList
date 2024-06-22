@@ -5,10 +5,10 @@ const DepartmentsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  // apartOfHouse: {
-  //   type: String,
-  //   required: true,
-  // }
+  apartOfHouse: {
+    type: String,
+    required: true,
+  }
 })
 
 const DepartmentsModel = mongoose.model("departments", DepartmentsSchema)

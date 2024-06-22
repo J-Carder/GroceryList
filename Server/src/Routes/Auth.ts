@@ -19,17 +19,18 @@ const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
   app.post("/login", checkNotAuthenticated, passport.authenticate("local"), (req, res) => {
     res.json({
       msg: "Authenticated",
-      user: req.user
+      user: pick(req.user, "name", "email", "houses")
     })
   });
 
   app.post("/register", checkNotAuthenticated, async (req, res) => {
     try {
       const hashedPassword = await bcrypt.hash(req.body.password, 15);
+      const email = req.body.email.toLowerCase();
       await UsersModel.create({
         name: req.body.name,
         password: hashedPassword,
-        email: req.body.email
+        email: email
       })
       res.json({ msg: "Registered new user"})
     } catch (e) {
@@ -38,7 +39,7 @@ const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
   })
 
   app.get("/authenticated", checkAuthenticated, async (req, res) => {
-    res.json({ msg: "Authenticated"});
+    res.json({ msg: "Authenticated", user: pick(req.user, "name", "email", "houses")});
   })
 }
 export default auth;

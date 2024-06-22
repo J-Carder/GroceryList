@@ -6,9 +6,17 @@ import ListModel from "../Models/List.js"
 
 const lists = (app, checkAuthenticated, checkNotAuthenticated) => {
 
-  app.get("/lists", checkAuthenticated, async (req, res) => {
+  app.get("/lists/:house", checkAuthenticated, async (req, res) => {
     try {
-      let query = await ListModel.find()
+
+      let {house} = req.params;
+      let housesApartOf = req.user.houses
+
+      if (!housesApartOf.includes(house)) {
+        return res.json([]);
+      }
+
+      let query = await ListModel.find({apartOfHouse: house})
       res.json(query)
     } catch (e) {
       res.json(e)

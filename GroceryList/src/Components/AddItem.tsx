@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Context } from '../App'
 
-function AddItem({setPage}) {
+function AddItem() {
 
   const queryClient = useQueryClient()
 

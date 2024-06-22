@@ -20,6 +20,7 @@ import houses from "./Routes/Houses.js";
 import lists from "./Routes/Lists.js";
 import people from "./Routes/People.js";
 import auth from "./Routes/Auth.js";
+import users from "./Routes/Users.js";
 
 const getUserByEmail = async (email) => {
   return await UsersModel.findOne({email: email});
@@ -85,6 +86,7 @@ houses(app, checkAuthenticated, checkNotAuthenticated);
 lists(app, checkAuthenticated, checkNotAuthenticated);
 people(app, checkAuthenticated, checkNotAuthenticated);
 auth(app, checkAuthenticated, checkNotAuthenticated, passport);
+users(app, checkAuthenticated, checkNotAuthenticated);
 
 // ---------------------------- //
 // -----   START SERVER   ----- //

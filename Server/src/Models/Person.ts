@@ -5,10 +5,10 @@ const PeopleSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  // apartOfHouse: {
-  //   type: String,
-  //   required: true
-  // }
+  apartOfHouse: {
+    type: String,
+    required: true
+  }
 }, {collection: "people"})
 
 const PeopleModel = mongoose.model("people", PeopleSchema)
