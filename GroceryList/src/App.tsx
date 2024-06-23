@@ -16,6 +16,7 @@ interface Props {
   departmentList: Array<any>
   selectedList: Array<any>
   user: Array<any>
+  lists: Array<any>
 }
 
 export const Context = React.createContext<Props>({} as Props);
@@ -30,9 +31,10 @@ function App() {
   const [selectedList, setSelectedList] = useState("");
   const [user, setUser] = useState({});
   const [authenticated, setAuthenticated] = useState(false);
+  const [lists, setLists] = useState<Array<any>>([]);
 
   return (
-    <Context.Provider value={{ personSelected: [personSelected, setPersonSelected], personList: [personList, setPersonList], departmentSelected: [departmentSelected, setDepartmentSelected], departmentList: [departmentList, setDepartmentList], selectedList: [selectedList, setSelectedList], user: [user, setUser], authenticated: [authenticated, setAuthenticated]}}>
+    <Context.Provider value={{ lists: [lists, setLists], personSelected: [personSelected, setPersonSelected], personList: [personList, setPersonList], departmentSelected: [departmentSelected, setDepartmentSelected], departmentList: [departmentList, setDepartmentList], selectedList: [selectedList, setSelectedList], user: [user, setUser], authenticated: [authenticated, setAuthenticated]}}>
       <QueryClientProvider client={queryClient}>
         { authenticated ? 
           <Logout />

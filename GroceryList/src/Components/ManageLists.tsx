@@ -2,52 +2,52 @@ import React, { useEffect, useState, useContext } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Context } from '../App';
 
-const fetchGetQuery = async () => {
-  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/lists`, 
-    {
-      method: "get",
-      credentials: "include"
-    }
-  )
-  return req.json();
-}
-
-const fetchAddQuery = async (listName : string) => {
-  if (listName != "") {
-    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/lists`, {
-            method: 'post',
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({ name: listName, apartOfHouse: "default" })
-          });
-      return req.json();
-  } 
-}
-
-const fetchDeleteQuery = async (id : string) => {
-  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/lists/${id}`, {
-          method: 'delete',
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include"
-        });
-    return req.json();
-}
-
 
 const ManageLists = () => {
 
-
   const queryClient = useQueryClient();
   const [listName, setListName] = useState("");
-  const [lists, setLists] = useState<Array<any>>([]);
 
-  const {selectedList} = useContext(Context);
+  const {selectedList, user, lists} = useContext(Context);
 
   const [selectedListVal, setSelectedListVal] = selectedList;
+  const [userVal, setUserVal] = user;
+  const [listsVal, setListsVal] = lists;
+
+  const fetchGetQuery = async () => {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/lists/${userVal.houses[0]}`, 
+      {
+        method: "get",
+        credentials: "include"
+      }
+    )
+    return req.json();
+  }
+
+  const fetchAddQuery = async (listName : string) => {
+    if (listName != "") {
+      const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/lists`, {
+              method: 'post',
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+              body: JSON.stringify({ name: listName, apartOfHouse: "default" })
+            });
+        return req.json();
+    } 
+  }
+
+  const fetchDeleteQuery = async (id : string) => {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/lists/${id}`, {
+            method: 'delete',
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include"
+          });
+      return req.json();
+  }
 
 
   const getQuery = useQuery({
@@ -82,13 +82,13 @@ const ManageLists = () => {
   }
 
   const handleDelete = () => {
-    if (lists.length > 0) {
-      deleteMutation.mutate(lists.filter((l) => l.name == selectedListVal)[0]._id);
+    if (listsVal.length > 0) {
+      deleteMutation.mutate(listsVal.filter((l) => l.name == selectedListVal)[0]._id);
     }
   }
 
   useEffect(() => {
-    getQuery.isSuccess && setLists(getQuery.data) ;
+    getQuery.isSuccess && setListsVal(getQuery.data) ;
     try {
       getQuery.isSuccess && setSelectedListVal(getQuery.data[0].name);
     } catch (e) {
@@ -108,7 +108,7 @@ const ManageLists = () => {
     <div>
       <h3>Add new list</h3>
       <select value={selectedListVal} onChange={(e) => setSelectedListVal(e.target.value)}>
-        { lists.map(list => <option key={list._id}>{list.name}</option>) }
+        { listsVal.map(list => <option key={list._id}>{list.name}</option>) }
       </select>
       <button onClick={handleDelete}>Delete selected</button>
       <div>
@@ -119,4 +119,4 @@ const ManageLists = () => {
   )
 }
 
-export default ManageLists
+export default ManageLists;

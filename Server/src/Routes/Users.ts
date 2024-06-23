@@ -26,7 +26,7 @@ const users = (app, checkAuthenticated, checkNotAuthenticated) => {
       const getHouse = await HouseModel.findOne({name: req.params.name});
 
       if (passphrase == getHouse.passphrase) {
-        await UsersModel.findOneAndUpdate({name: req.params.name}, {houses: [req.params.name]})
+        await UsersModel.findOneAndUpdate({email: req.user.email}, {houses: [req.params.name]})
       } else {
         return res.json({msg: "Wrong passphrase"})
       }

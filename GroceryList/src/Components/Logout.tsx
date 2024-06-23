@@ -4,9 +4,10 @@ import { Context } from '../App'
 
 const Logout = () => {
 
-  const {authenticated} = useContext(Context);
+  const {authenticated, user} = useContext(Context);
 
   const [authVal, setAuthVal] = authenticated;
+  const [userVal, setUserVal] = user;
 
   const fetchLogoutQuery = async () => {
     const logoutReq = await fetch(`${import.meta.env.VITE_REACT_APP_API}/logout`, {
@@ -31,6 +32,9 @@ const Logout = () => {
 
   return (
     <div>
+      <div>
+        <p>Hi, {userVal.name}</p>
+      </div>
       <button onClick={handleLogout}>
         Logout
       </button>

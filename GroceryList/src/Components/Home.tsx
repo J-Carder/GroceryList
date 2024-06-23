@@ -21,11 +21,16 @@ function Home({setPage}) {
 
 
   const [itemsList, setItemsList] = useState<Array<any>>([]);
-  const {selectedList} = useContext(Context);
+  const {user, lists, selectedList} = useContext(Context);
+
+  const [listsVal, setListsVal] = lists;
   const [selectedListVal, setSelectedListVal] = selectedList;
+  const [userVal, setUserVal] = user;
 
   const fetchGetQuery = async () => {
-    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${selectedListVal}`, {
+    const listId = listsVal.filter((list) => list == selectedListVal)[0]._id;
+    console.log(listId);
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${listId}`, {
       credentials: "include",
     })
     return req.json();
@@ -119,27 +124,36 @@ function Home({setPage}) {
 
   return (
     <div>
-      <h2>Grocery List</h2>
-      <button onClick={() => setPage("settings")}>Settings</button>
-      <ManageHouses />
-      <ManageLists />
-      <hr />
-      <AddItem />
+      <>
+        <h2>Grocery List</h2>
+        <button onClick={() => setPage("settings")}>Settings</button>
+      </>
+
       {
-        itemsList.length === 0 ? 
-        <div><h2>Empty!</h2></div>
-        :
-        itemsList.map(item => 
-          <div className="item" key={item._id}>
-            <input type="checkbox" onClick={(e) => handleEdit(item._id, e)} checked={item.completed} readOnly/>
-            <p className="itemContent"> <span className="bold">{item.item}</span>
-              {item.department != "" ? <> <span className="em">in</span> {item.department}</> : ""}
-              {item.wantedBy != "" ? <> <span className="em">by</span> {item.wantedBy}</> : ""}
-            </p>
-            <button onClick={() => handleDelete(item._id)}>X</button>
-          </div> 
-        )
-      }
+        userVal?.houses?.length > 0 ? 
+        <>
+          <ManageLists />
+          <hr />
+          <AddItem />
+          {
+            itemsList.length === 0 ? 
+            <div><h2>Empty!</h2></div>
+            :
+            itemsList.map(item => 
+              <div className="item" key={item._id}>
+                <input type="checkbox" onClick={(e) => handleEdit(item._id, e)} checked={item.completed} readOnly/>
+                <p className="itemContent"> <span className="bold">{item.item}</span>
+                  {item.department != "" ? <> <span className="em">in</span> {item.department}</> : ""}
+                  {item.wantedBy != "" ? <> <span className="em">by</span> {item.wantedBy}</> : ""}
+                </p>
+                <button onClick={() => handleDelete(item._id)}>X</button>
+              </div> 
+            )
+          }
+        </>
+        : 
+          <p>Welcome! First, head over to Settings to join a house</p>
+        }
     </div>
   )
 }

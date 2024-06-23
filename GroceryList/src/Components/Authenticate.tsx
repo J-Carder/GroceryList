@@ -121,4 +121,4 @@ const Authenticate = () => {
   )
 }
 
-export default Authenticate
+export default Authenticate;

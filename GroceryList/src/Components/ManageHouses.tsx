@@ -15,9 +15,11 @@ const ManageHouses = () => {
   const [selectedHouse, setSelectedHouse] = useState("");
   const [housesList, setHousesList] = useState<Array<any>>([]);
 
-  const {user} = useContext(Context);
+  const {user, selectedList, personSelected, lists} = useContext(Context);
 
   const [userVal, setUserVal] = user;
+  const [selectedListVal, setSelectedListVal] = selectedList;
+  const [listsVal, setListsVal] = lists;
 
   const fetchGetQuery = async () => {
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/houses`, {
@@ -116,6 +118,7 @@ const ManageHouses = () => {
           let tempVal = userVal;
           delete tempVal.houses
           setUserVal(tempVal);
+          setListsVal([]);
         }
       }
     }
@@ -143,9 +146,8 @@ const ManageHouses = () => {
       if (data.msg != "Joined") {
         console.log("Error");
       } else {
-        let tempVal = userVal;
-        tempVal.houses = [joinHouseName]
-        setUserVal(tempVal);
+        setUserVal(userVal => { return {...userVal, houses: [joinHouseName]}});
+        queryClient.invalidateQueries({queryKey: ["listGetQuery"]})
       }
     }
   })
@@ -177,8 +179,6 @@ const ManageHouses = () => {
 
   return (
     <div>
-      <h3>Current house</h3>
-      <p>{userVal?.houses && userVal?.houses[0]}</p>
 
       {/* <h3>Add new house</h3>
       <div>
@@ -187,8 +187,24 @@ const ManageHouses = () => {
         <button onClick={handleAddHouse}>Add</button>
       </div> */}
 
-      <h3>Leave current house</h3>
-      <button onClick={handleLeaveHouse}>Leave</button>
+
+      {/* <button onClick={() => {
+        console.log(userVal)
+      }}>
+        Click
+      </button> */}
+
+      {
+        userVal?.houses?.length > 0 ? 
+        <>
+          <h3>Current house</h3>
+          <p>{userVal?.houses && userVal?.houses[0]}</p>
+          <h3>Leave current house</h3>
+          <button onClick={handleLeaveHouse}>Leave</button>
+        </>
+        :
+          ""
+      }
 
       <h3>Join a house</h3>
       <div>
