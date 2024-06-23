@@ -24,40 +24,54 @@ const houses = (app, checkAuthenticated, checkNotAuthenticated) => {
     }
   })
 
-  // TODO: this
   app.put("/houses/:id", checkAuthenticated, async (req, res) => {
-    const {id} = req.params
-    const house = await HouseModel.findOne({_id: id});
-    let name = house.name;
-    let passphrase = house.passphrase;
-    if (req.body.name) {
-      name = req.body.name
-    } 
-    if (req.body.passphrase) {
-      passphrase = req.body.passphrase
+    try {
+      const {id} = req.params
+      const house = await HouseModel.findOne({_id: id});
+      let name = house.name;
+      let passphrase = house.passphrase;
+      if (req.body.name) {
+        name = req.body.name
+      } 
+      if (req.body.passphrase) {
+        passphrase = req.body.passphrase
+      }
+      const query = await HouseModel.findByIdAndUpdate({_id: id}, {name: name, passphrase: passphrase})
+      res.json({success: true})
+
+    } catch (e) {
+      res.json({msg: "Error"})
     }
-    const query = await HouseModel.findByIdAndUpdate({_id: id}, {name: name, passphrase: passphrase})
-    res.json({success: true})
   })
 
   app.delete("/houses/:id", checkAuthenticated, async (req, res) => {
-    const {id} = req.params
-    const houseToDelete = await HouseModel.findById(id);
-    if (req.body.passphrase == houseToDelete.passphrase) {
-      const query = await HouseModel.findByIdAndDelete({_id: id});
-      res.json({ msg: "Success"});
-    } else {
-      res.status(401).json({ msg: "Wrong passphrase"});
+    try {
+      const {id} = req.params
+      const houseToDelete = await HouseModel.findById(id);
+      if (req.body.passphrase == houseToDelete.passphrase) {
+        const query = await HouseModel.findByIdAndDelete({_id: id});
+        res.json({ msg: "Success"});
+      } else {
+        res.status(401).json({ msg: "Wrong passphrase"});
+      }
+
+    } catch (e) {
+      res.json({msg: "Error"})
     }
   })
 
   app.post("/houses", checkAuthenticated, async (req, res) => {
-    await HouseModel.create({
-      name: req.body.name,
-      passphrase: req.body.passphrase
-    })
+    try {
+      await HouseModel.create({
+        name: req.body.name,
+        passphrase: req.body.passphrase
+      })
 
-    res.json({success: true})
+      res.json({success: true})
+
+    } catch (e) {
+      res.json({msg: "Error"})
+    }
   })
 }
 

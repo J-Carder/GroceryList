@@ -88,8 +88,6 @@ const users = (app, checkAuthenticated, checkNotAuthenticated) => {
       res.json({msg: "Error"});
     }
   })
-
-  
 } 
 
 export default users;

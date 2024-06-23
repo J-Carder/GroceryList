@@ -39,20 +39,30 @@ const items = (app, checkAuthenticated, checkNotAuthenticated) => {
   })
 
   app.put("/items/:id", checkAuthenticated, async (req, res) => {
-    const {id} = req.params
-    const completed = req.body.completed
-    const query = await ItemModel.findByIdAndUpdate({_id: id}, {completed: completed})
-    res.json({success: true})
+    try {
+      const {id} = req.params
+      const completed = req.body.completed
+      const query = await ItemModel.findByIdAndUpdate({_id: id}, {completed: completed})
+      res.json({success: true})
+
+    } catch (e) {
+      res.json({msg: "Error"})
+    }
   })
 
   app.delete("/items/:id", checkAuthenticated, async (req, res) => {
-    const {id} = req.params
-    const query = await ItemModel.findByIdAndDelete({_id: id})
-    res.json({success: true})
+    try {
+      const {id} = req.params
+      const query = await ItemModel.findByIdAndDelete({_id: id})
+      res.json({success: true})
+
+    } catch (e) {
+      res.json({msg: "Error"})
+    }
   })
 
   app.post("/items", checkAuthenticated, async (req, res) => {
-
+    try {
     await ItemModel.create({
       item: req.body.item,
       department: req.body.department,
@@ -61,6 +71,10 @@ const items = (app, checkAuthenticated, checkNotAuthenticated) => {
     })
 
     res.json({success: true})
+
+    } catch (e) {
+      res.json({msg: "Error"})
+    }
   })
 }
 

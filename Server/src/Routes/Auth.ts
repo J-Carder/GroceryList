@@ -9,18 +9,26 @@ import { omit, pick } from "../helpers.js";
 const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
 
   app.delete("/logout", checkAuthenticated, (req, res, next) => {
-    req.logout((err) => {
-      if (err) { return next(err); }
-      res.json({ msg: "Logged out"});
-    });
+    try {
+      req.logout((err) => {
+        if (err) { return next(err); }
+        res.json({ msg: "Logged out"});
+      });
+    } catch (e) {
+      res.json({msg: "Error"})
+    }
   });
 
   // BAD ROUTE - cookie SHOULD be attached 
   app.post("/login", checkNotAuthenticated, passport.authenticate("local"), (req, res) => {
-    res.json({
-      msg: "Authenticated",
-      user: pick(req.user, "name", "email", "houses", "admin")
-    })
+    try {
+      res.json({
+        msg: "Authenticated",
+        user: pick(req.user, "name", "email", "houses", "admin")
+      })
+    } catch (e) {
+      res.json({msg: "Error"})
+    }
   });
 
   app.post("/register", checkNotAuthenticated, async (req, res) => {
@@ -39,7 +47,11 @@ const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
   })
 
   app.get("/authenticated", checkAuthenticated, async (req, res) => {
-    res.json({ msg: "Authenticated", user: pick(req.user, "name", "email", "houses", "admin")});
+    try {
+      res.json({ msg: "Authenticated", user: pick(req.user, "name", "email", "houses", "admin")});
+    } catch (e) {
+      res.json({msg: "Error"})
+    }
   })
 }
 export default auth;

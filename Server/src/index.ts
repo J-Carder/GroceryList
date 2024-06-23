@@ -33,14 +33,29 @@ const getUserById = async (id) => {
 // new express app
 const app = express()
 
+
+const jsonParserMiddleware = async(req, res, next) => {
+  if (!req.body || typeof req.body !== 'string') {
+    next();
+    return;
+  }
+  try {
+    req.body = JSON.parse(req.body);
+    next();
+  } catch (e) {
+    res.status(400).json({ msg: 'Malformed body (not JSON)' });
+  }
+};
+
 // ---------------------------- //
 // -----     MIDDLEWARE   ----- //
 // ---------------------------- //
 
+
+app.use(jsonParserMiddleware);
 app.use(cors({credentials: true, origin: "http://localhost:5173"}));
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
-app.use(flash())
 app.use(cookieParser())
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -88,13 +103,18 @@ people(app, checkAuthenticated, checkNotAuthenticated);
 auth(app, checkAuthenticated, checkNotAuthenticated, passport);
 users(app, checkAuthenticated, checkNotAuthenticated);
 
+// test route
+app.get("/test", (req, res) => {
+  res.json({msg: "Test success"})
+})
+
 // ---------------------------- //
 // -----   START SERVER   ----- //
 // ---------------------------- //
 
 app.listen(process.env.PORT, () => {
   console.log("--- Server is UP and running ---")
-})
+});
 
 // ---------------------------- //
 // ---------------------------- //

@@ -25,25 +25,37 @@ const lists = (app, checkAuthenticated, checkNotAuthenticated) => {
 
   // TODO: this
   app.put("/lists/:id", checkAuthenticated, async (req, res) => {
-    const {id} = req.params
-    // const name = req.body.name
-    // const query = await PeopleModel.findByIdAndUpdate({_id: id}, {name: name})
-    res.json({success: true})
+    try {
+      const {id} = req.params
+      // const name = req.body.name
+      // const query = await PeopleModel.findByIdAndUpdate({_id: id}, {name: name})
+      res.json({success: true})
+
+    } catch (e) {
+      res.json({msg: "Error"})
+    }
   })
 
   app.delete("/lists/:id", checkAuthenticated, async (req, res) => {
-    const {id} = req.params
-    const query = await ListModel.findByIdAndDelete({_id: id})
-    res.json({success: true})
+    try {
+      const {id} = req.params
+      const query = await ListModel.findByIdAndDelete({_id: id})
+      res.json({success: true})
+
+    } catch (e) {
+      res.json({msg: "Error"})
+    }
   })
 
   app.post("/lists", checkAuthenticated, async (req, res) => {
-
-    await ListModel.create({
-      name: req.body.name
-    })
-
-    res.json({success: true})
+    try {
+      await ListModel.create({
+        name: req.body.name
+      })
+      res.json({success: true})
+    } catch (e) {
+      res.json({msg: "Error"})
+    }
   })
 }
 export default lists;
