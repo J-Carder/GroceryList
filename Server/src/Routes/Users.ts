@@ -74,6 +74,22 @@ const users = (app, checkAuthenticated, checkNotAuthenticated) => {
       res.json({msg: "Error"});
     }
   })
+
+  app.post("/users/adminPassword", checkAuthenticated, async (req, res) => {
+    try {
+      if (req.user.admin) {
+        const hashedPassword = await bcrypt.hash(req.body.newPassword, 15);
+        await UsersModel.findOneAndUpdate({email: req.body.email}, {password: hashedPassword});
+        res.json({msg: "Password changed"})
+      } else {
+        res.json({msg: "Error, not authorized"})
+      }
+    } catch (e) {
+      res.json({msg: "Error"});
+    }
+  })
+
+  
 } 
 
 export default users;
