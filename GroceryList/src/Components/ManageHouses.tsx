@@ -179,7 +179,7 @@ const ManageHouses = () => {
 
   return (
     <div>
-
+      <h3>Manage Houses</h3>
       {/* <h3>Add new house</h3>
       <div>
         <input type="text" placeholder="House name" value={newHouseName} onChange={e => setNewHouseName(e.target.value)}/>

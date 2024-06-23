@@ -35,6 +35,15 @@ const users = (app, checkAuthenticated, checkNotAuthenticated) => {
       res.json({msg: "Error"})
     }
   })
+
+  app.post("/users/name", checkAuthenticated, async (req, res) => {
+    try {
+      await UsersModel.findOneAndUpdate({email: req.user.email}, {name: req.body.name})
+      res.json({msg: "Name changed"});
+    } catch (e) {
+      res.json({msg: "Error"});
+    }
+  })
 } 
 
 export default users;

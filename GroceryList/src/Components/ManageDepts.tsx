@@ -114,6 +114,7 @@ function ManageDepts() {
 
   return (
     <div>
+      <h3>Manage Departments</h3>
       <input type="text" value={deptText} onChange={(e) => setDeptText(e.target.value)} onKeyDown={handleKeyDown}/>
       <button onClick={handleAdd}>Add</button>
       {

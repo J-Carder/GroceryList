@@ -114,6 +114,7 @@ function ManagePeople() {
 
   return (
     <div>
+      <h3>Manage People</h3>
       <input type="text" value={peopleText} onChange={(e) => setPeopleText(e.target.value)} onKeyDown={handleKeyDown}/>
       <button onClick={handleAdd}>Add</button>
       {
