@@ -44,6 +44,21 @@ const users = (app, checkAuthenticated, checkNotAuthenticated) => {
       res.json({msg: "Error"});
     }
   })
+
+
+  app.post("/users/email", checkAuthenticated, async (req, res) => {
+    try {
+      // make sure doesn't already have an account
+      if (await UsersModel.findOne({email: req.body.newEmail})) {
+        return res.json({msg: "Email already exists"})
+      }
+      // set new email
+      await UsersModel.findOneAndUpdate({email: req.user.email}, {email: req.body.newEmail});
+      res.json({msg: "Email changed"});
+    } catch (e) {
+      res.json({msg: "Error"});
+    }
+  })
 } 
 
 export default users;
