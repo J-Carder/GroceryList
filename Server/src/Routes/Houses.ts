@@ -27,8 +27,16 @@ const houses = (app, checkAuthenticated, checkNotAuthenticated) => {
   // TODO: this
   app.put("/houses/:id", checkAuthenticated, async (req, res) => {
     const {id} = req.params
-    // const name = req.body.name
-    // const query = await HouseModel.findByIdAndUpdate({_id: id}, {name: name})
+    const house = await HouseModel.findOne({_id: id});
+    let name = house.name;
+    let passphrase = house.passphrase;
+    if (req.body.name) {
+      name = req.body.name
+    } 
+    if (req.body.passphrase) {
+      passphrase = req.body.passphrase
+    }
+    const query = await HouseModel.findByIdAndUpdate({_id: id}, {name: name, passphrase: passphrase})
     res.json({success: true})
   })
 
