@@ -19,7 +19,7 @@ const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
   app.post("/login", checkNotAuthenticated, passport.authenticate("local"), (req, res) => {
     res.json({
       msg: "Authenticated",
-      user: pick(req.user, "name", "email", "houses")
+      user: pick(req.user, "name", "email", "houses", "admin")
     })
   });
 
@@ -39,7 +39,7 @@ const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
   })
 
   app.get("/authenticated", checkAuthenticated, async (req, res) => {
-    res.json({ msg: "Authenticated", user: pick(req.user, "name", "email", "houses")});
+    res.json({ msg: "Authenticated", user: pick(req.user, "name", "email", "houses", "admin")});
   })
 }
 export default auth;
