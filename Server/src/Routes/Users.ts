@@ -1,6 +1,7 @@
 import { get } from "http";
 import HouseModel from "../Models/House.js";
-import UsersModel from "../Models/User.js"
+import UsersModel from "../Models/User.js";
+import bcrypt from "bcrypt";
 
 // ---------------------------- //
 // -----   USER ROUTES    ----- //
@@ -17,7 +18,6 @@ const users = (app, checkAuthenticated, checkNotAuthenticated) => {
       res.json({msg: "Error"})
     }
   })
-
 
   app.post("/users/house/:name", checkAuthenticated, async (req, res) => {
     try {
@@ -45,16 +45,31 @@ const users = (app, checkAuthenticated, checkNotAuthenticated) => {
     }
   })
 
-
   app.post("/users/email", checkAuthenticated, async (req, res) => {
     try {
       // make sure doesn't already have an account
-      if (await UsersModel.findOne({email: req.body.newEmail})) {
+      if (await UsersModel.findOne({email: req.body.newEmail.toLowerCase()})) {
         return res.json({msg: "Email already exists"})
       }
       // set new email
-      await UsersModel.findOneAndUpdate({email: req.user.email}, {email: req.body.newEmail});
+      await UsersModel.findOneAndUpdate({email: req.user.email}, {email: req.body.newEmail.toLowerCase()});
       res.json({msg: "Email changed"});
+    } catch (e) {
+      res.json({msg: "Error"});
+    }
+  })
+
+  app.post("/users/password", checkAuthenticated, async (req, res) => {
+    try {
+
+      if (await bcrypt.compare(req.body.oldPassword, req.user.password)) {
+        const hashedPassword = await bcrypt.hash(req.body.newPassword, 15);
+        await UsersModel.findOneAndUpdate({email: req.user.email}, {password: hashedPassword});
+
+        res.json({msg: "Password changed"})
+      } else {
+        return res.json({msg: "Incorrect password"});
+      }
     } catch (e) {
       res.json({msg: "Error"});
     }
