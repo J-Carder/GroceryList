@@ -3,6 +3,7 @@ make css styles
 make Progressive Web App
 validation
 no errors in TS
+implement mod functionality
 
 IN PROGRESS:
 

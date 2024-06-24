@@ -6,6 +6,7 @@ import PeopleModel from "../Models/Person.js"
 
 const people = (app, checkAuthenticated, checkNotAuthenticated) => {
 
+  // READ
   app.get("/people/:house", checkAuthenticated, async (req, res) => {
     try {
       const house = req.params.house;
@@ -20,7 +21,7 @@ const people = (app, checkAuthenticated, checkNotAuthenticated) => {
     }
   })
 
-  // probably not needed
+  // UPDATE probably not needed
   app.put("/people/:id", checkAuthenticated, async (req, res) => {
     try {
       const {id} = req.params
@@ -33,26 +34,37 @@ const people = (app, checkAuthenticated, checkNotAuthenticated) => {
     }
   })
 
+  // DELETE
   app.delete("/people/:id", checkAuthenticated, async (req, res) => {
     try {
-      const {id} = req.params
-      const query = await PeopleModel.findByIdAndDelete({_id: id})
-      res.json({success: true})
-
+      const house = req.body.house;
+      if (req.user.houses.includes(house)) {
+        const {id} = req.params
+        if (await PeopleModel.find({_id: id, apartOfHouse: house})) {
+          const query = await PeopleModel.findByIdAndDelete({_id: id})
+          return res.json({msg: "Success"});
+        }
+      } else {
+        res.json({msg: "Not authorized"})
+      }
     } catch (e) {
       res.json({msg: "Error"})
     }
   })
 
+  // CREATE
   app.post("/people", checkAuthenticated, async (req, res) => {
     try {
-      await PeopleModel.create({
-        name: req.body.name,
-        apartOfHouse: req.body.apartOfHouse
-      })
-
-      res.json({success: true})
-
+      const house = req.body.house;
+      if (req.user.houses.includes(house)) {
+        await PeopleModel.create({
+          name: req.body.name,
+          apartOfHouse: house
+        })
+        return res.json({msg: "Success"});
+      } else {
+        res.json({msg: "Not authorized"})
+      }
     } catch (e) {
       res.json({msg: "Error"})
     }

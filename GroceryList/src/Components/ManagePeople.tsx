@@ -2,17 +2,43 @@ import React, { useState, useContext } from 'react'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { Context } from '../App';
 
-const fetchGetQuery = async () => {
-  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people`, {
-    credentials: "include"
-  })
-  return req.json();
-}
 
-const fetchAddQuery = async (newName : string) => {
-  if (newName != "") {
-    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people`, {
-            method: 'post',
+function ManagePeople() {
+
+  const queryClient = useQueryClient()
+  const [peopleText, setPeopleText] = useState("");
+
+  const {personSelected, personList, selectedHouse} = useContext(Context);
+
+  const [personSelectedVal, setPersonSelectedVal] = personSelected;
+  const [personListVal, setPersonListVal] = personList;
+  const [selectedHouseVal, setSelectedHouseVal] = selectedHouse;
+
+  const fetchGetQuery = async () => {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people/${selectedHouseVal}`, {
+      credentials: "include",
+    })
+    return req.json();
+  }
+
+  const fetchAddQuery = async (newName : string) => {
+    if (newName != "") {
+      const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people`, {
+              method: 'post',
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+              body: JSON.stringify({ name: newName, house: selectedHouseVal })
+            });
+        return req.json();
+    }
+  }
+
+  // not needed
+  const fetchUpdateQuery = async ({id, newName}) => {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people/${id}`, {
+            method: 'put',
             headers: {
               "Content-Type": "application/json",
             },
@@ -21,40 +47,18 @@ const fetchAddQuery = async (newName : string) => {
           });
       return req.json();
   }
-}
 
-const fetchUpdateQuery = async ({id, newName}) => {
-  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people/${id}`, {
-          method: 'put',
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({ name: newName })
-        });
-    return req.json();
-}
-
-const fetchDeleteQuery = async (id : string) => {
-  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people/${id}`, {
-          method: 'delete',
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include"
-        });
-    return req.json();
-}
-
-function ManagePeople() {
-
-  const queryClient = useQueryClient()
-  const [peopleText, setPeopleText] = useState("");
-
-  const {personSelected, personList} = useContext(Context);
-
-  const [personSelectedVal, setPersonSelectedVal] = personSelected;
-  const [personListVal, setPersonListVal] = personList;
+  const fetchDeleteQuery = async (id : string) => {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people/${id}`, {
+            method: 'delete',
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ house: selectedHouseVal})
+          });
+      return req.json();
+  }
 
   const {data: people, status: peopleStatus} = useQuery({
     queryFn: fetchGetQuery,

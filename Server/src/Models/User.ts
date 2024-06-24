@@ -18,6 +18,10 @@ const UsersSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  mod: {
+    type: Boolean,
+    default: false
+  },
   houses: {
     type: [String],
   }

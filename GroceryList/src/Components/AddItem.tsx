@@ -26,7 +26,7 @@ function AddItem() {
   }
 
   const fetchGetPeople = async () => {
-    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people`, {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people/${selectedHouseVal}`, {
       credentials: "include"
     })
     return req.json();
