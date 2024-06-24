@@ -7,7 +7,7 @@ function AddItem() {
   const queryClient = useQueryClient()
 
   const [item, setItem] = useState("");
-  const {personSelected, personList, departmentSelected, departmentList, selectedHouse, selectedList} = useContext(Context);
+  const {personSelected, personList, departmentSelected, departmentList, selectedHouse, selectedList, lists} = useContext(Context);
 
   const [personSelectedVal, setPersonSelectedVal] = personSelected;
   const [personListVal, setPersonListVal] = personList;
@@ -17,6 +17,8 @@ function AddItem() {
 
   const [selectedListVal, setSelectedListVal] = selectedList;
   const [selectedHouseVal, setSelectedHouseVal] = selectedHouse;
+
+  const [listsVal, setListsVal] = lists;
 
   const fetchGetDepts = async () => {
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/departments/${selectedHouseVal}`, {
@@ -33,7 +35,10 @@ function AddItem() {
   }
 
   const fetchAddQuery = async () => {
-    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items`, {
+
+    const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
+
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${listId}`, {
             method: 'post',
             headers: {
               "Content-Type": "application/json",
@@ -43,7 +48,7 @@ function AddItem() {
               item: item,
               wantedBy: personSelectedVal,
               department: departmentSelectedVal,
-              apartOfList: selectedListVal
+              apartOfList: listId
             })
           });
       return req.json();

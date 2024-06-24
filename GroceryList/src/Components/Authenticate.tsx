@@ -3,7 +3,7 @@ import "../css/Auth.css";
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Context } from '../App';
 
-const Authenticate = () => {
+const Authenticate = ({setPage}) => {
   const [isLogin, setIsLogin] = useState(false)
 
   const [loginEmail, setLoginEmail] = useState("");
@@ -69,6 +69,7 @@ const Authenticate = () => {
         if (data.msg == "Authenticated") {
           setAuthenticatedVal(true);
           setUserVal(data.user);
+          setPage("home");
           try {
             setSelectedHouseVal(data.user.houses[0]) 
           } catch (e) {

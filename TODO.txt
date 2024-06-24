@@ -4,6 +4,8 @@ make Progressive Web App
 validation
 no errors in TS
 implement mod functionality
+fix refresh errors
+fix logout erroring (blank page)
 
 IN PROGRESS:
 

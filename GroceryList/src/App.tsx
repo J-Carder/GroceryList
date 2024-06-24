@@ -45,7 +45,7 @@ function App() {
         }
         {
           !authenticated ?
-        <Authenticate />
+        <Authenticate setPage={setPage} />
         : 
           page == "home" ?
             <Home setPage={setPage} /> 
