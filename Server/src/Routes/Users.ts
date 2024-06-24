@@ -48,7 +48,7 @@ const users = (app, checkAuthenticated, checkNotAuthenticated) => {
   app.post("/users/email", checkAuthenticated, async (req, res) => {
     try {
       // make sure doesn't already have an account
-      if (await UsersModel.findOne({email: req.body.newEmail.toLowerCase()})) {
+      if (await UsersModel.exists({email: req.body.newEmail.toLowerCase()})) {
         return res.json({msg: "Email already exists"})
       }
       // set new email
