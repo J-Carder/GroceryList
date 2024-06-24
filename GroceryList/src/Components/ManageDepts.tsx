@@ -3,12 +3,33 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Context } from '../App';
 
 
-const fetchGetQuery = async () => {
-  const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/departments`, {
-    credentials: "include"
+
+
+function ManageDepts() {
+
+  const queryClient = useQueryClient()
+  const [deptText, setDeptText] = useState("");
+
+  const {departmentSelected, departmentList, selectedHouse} = useContext(Context);
+
+  const [departmentSelectedVal, setDepartmentSelectedVal] = departmentSelected;
+  const [departmentListVal, setDepartmentListVal] = departmentSelected;
+  const [selectedHouseVal, setSelectedHouseVal] = selectedHouse;
+  
+  const fetchGetQuery = async () => {
+    console.log(selectedHouseVal);
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/departments/${selectedHouseVal}`, {
+      credentials: "include"
+    })
+    return req.json();
+  }
+
+  const {data: depts, status: deptStatus} = useQuery({
+    queryFn: fetchGetQuery,
+    queryKey: ["deptGetQuery"]
   })
-  return req.json();
-}
+
+
 
 const fetchAddQuery = async (newDept : string) => {
   if (newDept != "") {
@@ -46,21 +67,6 @@ const fetchDeleteQuery = async (id : string) => {
         });
     return req.json();
 }
-
-function ManageDepts() {
-
-  const queryClient = useQueryClient()
-  const [deptText, setDeptText] = useState("");
-
-  const {departmentSelected, departmentList} = useContext(Context);
-
-  const [departmentSelectedVal, setDepartmentSelectedVal] = departmentSelected;
-  const [departmentListVal, setDepartmentListVal] = departmentSelected;
-
-  const {data: depts, status: deptStatus} = useQuery({
-    queryFn: fetchGetQuery,
-    queryKey: ["deptGetQuery"]
-  })
 
   const addMutation = useMutation({
     mutationFn: fetchAddQuery,

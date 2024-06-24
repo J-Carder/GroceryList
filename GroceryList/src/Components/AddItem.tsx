@@ -7,7 +7,7 @@ function AddItem() {
   const queryClient = useQueryClient()
 
   const [item, setItem] = useState("");
-  const {personSelected, personList, departmentSelected, departmentList} = useContext(Context);
+  const {personSelected, personList, departmentSelected, departmentList, selectedHouse, selectedList} = useContext(Context);
 
   const [personSelectedVal, setPersonSelectedVal] = personSelected;
   const [personListVal, setPersonListVal] = personList;
@@ -15,13 +15,11 @@ function AddItem() {
   const [departmentSelectedVal, setDepartmentSelectedVal] = departmentSelected;
   const [departmentListVal, setDepartmentListVal] = departmentList;
 
-  const {selectedList} = useContext(Context);
-
   const [selectedListVal, setSelectedListVal] = selectedList;
-
+  const [selectedHouseVal, setSelectedHouseVal] = selectedHouse;
 
   const fetchGetDepts = async () => {
-    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/departments`, {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/departments/${selectedHouseVal}`, {
       credentials: "include"
     })
     return req.json();

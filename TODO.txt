@@ -2,11 +2,12 @@ TODO:
 make css styles
 make Progressive Web App
 validation
-catch exceptions instead of crashing server
+no errors in TS
 
 IN PROGRESS:
 
 DONE:
+catch exceptions instead of crashing server
 move everything to react-query
 useContext for props
 make sure no dups

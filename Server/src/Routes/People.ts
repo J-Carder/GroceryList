@@ -6,10 +6,15 @@ import PeopleModel from "../Models/Person.js"
 
 const people = (app, checkAuthenticated, checkNotAuthenticated) => {
 
-  app.get("/people", checkAuthenticated, async (req, res) => {
+  app.get("/people/:house", checkAuthenticated, async (req, res) => {
     try {
-      let query = await PeopleModel.find()
-      res.json(query)
+      const house = req.params.house;
+      if (req.user.houses.includes(house)) {
+        let query = await PeopleModel.find({apartOfHouse: house})
+        res.json(query)
+      } else {
+        res.json([])
+      }
     } catch (e) {
       res.json(e)
     }

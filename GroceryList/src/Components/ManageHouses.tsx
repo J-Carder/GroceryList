@@ -12,14 +12,15 @@ const ManageHouses = () => {
   const [joinHouseName, setJoinHouseName] = useState("");
   const [joinHousePassphrase, setJoinHousePassphrase] = useState("");
   const [deletePassphrase, setDeletePassphrase] = useState("");
-  const [selectedHouse, setSelectedHouse] = useState("");
   const [housesList, setHousesList] = useState<Array<any>>([]);
 
-  const {user, selectedList, personSelected, lists} = useContext(Context);
+  const {user, selectedList, personSelected, lists, selectedHouse, departmentList} = useContext(Context);
 
   const [userVal, setUserVal] = user;
   const [selectedListVal, setSelectedListVal] = selectedList;
   const [listsVal, setListsVal] = lists;
+  const [selectedHouseVal, setSelectedHouseVal] = selectedHouse;
+  const [departmentListVal, setDepartmentListVal] = departmentList;
 
   const fetchGetQuery = async () => {
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/houses`, {
@@ -77,6 +78,8 @@ const ManageHouses = () => {
     mutationFn: fetchAddQuery,
     onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["housesGetQuery"]})
+        setNewHouseName("");
+        setNewHousePassphrase("");
     }
   })
 
@@ -97,8 +100,6 @@ const ManageHouses = () => {
   const handleAddHouse = () => {
     if (newHouseName != "" && newHousePassphrase != "") {
       addMutation.mutate({name: newHouseName, passphrase: newHousePassphrase})
-      setNewHouseName("");
-      setNewHousePassphrase("");
     }
   }
 
@@ -147,7 +148,13 @@ const ManageHouses = () => {
         console.log("Error");
       } else {
         setUserVal(userVal => { return {...userVal, houses: [joinHouseName]}});
+        try {
+          setSelectedHouseVal(userVal.houses[0])
+        } catch (e) {
+          setSelectedHouseVal("");
+        }
         queryClient.invalidateQueries({queryKey: ["listGetQuery"]})
+        // queryClient.invalidateQueries({queryKey: ["deptGetQuery"]})
       }
     }
   })
@@ -158,7 +165,7 @@ const ManageHouses = () => {
 
   const handleDelete = async () => {
     if (housesList.length > 0) {
-      deleteMutation.mutate({id: housesList.filter((h) => h.name == selectedHouse)[0]._id, passphrase: deletePassphrase}, 
+      deleteMutation.mutate({id: housesList.filter((h) => h.name == selectedHouseVal)[0]._id, passphrase: deletePassphrase}, 
       {onSuccess: (data) => {
         setDeletePassphrase("");  
         setDeleteMsg(data.msg)
@@ -170,11 +177,11 @@ const ManageHouses = () => {
 
   useEffect(() => {
     housesQuery.isSuccess && setHousesList(housesQuery.data)
-    try {
-      housesQuery.isSuccess && setSelectedHouse(housesQuery.data[0].name)
-    } catch (e) {
-      setSelectedHouse("")
-    }
+    // try {
+    //   housesQuery.isSuccess && setSelectedHouseVal(housesQuery.data[0].name)
+    // } catch (e) {
+    //   setSelectedHouseVal("")
+    // }
   }, [housesQuery.data]);
 
   return (

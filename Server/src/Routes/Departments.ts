@@ -6,10 +6,15 @@ import DepartmentModel from "../Models/Department.js"
 
 const departments = (app, checkAuthenticated, checkNotAuthenticated) => {
 
-  app.get("/departments", checkAuthenticated, async (req, res) => {
+  app.get("/departments/:house", checkAuthenticated, async (req, res) => {
     try {
-      let query = await DepartmentModel.find()
-      res.json(query)
+      const house = req.params.house;
+      if (req.user.houses.includes(house)) {
+        let query = await DepartmentModel.find({apartOfHouse: house})
+        res.json(query)
+      } else {
+        res.json([])
+      }
     } catch (e) {
       res.json(e)
     }

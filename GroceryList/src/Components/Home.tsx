@@ -21,15 +21,15 @@ function Home({setPage}) {
 
 
   const [itemsList, setItemsList] = useState<Array<any>>([]);
-  const {user, lists, selectedList} = useContext(Context);
+  const {user, lists, selectedList, selectedHouse} = useContext(Context);
 
   const [listsVal, setListsVal] = lists;
   const [selectedListVal, setSelectedListVal] = selectedList;
   const [userVal, setUserVal] = user;
+  const [selectedHouseVal, setSelectedHouseVal] = selectedHouse; 
 
   const fetchGetQuery = async () => {
     const listId = listsVal.filter((list) => list == selectedListVal)[0]._id;
-    console.log(listId);
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${listId}`, {
       credentials: "include",
     })

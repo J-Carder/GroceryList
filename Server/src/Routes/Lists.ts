@@ -19,7 +19,7 @@ const lists = (app, checkAuthenticated, checkNotAuthenticated) => {
       let query = await ListModel.find({apartOfHouse: house})
       res.json(query)
     } catch (e) {
-      res.json(e)
+      res.json([])
     }
   })
 

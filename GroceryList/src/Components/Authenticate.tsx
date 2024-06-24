@@ -14,9 +14,10 @@ const Authenticate = () => {
   const [registerPwd, setRegisterPwd] = useState("");
   const [registerPwdConfirm, setRegisterPwdConfirm] = useState("");
 
-  const {user, authenticated} = useContext(Context);
+  const {user, authenticated, selectedHouse} = useContext(Context);
   const [userVal, setUserVal] = user;
   const [authenticatedVal, setAuthenticatedVal] = authenticated;
+  const [selectedHouseVal, setSelectedHouseVal] = selectedHouse;
 
   const fetchLoginQuery = async () => {
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/login`, {
@@ -68,6 +69,11 @@ const Authenticate = () => {
         if (data.msg == "Authenticated") {
           setAuthenticatedVal(true);
           setUserVal(data.user);
+          try {
+            setSelectedHouseVal(data.user.houses[0]) 
+          } catch (e) {
+            setSelectedHouseVal("");
+          }
         }
         // queryClient.invalidateQueries({ queryKey: [""]})
     }
@@ -86,6 +92,11 @@ const Authenticate = () => {
   useEffect(() => {
     isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setAuthenticatedVal(true)
     isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setUserVal(isAuthQuery.data.user)
+    try {
+      isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setSelectedHouseVal(isAuthQuery.data.user.houses[0]) 
+    } catch (e) {
+      isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setSelectedHouseVal("") 
+    }
   }, [isAuthQuery.isSuccess])
 
   const handleLogin = () => {
