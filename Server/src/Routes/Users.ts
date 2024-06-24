@@ -2,6 +2,7 @@ import { get } from "http";
 import HouseModel from "../Models/House.js";
 import UsersModel from "../Models/User.js";
 import bcrypt from "bcrypt";
+import { pick } from "../helpers.js";
 
 // ---------------------------- //
 // -----   USER ROUTES    ----- //
@@ -80,9 +81,23 @@ const users = (app, checkAuthenticated, checkNotAuthenticated) => {
       if (req.user.admin) {
         const hashedPassword = await bcrypt.hash(req.body.newPassword, 15);
         await UsersModel.findOneAndUpdate({email: req.body.email}, {password: hashedPassword});
-        res.json({msg: "Password changed"})
+        res.json({msg: "Password changed"});
       } else {
-        res.json({msg: "Error, not authorized"})
+        res.json({msg: "Error, not authorized"});
+      }
+    } catch (e) {
+      res.json({msg: "Error"});
+    }
+  })
+
+  app.get("/users", checkAuthenticated, async (req, res) => {
+    try {
+      if (req.user.admin) {
+        let data = await UsersModel.find();
+        data = data.map(obj => pick(obj, "email"))
+        res.json(data);
+      } else {
+        res.json({msg: "Error, not authorized"});
       }
     } catch (e) {
       res.json({msg: "Error"});
