@@ -3,7 +3,7 @@ import ChangeEmail from './AccountManagement/ChangeEmail';
 import ResetPassword from './AccountManagement/ResetPassword';
 import ChangeName from './AccountManagement/ChangeName';
 import { Context } from '../App';
-import AdminResetPassword from './AccountManagement/AdminResetPassword';
+import AdminOptions from './AccountManagement/AdminOptions';
 
 const ManageAccount = () => {
 
@@ -19,7 +19,7 @@ const ManageAccount = () => {
       <ResetPassword />
       {
         userVal.admin ?
-          <AdminResetPassword />
+          <AdminOptions />
         : 
           ""
       }

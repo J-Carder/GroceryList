@@ -103,6 +103,20 @@ const users = (app, checkAuthenticated, checkNotAuthenticated) => {
       res.json({msg: "Error"});
     }
   })
+
+
+  app.delete("/users", checkAuthenticated, async (req, res) => {
+    try {
+      if (req.user.admin) {
+        await UsersModel.deleteOne({email: req.body.email.toLowerCase()})
+        res.json({msg: "Success"});
+      } else {
+        res.json({msg: "Error, not authorized"});
+      }
+    } catch (e) {
+      res.json({msg: "Error"});
+    }
+  })
 } 
 
 export default users;
