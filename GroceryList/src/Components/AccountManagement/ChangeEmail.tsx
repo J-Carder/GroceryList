@@ -14,7 +14,7 @@ const ChangeEmail = () => {
   const [userVal, setUserVal] = user;
   const [status, setStatus] = useState("");
 
-  const nameChangeMutation = useMutation({
+  const emailChangeMutation = useMutation({
     mutationFn: async () => {
       const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/users/email`, {
         method: "post",
@@ -40,7 +40,7 @@ const ChangeEmail = () => {
   })
 
   const handleChange = () => {
-    nameChangeMutation.mutate();
+    emailChangeMutation.mutate();
   }
 
   return (
