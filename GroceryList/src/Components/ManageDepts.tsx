@@ -2,9 +2,6 @@ import React, { useContext, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Context } from '../App';
 
-
-
-
 function ManageDepts() {
 
   const queryClient = useQueryClient()
@@ -39,7 +36,7 @@ const fetchAddQuery = async (newDept : string) => {
               "Content-Type": "application/json",
             },
             credentials: "include",
-            body: JSON.stringify({ department: newDept })
+            body: JSON.stringify({ department: newDept, house: selectedHouseVal })
           });
       return req.json();
   } 
@@ -64,6 +61,9 @@ const fetchDeleteQuery = async (id : string) => {
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({
+            house: selectedHouseVal
+          })
         });
     return req.json();
 }

@@ -35,9 +35,16 @@ const departments = (app, checkAuthenticated, checkNotAuthenticated) => {
 
   app.delete("/departments/:id", checkAuthenticated, async (req, res) => {
     try {
-      const {id} = req.params
-      const query = await DepartmentModel.findByIdAndDelete({_id: id})
-      res.json({success: true})
+      const house = req.body.house;
+      if (req.user.houses.includes(house)) {
+        const {id} = req.params
+        if (await DepartmentModel.find({_id: id, apartOfHouse: house})) {
+          const query = await DepartmentModel.findByIdAndDelete({_id: id})
+          return res.json({msg: "Success"});
+        }
+      } else {
+        res.json({msg: "Not authorized"})
+      }
     } catch (e) {
       res.json({msg: "Error"})
     }
@@ -45,15 +52,19 @@ const departments = (app, checkAuthenticated, checkNotAuthenticated) => {
 
   app.post("/departments", checkAuthenticated, async (req, res) => {
     try {
-
-      await DepartmentModel.create({
-        department: req.body.department,
-        apartOfHouse: req.body.apartOfHouse
-      })
-
-      res.json({success: true})
-
+      const house = req.body.house;
+      if (req.user.houses.includes(house)) {
+        console.log(house, req.body.department);
+        await DepartmentModel.create({
+          department: req.body.department,
+          apartOfHouse: house
+        })
+        return res.json({msg: "Success"});
+      } else {
+        res.json({msg: "Not authorized"})
+      }
     } catch (e) {
+      console.log(e);
       res.json({msg: "Error"})
     }
   })

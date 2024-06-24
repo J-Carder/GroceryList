@@ -93,7 +93,7 @@ const AdminOptions = () => {
 
   return (
     <div>
-      <h4>Change password</h4>
+      <h4>Admin panel</h4>
       <select value={selectedEmail} onChange={(e) => setSelectedEmail(e.target.value)}>
         {emails.map(e => <option key={e.email}>{e.email}</option>)}
       </select>

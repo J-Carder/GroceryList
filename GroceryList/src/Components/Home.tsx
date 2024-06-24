@@ -29,7 +29,7 @@ function Home({setPage}) {
   const [selectedHouseVal, setSelectedHouseVal] = selectedHouse; 
 
   const fetchGetQuery = async () => {
-    const listId = listsVal.filter((list) => list == selectedListVal)[0]._id;
+    const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${listId}`, {
       credentials: "include",
     })
@@ -39,12 +39,11 @@ function Home({setPage}) {
   const {data: items, status} = useQuery({
     queryFn: fetchGetQuery,
     queryKey: ["getQuery"],
-    enabled: selectedListVal != ""
   })
 
   useEffect(() => {
     status == "success" && setItemsList(items)
-  }, [items])
+  }, [items, status])
 
  
 
