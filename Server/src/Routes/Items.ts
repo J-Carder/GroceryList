@@ -29,35 +29,57 @@ const items = (app, checkAuthenticated, checkNotAuthenticated) => {
     }
   })
 
-  app.get("/items/:id", checkAuthenticated, async (req, res) => {
-    try {
-      let query = await ItemModel.findById(req.params.id)
-      res.json(query)
-    } catch (e) {
-      res.json(e)
-    }
-  })
+  // app.get("/items/:id", checkAuthenticated, async (req, res) => {
+  //   try {
+  //     let query = await ItemModel.findById(req.params.id)
+  //     res.json(query)
+  //   } catch (e) {
+  //     res.json(e)
+  //   }
+  // })
 
   app.put("/items/:id", checkAuthenticated, async (req, res) => {
     try {
+      // query param 
+      let {apartOfList} = req.body
+      // the houses the user has attached to them
+      let apartOfHouses = req.user.houses;
+      // the house the list they are requesting is apart of
+      let houseRequested = (await ListModel.findById(apartOfList)).apartOfHouse
+      if (!apartOfHouses.includes(houseRequested)) {
+        // if they don't have this house error
+        return res.status(401).json({msg: "Not authorized"})
+      }
+
       const {id} = req.params
       const completed = req.body.completed
       const query = await ItemModel.findByIdAndUpdate({_id: id}, {completed: completed})
-      res.json({success: true})
-
+      res.json({msg: "Success"})
     } catch (e) {
-      res.json({msg: "Error"})
+      console.log(e);
+      res.json({msg: "Failed"});
     }
   })
 
   app.delete("/items/:id", checkAuthenticated, async (req, res) => {
     try {
+      // query param 
+      let {apartOfList} = req.body
+      // the houses the user has attached to them
+      let apartOfHouses = req.user.houses;
+      // the house the list they are requesting is apart of
+      let houseRequested = (await ListModel.findById(apartOfList)).apartOfHouse
+      if (!apartOfHouses.includes(houseRequested)) {
+        // if they don't have this house error
+        return res.status(401).json({msg: "Not authorized"})
+      }
+
       const {id} = req.params
       const query = await ItemModel.findByIdAndDelete({_id: id})
-      res.json({success: true})
-
+      res.json({msg: "Success"})
     } catch (e) {
-      res.json({msg: "Error"})
+      console.log(e);
+      res.json({msg: "Failed"});
     }
   })
 
@@ -86,10 +108,6 @@ const items = (app, checkAuthenticated, checkNotAuthenticated) => {
       console.log(e);
       res.json({msg: "Failed"});
     }
-
-
-
-
   })
 }
 

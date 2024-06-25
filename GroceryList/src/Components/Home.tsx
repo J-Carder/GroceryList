@@ -48,14 +48,23 @@ function Home({setPage}) {
  
 
   const fetchDeleteQuery = async (id : string) => {
+    const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${id}`, {
             method: 'delete',
             credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+              },
+            body: JSON.stringify({
+              apartOfList: listId
+            })
           });
       return req.json();
   }
 
   const fetchUpdateQuery = async ({id, checked}) => {
+    console.log(checked);
+    const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${id}`, {
           method: 'put',
           headers: {
@@ -63,7 +72,8 @@ function Home({setPage}) {
             },
             credentials: "include",
             body: JSON.stringify({ 
-              completed: checked 
+              completed: checked,
+              apartOfList: listId
             })
             }
           );
@@ -77,8 +87,8 @@ function Home({setPage}) {
     }
   });
   
-  const handleEdit = (id, e) => {
-    updateMutation.mutate({ id: id, checked: e.target.value });
+  const handleEdit = (id, checked) => {
+    updateMutation.mutate({ id: id, checked: checked });
   }
 
   const handleDelete = (id) => {
@@ -140,7 +150,7 @@ function Home({setPage}) {
             :
             itemsList.map(item => 
               <div className="item" key={item._id}>
-                <input type="checkbox" onClick={(e) => handleEdit(item._id, e)} checked={item.completed} readOnly/>
+                <input type="checkbox" onClick={(e) => handleEdit(item._id, e.target.checked)} checked={item.completed} readOnly/>
                 <p className="itemContent"> <span className="bold">{item.item}</span>
                   {item.department != "" ? <> <span className="em">in</span> {item.department}</> : ""}
                   {item.wantedBy != "" ? <> <span className="em">by</span> {item.wantedBy}</> : ""}
