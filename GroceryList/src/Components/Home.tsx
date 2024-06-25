@@ -150,12 +150,13 @@ function Home({setPage}) {
             :
             itemsList.map(item => 
               <div className="item" key={item._id}>
-                <input type="checkbox" onClick={(e) => handleEdit(item._id, e.target.checked)} checked={item.completed} readOnly/>
-                <p className="itemContent"> <span className="bold">{item.item}</span>
-                  {item.department != "" ? <> <span className="em">in</span> {item.department}</> : ""}
-                  {item.wantedBy != "" ? <> <span className="em">by</span> {item.wantedBy}</> : ""}
+                <p className="itemContent"> 
+                  <input type="checkbox" onClick={(e) => handleEdit(item._id, e.target.checked)} checked={item.completed} />
+                  <span className="bold">{item.item}</span>
+                    {item.department != "" && item.department != "None" ? <> <span className="em">in</span> {item.department}</> : ""}
+                    {item.wantedBy != "" && item.wantedBy != "None" ? <> <span className="em">by</span> {item.wantedBy}</> : ""}
+                  <button onClick={() => handleDelete(item._id)}>X</button>
                 </p>
-                <button onClick={() => handleDelete(item._id)}>X</button>
               </div> 
             )
           }

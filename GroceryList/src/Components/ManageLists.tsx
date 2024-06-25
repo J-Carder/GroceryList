@@ -68,6 +68,7 @@ const ManageLists = () => {
   const deleteMutation = useMutation({
     mutationFn: fetchDeleteQuery,
     onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["getQuery"]})
         queryClient.invalidateQueries({ queryKey: ["listGetQuery"]})
     }
   })

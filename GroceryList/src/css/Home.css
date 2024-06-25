@@ -2,6 +2,10 @@
   display: inline;
 }
 
+.item input, .item button {
+  display: inline;
+}
+
 .item {
   border: 1px solid grey;
   padding: 1px;

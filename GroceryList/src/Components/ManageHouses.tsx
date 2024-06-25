@@ -211,15 +211,16 @@ const ManageHouses = () => {
           <button onClick={handleLeaveHouse}>Leave</button>
         </>
         :
-          ""
+        <>
+          <h3>Join a house</h3>
+          <div>
+            <input type="text" placeholder="House name" value={joinHouseName} onChange={e => setJoinHouseName(e.target.value)}/>
+            <input type="text" placeholder="Passphrase" value={joinHousePassphrase} onChange={e => setJoinHousePassphrase(e.target.value)}/>
+            <button onClick={handleJoinHouse}>Join!</button> 
+          </div>
+        </>
       }
 
-      <h3>Join a house</h3>
-      <div>
-        <input type="text" placeholder="House name" value={joinHouseName} onChange={e => setJoinHouseName(e.target.value)}/>
-        <input type="text" placeholder="Passphrase" value={joinHousePassphrase} onChange={e => setJoinHousePassphrase(e.target.value)}/>
-        <button onClick={handleJoinHouse}>Join!</button> 
-      </div>
     </div>
   )
 }
