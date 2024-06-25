@@ -6,6 +6,7 @@ import ManageLists from './ManageLists'
 import { Context } from '../App'
 import ManageHouses from './ManageHouses'
 import SortItems from './SortItems'
+import ItemSettings from './ItemSettings'
 
 function Home({setPage}) {
 
@@ -179,17 +180,20 @@ function Home({setPage}) {
           <hr />
           <AddItem />
           <SortItems />
+          <ItemSettings itemsList={itemsList} setItemsList={setItemsList} />
           {
             itemsList.length === 0 ? 
             <div><h2>Empty!</h2></div>
             :
             itemsList.map(item => 
-              <div className="item" key={item._id}>
+              <div className="item" key={item._id} onClick={(e) => handleEdit(item._id, !item.completed)}>
                 <p className="itemContent"> 
                   <input type="checkbox" onChange={(e) => handleEdit(item._id, e.target.checked)} checked={item.completed} />
-                  <span className="bold">{item.item}</span>
-                    {item.department != "" && item.department != "None" ? <> <span className="em">in</span> {item.department}</> : ""}
-                    {item.wantedBy != "" && item.wantedBy != "None" ? <> <span className="em">by</span> {item.wantedBy}</> : ""}
+                  <span className={item.completed ? "strike" : ""}>
+                    <span className="bold">{item.item}</span>
+                      {item.department != "" && item.department != "None" ? <> <span className="em">in</span> {item.department}</> : ""}
+                      {item.wantedBy != "" && item.wantedBy != "None" ? <> <span className="em">by</span> {item.wantedBy}</> : ""}
+                  </span>
                   <button onClick={() => handleDelete(item._id)}>X</button>
                 </p>
               </div> 

@@ -8,6 +8,8 @@ fix refresh errors
 fix logout erroring (blank page)
 
 IN PROGRESS:
+Removed checked items
+Check all/none/invert
 
 DONE:
 fix house not being set when logged in on new account sign up

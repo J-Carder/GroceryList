@@ -6,6 +6,10 @@
   display: inline;
 }
 
+.strike {
+  text-decoration: line-through;
+}
+
 .item {
   border: 1px solid grey;
   padding: 1px;
