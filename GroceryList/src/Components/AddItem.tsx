@@ -98,17 +98,8 @@ function AddItem() {
     peopleQuery.isSuccess && setPersonListVal(peopleQuery.data);
     deptQuery.isSuccess && setDepartmentListVal(deptQuery.data);
 
-    try {
-      peopleQuery.isSuccess && setPersonSelectedVal(peopleQuery.data[0].name)
-    } catch (e) {
-      setPersonSelectedVal("")
-    }
-
-    try {
-      deptQuery.isSuccess && setDepartmentSelectedVal(deptQuery.data[0].department)
-    } catch (e) {
-      setDepartmentSelectedVal("")
-    }
+    setPersonSelectedVal("None")
+    setDepartmentSelectedVal("None")
 
   }, [peopleQuery.isSuccess, deptQuery.isSuccess]);
 
@@ -121,10 +112,12 @@ function AddItem() {
       <div className="categories">
         <h3>Wanted by:</h3>
         <select name="wantedBy" id="wantedBy" value={personSelectedVal} onChange={e => handlePersonChange(e.target.value)}>
+          <option>None</option>
           { personListVal.map(person => <option key={person._id}>{person.name}</option>)  } 
         </select>
         <h3>Department</h3>
         <select name="dept" id="dept" value={departmentSelectedVal} onChange={e => handleDepartmentChange(e.target.value)}>
+          <option>None</option>
           { departmentListVal.map(dept => <option key={dept._id}>{dept.department}</option>) } 
         </select>
       </div>

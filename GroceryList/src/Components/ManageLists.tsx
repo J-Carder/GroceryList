@@ -8,9 +8,10 @@ const ManageLists = () => {
   const queryClient = useQueryClient();
   const [listName, setListName] = useState("");
 
-  const {selectedList, user, lists} = useContext(Context);
+  const {selectedList, selectedHouse, user, lists} = useContext(Context);
 
   const [selectedListVal, setSelectedListVal] = selectedList;
+  const [selectedHouseVal, setSelectedHouseVal] = selectedHouse;
   const [userVal, setUserVal] = user;
   const [listsVal, setListsVal] = lists;
 
@@ -26,13 +27,13 @@ const ManageLists = () => {
 
   const fetchAddQuery = async (listName : string) => {
     if (listName != "") {
-      const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/lists`, {
+      const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/lists/${selectedHouseVal}`, {
               method: 'post',
               headers: {
                 "Content-Type": "application/json",
               },
               credentials: "include",
-              body: JSON.stringify({ name: listName, apartOfHouse: "default" })
+              body: JSON.stringify({ name: listName })
             });
         return req.json();
     } 

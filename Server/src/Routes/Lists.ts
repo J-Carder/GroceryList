@@ -47,14 +47,23 @@ const lists = (app, checkAuthenticated, checkNotAuthenticated) => {
     }
   })
 
-  app.post("/lists", checkAuthenticated, async (req, res) => {
+  app.post("/lists/:house", checkAuthenticated, async (req, res) => {
     try {
+
+      let {house} = req.params;
+      let housesApartOf = req.user.houses
+
+      if (!housesApartOf.includes(house)) {
+        return res.json({msg: "Not authorized"});
+      }
       await ListModel.create({
-        name: req.body.name
+        name: req.body.name,
+        apartOfHouse: house
       })
-      res.json({success: true})
+
+      res.json({msg: "Success"});
     } catch (e) {
-      res.json({msg: "Error"})
+      res.json({msg: "Error"});
     }
   })
 }

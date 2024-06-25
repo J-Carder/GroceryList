@@ -120,6 +120,7 @@ const ManageHouses = () => {
           delete tempVal.houses
           setUserVal(tempVal);
           setListsVal([]);
+          setSelectedHouseVal("");
         }
       }
     }
@@ -149,7 +150,7 @@ const ManageHouses = () => {
       } else {
         setUserVal(userVal => { return {...userVal, houses: [joinHouseName]}});
         try {
-          setSelectedHouseVal(userVal.houses[0])
+          setSelectedHouseVal(joinHouseName)
         } catch (e) {
           setSelectedHouseVal("");
         }
