@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { Context } from '../../App';
 
 const AdminOptions = () => {
   const [selectedEmail, setSelectedEmail] = useState("");
@@ -8,6 +9,10 @@ const AdminOptions = () => {
   const [status, setStatus] = useState("");
   const [deleteForReal, setDeleteForReal] = useState(false);
   const queryClient = useQueryClient();
+
+  const {user} = useContext(Context);
+
+  const [userVal, setUserVal] = user;
 
   const getUsersQuery = useQuery({
     queryFn: async () => {
@@ -95,7 +100,7 @@ const AdminOptions = () => {
     <div>
       <h4>Admin panel</h4>
       <select value={selectedEmail} onChange={(e) => setSelectedEmail(e.target.value)}>
-        {emails.map(e => <option key={e.email}>{e.email}</option>)}
+        {emails.map(e => { if (e.email != userVal.email) {return <option key={e.email}>{e.email}</option>}})};
       </select>
       <input type="text" placeholder='New password' value={newPwd} onChange={(e) => setNewPwd(e.target.value)}/>
       <p>{status}</p>

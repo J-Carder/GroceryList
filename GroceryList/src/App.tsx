@@ -53,7 +53,7 @@ function App() {
             <Settings setPage={setPage} />
         }
         <button onClick={(e) =>
-          console.log(selectedHouse)
+          console.log(userVal)
         }>
           TESTER
         </button>
