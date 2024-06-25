@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import ManageLists from './ManageLists'
 import { Context } from '../App'
 import ManageHouses from './ManageHouses'
+import SortItems from './SortItems'
 
 function Home({setPage}) {
 
@@ -21,12 +22,14 @@ function Home({setPage}) {
 
 
   const [itemsList, setItemsList] = useState<Array<any>>([]);
-  const {user, lists, selectedList, selectedHouse} = useContext(Context);
+  const {user, lists, selectedList, selectedHouse, sortBy, order} = useContext(Context);
 
   const [listsVal, setListsVal] = lists;
   const [selectedListVal, setSelectedListVal] = selectedList;
   const [userVal, setUserVal] = user;
   const [selectedHouseVal, setSelectedHouseVal] = selectedHouse; 
+  const [sortByVal, setSortByVal] = sortBy; 
+  const [orderVal, setOrderVal] = order;
 
   const fetchGetQuery = async () => {
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
@@ -42,7 +45,10 @@ function Home({setPage}) {
   })
 
   useEffect(() => {
-    status == "success" && setItemsList(items)
+    if (status == "success") {
+      const tempItems = [...items];
+      setItemsList(tempItems.reverse())
+    }
   }, [items, status])
 
  
@@ -130,6 +136,34 @@ function Home({setPage}) {
     queryClient.invalidateQueries({queryKey: ["getQuery"]});
   }, [selectedListVal])
 
+  const dateFromObjectId = function (objectId) {
+    return new Date(parseInt(objectId.substring(0, 8), 16) * 1000);
+  };
+
+  const refreshSort = (itemsList) => {
+    if (sortByVal == "Department") {
+      itemsList.sort((a, b) => a.department > b.department ? 1 : -1)
+    } else if (sortByVal == "Person") {
+      itemsList.sort((a, b) => a.wantedBy > b.wantedBy ? 1 : -1)
+    } else {
+      itemsList.sort((a, b) => dateFromObjectId(a._id) > dateFromObjectId(b._id) ? 1 : -1)
+    }
+
+    if (orderVal == "Descending") {
+      itemsList.reverse();
+    }
+
+    return itemsList;
+  }
+    
+  useEffect(() => {
+    if (status == "success") {
+      const tempItemsList = [...itemsList];
+      refreshSort(tempItemsList);
+      setItemsList(tempItemsList);
+    }
+  }, [sortByVal, orderVal])
+
 
   return (
     <div>
@@ -144,6 +178,7 @@ function Home({setPage}) {
           <ManageLists />
           <hr />
           <AddItem />
+          <SortItems />
           {
             itemsList.length === 0 ? 
             <div><h2>Empty!</h2></div>
@@ -151,7 +186,7 @@ function Home({setPage}) {
             itemsList.map(item => 
               <div className="item" key={item._id}>
                 <p className="itemContent"> 
-                  <input type="checkbox" onClick={(e) => handleEdit(item._id, e.target.checked)} checked={item.completed} />
+                  <input type="checkbox" onChange={(e) => handleEdit(item._id, e.target.checked)} checked={item.completed} />
                   <span className="bold">{item.item}</span>
                     {item.department != "" && item.department != "None" ? <> <span className="em">in</span> {item.department}</> : ""}
                     {item.wantedBy != "" && item.wantedBy != "None" ? <> <span className="em">by</span> {item.wantedBy}</> : ""}

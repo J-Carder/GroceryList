@@ -18,6 +18,8 @@ interface Props {
   user: Array<any>
   lists: Array<any>
   selectedHouse: Array<any>
+  sortBy: Array<any>
+  order: Array<any>
 }
 
 export const Context = React.createContext<Props>({} as Props);
@@ -34,9 +36,11 @@ function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [lists, setLists] = useState<Array<any>>([]);
   const [selectedHouse, setSelectedHouse] = useState("");
+  const [sortBy, setSortBy] = useState("");
+  const [order, setOrder] = useState("Descending");
 
   return (
-    <Context.Provider value={{ selectedHouse: [selectedHouse, setSelectedHouse], lists: [lists, setLists], personSelected: [personSelected, setPersonSelected], personList: [personList, setPersonList], departmentSelected: [departmentSelected, setDepartmentSelected], departmentList: [departmentList, setDepartmentList], selectedList: [selectedList, setSelectedList], user: [user, setUser], authenticated: [authenticated, setAuthenticated]}}>
+    <Context.Provider value={{ order: [order, setOrder], sortBy: [sortBy, setSortBy], selectedHouse: [selectedHouse, setSelectedHouse], lists: [lists, setLists], personSelected: [personSelected, setPersonSelected], personList: [personList, setPersonList], departmentSelected: [departmentSelected, setDepartmentSelected], departmentList: [departmentList, setDepartmentList], selectedList: [selectedList, setSelectedList], user: [user, setUser], authenticated: [authenticated, setAuthenticated]}}>
       <QueryClientProvider client={queryClient}>
         { authenticated ? 
           <Logout />
