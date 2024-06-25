@@ -12,7 +12,7 @@ const ItemSettings = ({itemsList, setItemsList}) => {
 
   const queryClient = useQueryClient();
 
-  const allQuery = useMutation({
+  const fillQuery = useMutation({
     mutationFn: async (completed) => {
 
       const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
@@ -35,17 +35,38 @@ const ItemSettings = ({itemsList, setItemsList}) => {
     }
   })
 
+  const clearQuery = useMutation({
+    mutationFn: async (completed) => {
+
+      const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
+      const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/clear`, {
+              method: 'post',
+              headers: {
+                  "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({ 
+                  apartOfList: listId
+                })
+                }
+              );
+      return req.json();
+    },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({queryKey: ["getQuery"]})
+    }
+  })
 
   const handleClear = () => {
-
+    clearQuery.mutate();
   }
 
   const handleAll = () => {
-    allQuery.mutate(true);
+    fillQuery.mutate(true);
   }
 
   const handleNone = () => {
-    allQuery.mutate(false);
+    fillQuery.mutate(false);
   }
 
   return (
