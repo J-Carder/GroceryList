@@ -21,6 +21,7 @@ const Logout = () => {
     mutationFn: fetchLogoutQuery,
     onSuccess: (data) => {
       if (data.msg == "Logged out") {
+        console.log("test")
         setAuthVal(false);
       }
     }

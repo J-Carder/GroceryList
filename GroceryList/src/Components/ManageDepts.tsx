@@ -14,7 +14,6 @@ function ManageDepts() {
   const [selectedHouseVal, setSelectedHouseVal] = selectedHouse;
   
   const fetchGetQuery = async () => {
-    console.log(selectedHouseVal);
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/departments/${selectedHouseVal}`, {
       credentials: "include"
     })
@@ -71,7 +70,7 @@ const fetchDeleteQuery = async (id : string) => {
   const addMutation = useMutation({
     mutationFn: fetchAddQuery,
     onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["deptGetQuery"]})
+      queryClient.invalidateQueries({ queryKey: ["deptGetQuery"]})
     }
   })
 
@@ -130,6 +129,9 @@ const fetchDeleteQuery = async (id : string) => {
         depts.map(dept => 
           <div key={dept._id}>
             <p>{dept.department}</p> 
+            {
+              user
+            }
             <button onClick={() => handleDelete(dept._id)}>X</button>
           </div> 
         )

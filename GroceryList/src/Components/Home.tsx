@@ -45,12 +45,6 @@ function Home({setPage}) {
     queryKey: ["getQuery"],
   })
 
-  useEffect(() => {
-    if (status == "success") {
-      const tempItems = [...items];
-      setItemsList(tempItems.reverse())
-    }
-  }, [items, status])
 
  
 
@@ -133,10 +127,6 @@ function Home({setPage}) {
 
   //////////////////////////////////////
 
-  useEffect(() => {
-    queryClient.invalidateQueries({queryKey: ["getQuery"]});
-  }, [selectedListVal])
-
   const dateFromObjectId = function (objectId) {
     return new Date(parseInt(objectId.substring(0, 8), 16) * 1000);
   };
@@ -156,15 +146,26 @@ function Home({setPage}) {
 
     return itemsList;
   }
-    
+
+  useEffect(() => {
+    queryClient.invalidateQueries({queryKey: ["getQuery"]});
+  }, [selectedListVal])
+
+
   useEffect(() => {
     if (status == "success") {
-      const tempItemsList = [...itemsList];
-      refreshSort(tempItemsList);
-      setItemsList(tempItemsList);
+      const tempItems = [...items];
+      setItemsList(tempItems.reverse());
+    }
+  }, [items, status])
+  
+  // PROBLEM CODE
+  useEffect(() => {
+    if (status == "success") {
+      const tempItemsList = [...items];
+      setItemsList(refreshSort(tempItemsList));
     }
   }, [sortByVal, orderVal])
-
 
   return (
     <div>
@@ -203,6 +204,9 @@ function Home({setPage}) {
         : 
           <p>Welcome! First, head over to Settings to join a house</p>
         }
+        <button onClick={() => console.log(itemsList)}>
+          CLICK ME
+        </button>
     </div>
   )
 }
