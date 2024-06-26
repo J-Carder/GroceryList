@@ -107,8 +107,6 @@ const Home = ({setPage}) => {
     deleteMutation.mutate(id);
   }
 
-  //////////////////////////////////////
-
   const updateLocal = (
       id: string,
       completed: boolean
@@ -131,8 +129,6 @@ const Home = ({setPage}) => {
     },
   });
 
-
-  //////////////////////////////////////
 
   const dateFromObjectId = function (objectId) {
     return new Date(parseInt(objectId.substring(0, 8), 16) * 1000);
