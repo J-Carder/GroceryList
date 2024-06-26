@@ -70,10 +70,22 @@ function Home({setPage}) {
       return req.json();
   }
 
+  const deleteLocal = (
+      id: string
+    ) => {
+      queryClient.setQueryData(['getQuery'], (itemsList : Array<any>) => {
+        return itemsList.filter(item => item._id != id);
+      });
+    };  
+
   const deleteMutation = useMutation({
     mutationFn: fetchDeleteQuery,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["getQuery"]})
+    onMutate: async (payload) => {
+      await queryClient.cancelQueries({queryKey: ["getQuery"]});
+      deleteLocal(payload)
+    },
+    onSuccess: (data) => {
+      // queryClient.invalidateQueries({ queryKey: ["getQuery"]});
     }
   });
   
@@ -107,10 +119,6 @@ function Home({setPage}) {
       await queryClient.cancelQueries({queryKey: ["getQuery"]});
       updateLocal(payload.id, payload.checked);
     },
-    onSuccess: (data) => {
-      updateLocal(data.id, data.completed);
-        // queryClient.invalidateQueries({ queryKey: ["getQuery"]})
-    }
   });
 
 

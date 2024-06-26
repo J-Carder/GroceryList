@@ -68,11 +68,38 @@ function AddItem() {
     gcTime: Infinity
   })
 
+  const mongoObjectId =() => {
+    let timestamp = (new Date().getTime() / 1000 | 0).toString(16);
+    return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function() {
+        return (Math.random() * 16 | 0).toString(16);
+    }).toLowerCase();
+  };
+
+  const addLocal = () => {
+    const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
+    queryClient.setQueryData(["getQuery"], (itemsList: Array<any>) => {
+      const newList = [...itemsList];
+      newList.push({
+        completed: false,
+        wantedBy: personSelectedVal,
+        department: departmentSelectedVal,
+        item: item,
+        apartOfList: listId,
+        _id: mongoObjectId()
+      });
+      return newList;
+    })
+  }
+
   const addItemQuery = useMutation({
     mutationFn: fetchAddQuery,
+    onMutate: async (payload) => {
+      await queryClient.cancelQueries({queryKey: ["getQuery"]});
+      addLocal();
+      setItem("");
+    },
     onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["getQuery"]})
-        setItem("");
+        // queryClient.invalidateQueries({ queryKey: ["getQuery"]})
     }
   })
 
