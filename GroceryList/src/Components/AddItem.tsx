@@ -34,26 +34,26 @@ function AddItem() {
     return req.json();
   }
 
-  const fetchAddQuery = async (tempId) => {
+  const fetchAddQuery = async ({itemName, wantedBy, department, apartOflist, tempId}) => {
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
     let reqBody;
     if (tempId) {
       reqBody = JSON.stringify({ 
-              item: item,
-              wantedBy: personSelectedVal,
-              department: departmentSelectedVal,
+              item: itemName,
+              wantedBy: wantedBy,
+              department: department,
               apartOfList: listId,
               tempId: tempId
             })
     } else {
       reqBody = JSON.stringify({ 
-              item: item,
-              wantedBy: personSelectedVal,
-              department: departmentSelectedVal,
-              apartOfList: listId
+              item: itemName,
+              wantedBy: wantedBy,
+              department: department,
+              apartOfList: apartOflist
             })
     }
-    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${listId}`, {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${apartOflist}`, {
             method: 'post',
             headers: {
               "Content-Type": "application/json",
@@ -86,16 +86,15 @@ function AddItem() {
     }).toLowerCase();
   };
 
-  const addLocal = (tempId) => {
-    const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
+  const addLocal = ({itemName, wantedBy, department, apartOflist, tempId}) => {
     queryClient.setQueryData(["getQuery"], (itemsList: Array<any>) => {
       const newList = [...itemsList];
       newList.push({
         completed: false,
-        wantedBy: personSelectedVal,
-        department: departmentSelectedVal,
-        item: item,
-        apartOfList: listId,
+        wantedBy: wantedBy,
+        department: department,
+        item: itemName,
+        apartOfList: apartOflist,
         tempId: tempId,
         _id: tempId
       });
@@ -120,7 +119,8 @@ function AddItem() {
   const handleAdd = async () => {
     if (item != "" && selectedListVal != "") {
       const tempId = mongoObjectId();
-      addItemQuery.mutate(tempId); 
+      const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
+      addItemQuery.mutate({itemName: item, wantedBy: personSelectedVal, department: departmentSelectedVal, apartOflist: listId, tempId: tempId}); 
     } else {
       // TODO: send error cuz of blank string
     }
@@ -171,4 +171,4 @@ function AddItem() {
   )
 }
 
-export default AddItem
+export default AddItem;
