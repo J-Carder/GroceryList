@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Home from "./Components/Home";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import Settings from "./Components/Settings";
 import Authenticate from './Components/Authenticate';
 import Logout from './Components/Logout';
+import "./css/App.css"
 
 
 const queryClient = new QueryClient();
@@ -20,6 +21,7 @@ interface Props {
   selectedHouse: Array<any>
   sortBy: Array<any>
   order: Array<any>
+  online: Array<any>
 }
 
 export const Context = React.createContext<Props>({} as Props);
@@ -38,10 +40,28 @@ function App() {
   const [selectedHouse, setSelectedHouse] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [order, setOrder] = useState("Descending");
+  const [online, setOnline] = useState(true);
+
+  useEffect(()=>{
+    window.addEventListener('online', function(e) {
+      setOnline(true);
+    }, false);
+                
+    window.addEventListener('offline', function(e) {
+      setOnline(false);
+    }, false);
+  },[])
 
   return (
-    <Context.Provider value={{ order: [order, setOrder], sortBy: [sortBy, setSortBy], selectedHouse: [selectedHouse, setSelectedHouse], lists: [lists, setLists], personSelected: [personSelected, setPersonSelected], personList: [personList, setPersonList], departmentSelected: [departmentSelected, setDepartmentSelected], departmentList: [departmentList, setDepartmentList], selectedList: [selectedList, setSelectedList], user: [user, setUser], authenticated: [authenticated, setAuthenticated]}}>
+    <Context.Provider value={{ online: [online, setOnline], order: [order, setOrder], sortBy: [sortBy, setSortBy], selectedHouse: [selectedHouse, setSelectedHouse], lists: [lists, setLists], personSelected: [personSelected, setPersonSelected], personList: [personList, setPersonList], departmentSelected: [departmentSelected, setDepartmentSelected], departmentList: [departmentList, setDepartmentList], selectedList: [selectedList, setSelectedList], user: [user, setUser], authenticated: [authenticated, setAuthenticated]}}>
       <QueryClientProvider client={queryClient}>
+        { !online ? 
+          <p>
+            <span className='red'>OFFLINE</span>
+          </p>
+        : 
+          ""
+        }
         { authenticated ? 
           <Logout />
         :
