@@ -20,6 +20,9 @@ const ItemSchema = new mongoose.Schema({
   apartOfList: {
     type: String,
     required: true
+  },
+  tempId: {
+    type: String
   }
 })
 

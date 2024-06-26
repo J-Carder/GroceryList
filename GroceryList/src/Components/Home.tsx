@@ -53,7 +53,7 @@ const Home = ({setPage}) => {
       return req.json();
   }
 
-  const fetchUpdateQuery = async ({id, checked}) => {
+  const fetchUpdateQuery = async ({id, checked, tempId}) => {
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
 
     const reqPath = `${import.meta.env.VITE_REACT_APP_API}/items/${id}`
@@ -65,15 +65,10 @@ const Home = ({setPage}) => {
           credentials: "include",
           body: JSON.stringify({ 
             completed: checked,
-            apartOfList: listId
+            apartOfList: listId,
+            tempId: tempId
           })
         };
-
-    // if (!onlineVal) {
-    //   setOfflineStateVal([...offlineStateVal, {
-    //     path: reqPath,
-    //     body: reqBody
-    //   }]);
 
     const req = await fetch(reqPath, reqBody);
     return req.json();
@@ -99,8 +94,8 @@ const Home = ({setPage}) => {
     }
   });
   
-  const handleEdit = (id, checked) => {
-    updateMutation.mutate({ id: id, checked: checked });
+  const handleEdit = (id, checked, tempId) => {
+    updateMutation.mutate({ id: id, checked: checked, tempId: tempId });
   }
 
   const handleDelete = (id) => {
@@ -109,7 +104,8 @@ const Home = ({setPage}) => {
 
   const updateLocal = (
       id: string,
-      completed: boolean
+      completed: boolean,
+      tempId: string
     ) => {
       queryClient.setQueryData(['getQuery'], (itemsList : Array<any>) => {
         return itemsList.map(item => {
@@ -125,7 +121,7 @@ const Home = ({setPage}) => {
     mutationFn: fetchUpdateQuery,
     onMutate: async (payload) => {
       await queryClient.cancelQueries({queryKey: ["getQuery"]});
-      updateLocal(payload.id, payload.checked);
+      updateLocal(payload.id, payload.checked, payload.tempId);
     },
   });
 
@@ -190,9 +186,9 @@ const Home = ({setPage}) => {
             <div><h2>Empty!</h2></div>
             :
             itemsList.map(item => 
-              <div className="item" key={item._id} onClick={(e) => handleEdit(item._id, !item.completed)}>
+              <div className="item" key={item._id} onClick={(e) => handleEdit(item._id, !item.completed, item.tempId ? item.tempId : false)}>
                 <p className="itemContent"> 
-                  <input type="checkbox" onChange={(e) => handleEdit(item._id, e.target.checked)} checked={item.completed} />
+                  <input type="checkbox" onChange={(e) => handleEdit(item._id, e.target.checked, item.tempId ? item.tempId : false)} checked={item.completed} />
                   <span className={item.completed ? "strike" : ""}>
                     <span className="bold">{item.item}</span>
                       {item.department != "" && item.department != "None" ? <> <span className="em">in</span> {item.department}</> : ""}

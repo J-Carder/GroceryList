@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { onlineManager, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Context } from '../AppWrapper'
 
 function AddItem() {
@@ -34,23 +34,34 @@ function AddItem() {
     return req.json();
   }
 
-  const fetchAddQuery = async () => {
-
+  const fetchAddQuery = async (tempId) => {
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
-    console.log(item)
+    let reqBody;
+    if (tempId) {
+      reqBody = JSON.stringify({ 
+              item: item,
+              wantedBy: personSelectedVal,
+              department: departmentSelectedVal,
+              apartOfList: listId,
+              tempId: tempId
+            })
+    } else {
+      reqBody = JSON.stringify({ 
+              item: item,
+              wantedBy: personSelectedVal,
+              department: departmentSelectedVal,
+              apartOfList: listId
+            })
+    }
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${listId}`, {
             method: 'post',
             headers: {
               "Content-Type": "application/json",
             },
             credentials: "include",
-            body: JSON.stringify({ 
-              item: item,
-              wantedBy: personSelectedVal,
-              department: departmentSelectedVal,
-              apartOfList: listId
-            })
+            body: reqBody 
           });
+      setItem("");
       return req.json();
   }
 
@@ -75,7 +86,7 @@ function AddItem() {
     }).toLowerCase();
   };
 
-  const addLocal = () => {
+  const addLocal = (tempId) => {
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
     queryClient.setQueryData(["getQuery"], (itemsList: Array<any>) => {
       const newList = [...itemsList];
@@ -85,7 +96,8 @@ function AddItem() {
         department: departmentSelectedVal,
         item: item,
         apartOfList: listId,
-        _id: mongoObjectId()
+        tempId: tempId,
+        _id: tempId
       });
       return newList;
     })
@@ -95,19 +107,20 @@ function AddItem() {
     mutationFn: fetchAddQuery,
     onMutate: async (payload) => {
       await queryClient.cancelQueries({queryKey: ["getQuery"]});
-      addLocal();
+      addLocal(payload);
+      if (!window.navigator.onLine) {
+        setItem("");
+      }
     },
     onSuccess: () => {
         // queryClient.invalidateQueries({ queryKey: ["getQuery"]})
-    },
-    onSettled: () => {
-      setItem("");
     }
   })
 
   const handleAdd = async () => {
     if (item != "" && selectedListVal != "") {
-      addItemQuery.mutate(); 
+      const tempId = mongoObjectId();
+      addItemQuery.mutate(tempId); 
     } else {
       // TODO: send error cuz of blank string
     }
