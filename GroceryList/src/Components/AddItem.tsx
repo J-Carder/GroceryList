@@ -57,11 +57,15 @@ function AddItem() {
   const deptQuery = useQuery({
     queryFn: fetchGetDepts,
     queryKey: ["deptGetQuery"],
+    staleTime: Infinity,
+    gcTime: Infinity
   })
 
   const peopleQuery = useQuery({
     queryFn: fetchGetPeople,
     queryKey: ["peopleGetQuery"],
+    staleTime: Infinity,
+    gcTime: Infinity
   })
 
   const addItemQuery = useMutation({

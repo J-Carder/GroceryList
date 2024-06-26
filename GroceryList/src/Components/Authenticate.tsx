@@ -60,7 +60,9 @@ const Authenticate = ({setPage}) => {
 
   const isAuthQuery = useQuery({
     queryFn: fetchIsAuthQuery,
-    queryKey: ["isAuthQuery"]
+    queryKey: ["isAuthQuery"],
+    staleTime: Infinity,
+    gcTime: Infinity
   })
 
   const loginMutation = useMutation({

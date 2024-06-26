@@ -70,7 +70,9 @@ const ManageHouses = () => {
 
   const housesQuery = useQuery({
     queryFn: fetchGetQuery,
-    queryKey: ["housesGetQuery"]
+    queryKey: ["housesGetQuery"],
+    staleTime: Infinity,
+    gcTime: Infinity
   })
 
 
@@ -188,19 +190,6 @@ const ManageHouses = () => {
   return (
     <div>
       <h3>Manage Houses</h3>
-      {/* <h3>Add new house</h3>
-      <div>
-        <input type="text" placeholder="House name" value={newHouseName} onChange={e => setNewHouseName(e.target.value)}/>
-        <input type="text" placeholder="Passphrase" value={newHousePassphrase} onChange={e => setNewHousePassphrase(e.target.value)}/>
-        <button onClick={handleAddHouse}>Add</button>
-      </div> */}
-
-
-      {/* <button onClick={() => {
-        console.log(userVal)
-      }}>
-        Click
-      </button> */}
 
       {
         userVal?.houses?.length > 0 ? 

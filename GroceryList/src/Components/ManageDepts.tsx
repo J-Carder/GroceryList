@@ -22,7 +22,9 @@ function ManageDepts() {
 
   const {data: depts, status: deptStatus} = useQuery({
     queryFn: fetchGetQuery,
-    queryKey: ["deptGetQuery"]
+    queryKey: ["deptGetQuery"],
+    staleTime: Infinity,
+    gcTime: Infinity
   })
 
 
@@ -129,9 +131,6 @@ const fetchDeleteQuery = async (id : string) => {
         depts.map(dept => 
           <div key={dept._id}>
             <p>{dept.department}</p> 
-            {
-              user
-            }
             <button onClick={() => handleDelete(dept._id)}>X</button>
           </div> 
         )

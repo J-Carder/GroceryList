@@ -8,10 +8,10 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import UsersModel from './Models/User.js';
 import passport from "passport";
-import flash from "express-flash";
 import session from "express-session";
 import initialize from "./Routes/Passport.js";
 import cookieParser from "cookie-parser";
+import MongoStore from 'connect-mongo';
 
 // route imports
 import items from "./Routes/Items.js";
@@ -47,27 +47,38 @@ const jsonParserMiddleware = async(req, res, next) => {
   }
 };
 
+// connect to mongoDB
+const conn = mongoose.connect(process.env.DB).then(m => m.connection.getClient())
+
 // ---------------------------- //
 // -----     MIDDLEWARE   ----- //
 // ---------------------------- //
-
 
 app.use(jsonParserMiddleware);
 app.use(cors({credentials: true, origin: "http://localhost:5173"}));
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
+// USE BELOW IN PROD (STORES SESSIONS IN DB)!!!!!!!
+// app.use(session({ // PROD
+//   secret: process.env.SESSION_SECRET,
+//   resave: false,
+//   saveUninitialized: false,
+//   store: MongoStore.create({
+//     clientPromise: conn,
+//     dbName: "GroceryList",
+//     stringify: false,
+//     autoRemove: "interval",
+//     autoRemoveInterval: 1
+//   })
+// }))
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: false
 }))
 app.use(passport.initialize())
 app.use(passport.session())
-
-
-// connect to mongoDB
-mongoose.connect(process.env.DB)
 
 // initialize passport
 initialize(passport, getUserByEmail, getUserById)

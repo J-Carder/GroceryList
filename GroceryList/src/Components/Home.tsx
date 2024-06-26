@@ -12,16 +12,6 @@ function Home({setPage}) {
 
   const queryClient = useQueryClient()
 
-
-  // const updateMutation = useMutation({
-  //   mutationFn: fetchUpdateQuery,
-  //   onSuccess: () => {
-  //       queryClient.invalidateQueries({ queryKey: ["getQuery"]})
-  //   }
-  // });
-  
-
-
   const [itemsList, setItemsList] = useState<Array<any>>([]);
   const {user, lists, selectedList, selectedHouse, sortBy, order} = useContext(Context);
 
@@ -43,10 +33,9 @@ function Home({setPage}) {
   const {data: items, status} = useQuery({
     queryFn: fetchGetQuery,
     queryKey: ["getQuery"],
+    staleTime: Infinity,
+    gcTime: Infinity
   })
-
-
- 
 
   const fetchDeleteQuery = async (id : string) => {
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
@@ -159,7 +148,6 @@ function Home({setPage}) {
     }
   }, [items, status])
   
-  // PROBLEM CODE
   useEffect(() => {
     if (status == "success") {
       const tempItemsList = [...items];

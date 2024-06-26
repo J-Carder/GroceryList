@@ -5,6 +5,7 @@ validation
 no errors in TS
 fix refresh errors
 fix logout erroring (blank page)
+clean up code
 
 IN PROGRESS:
 

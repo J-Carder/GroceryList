@@ -110,7 +110,7 @@ const ManageLists = () => {
     <div>
       <h3>Add new list</h3>
       <select value={selectedListVal} onChange={(e) => setSelectedListVal(e.target.value)}>
-        { listsVal.map(list => <option key={list._id}>{list.name}</option>) }
+        { listsVal && listsVal.map(list => <option key={list._id}>{list.name}</option>) }
       </select>
       <button onClick={handleDelete}>Delete selected</button>
       <div>

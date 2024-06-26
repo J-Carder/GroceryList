@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Context } from '../../App';
 
 const AdminOptions = () => {
+
   const [selectedEmail, setSelectedEmail] = useState("");
   const [emails, setEmails] = useState<Array<any>>([]);
   const [newPwd, setNewPwd] = useState("");
@@ -23,7 +24,9 @@ const AdminOptions = () => {
       )
       return data.json();
     },
-    queryKey: ["getUsersQuery"]
+    queryKey: ["getUsersQuery"],
+    staleTime: Infinity,
+    gcTime: Infinity
   })
 
   const passwordChangeMutation = useMutation({

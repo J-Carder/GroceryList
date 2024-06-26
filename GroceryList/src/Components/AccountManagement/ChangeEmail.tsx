@@ -8,7 +8,6 @@ const ChangeEmail = () => {
 
   const [email, setEmail] = useState("");
 
-
   const {user} = useContext(Context);
 
   const [userVal, setUserVal] = user;
@@ -50,7 +49,6 @@ const ChangeEmail = () => {
         QueryClient.invalidateQueries({queryKey: ["listGetQuery"], refetchType: "active"});
         console.log("test")
       }}>TEST BUTTON</button> */}
-
 
       <h4>Change Email</h4>
       <input type="text" placeholder='New email' value={email} onChange={(e) => setEmail(e.target.value)} />
