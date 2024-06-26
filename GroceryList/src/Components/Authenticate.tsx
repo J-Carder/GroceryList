@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import "../css/Auth.css";
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Context } from '../App';
+import { Context } from '../AppWrapper';
 
 const Authenticate = ({setPage}) => {
   const [isLogin, setIsLogin] = useState(false)

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import React, { useContext } from 'react'
-import { Context } from '../App'
+import { Context } from '../AppWrapper'
 
 const ItemSettings = ({itemsList, setItemsList}) => {
 

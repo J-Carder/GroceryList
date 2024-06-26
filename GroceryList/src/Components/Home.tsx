@@ -3,17 +3,16 @@ import AddItem from './AddItem'
 import '../css/Home.css'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import ManageLists from './ManageLists'
-import { Context } from '../App'
-import ManageHouses from './ManageHouses'
+import { Context } from '../AppWrapper'
 import SortItems from './SortItems'
 import ItemSettings from './ItemSettings'
 
-function Home({setPage}) {
+const Home = ({setPage}) => {
 
   const queryClient = useQueryClient()
 
   const [itemsList, setItemsList] = useState<Array<any>>([]);
-  const {user, lists, selectedList, selectedHouse, sortBy, order} = useContext(Context);
+  const {user, lists, selectedList, selectedHouse, sortBy, order, online, offlineState, syncBackend} = useContext(Context);
 
   const [listsVal, setListsVal] = lists;
   const [selectedListVal, setSelectedListVal] = selectedList;
@@ -21,6 +20,8 @@ function Home({setPage}) {
   const [selectedHouseVal, setSelectedHouseVal] = selectedHouse; 
   const [sortByVal, setSortByVal] = sortBy; 
   const [orderVal, setOrderVal] = order;
+  const [onlineVal, setOnlineVal] = online;
+  const [offlineStateVal, setOfflineStateVal] = offlineState;
 
   const fetchGetQuery = async () => {
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
@@ -53,22 +54,31 @@ function Home({setPage}) {
   }
 
   const fetchUpdateQuery = async ({id, checked}) => {
-    console.log(checked);
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
-    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${id}`, {
+
+    const reqPath = `${import.meta.env.VITE_REACT_APP_API}/items/${id}`
+    const reqBody = {
           method: 'put',
           headers: {
               "Content-Type": "application/json",
             },
-            credentials: "include",
-            body: JSON.stringify({ 
-              completed: checked,
-              apartOfList: listId
-            })
-            }
-          );
-      return req.json();
+          credentials: "include",
+          body: JSON.stringify({ 
+            completed: checked,
+            apartOfList: listId
+          })
+        };
+
+    // if (!onlineVal) {
+    //   setOfflineStateVal([...offlineStateVal, {
+    //     path: reqPath,
+    //     body: reqBody
+    //   }]);
+
+    const req = await fetch(reqPath, reqBody);
+    return req.json();
   }
+
 
   const deleteLocal = (
       id: string
@@ -82,7 +92,7 @@ function Home({setPage}) {
     mutationFn: fetchDeleteQuery,
     onMutate: async (payload) => {
       await queryClient.cancelQueries({queryKey: ["getQuery"]});
-      deleteLocal(payload)
+      deleteLocal(payload);
     },
     onSuccess: (data) => {
       // queryClient.invalidateQueries({ queryKey: ["getQuery"]});
@@ -163,6 +173,7 @@ function Home({setPage}) {
     }
   }, [sortByVal, orderVal])
 
+
   return (
     <div>
       <>
@@ -200,9 +211,6 @@ function Home({setPage}) {
         : 
           <p>Welcome! First, head over to Settings to join a house</p>
         }
-        <button onClick={() => console.log(itemsList)}>
-          CLICK ME
-        </button>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Context } from '../App';
+import { Context } from '../AppWrapper';
 
 
 const ManageLists = () => {
@@ -110,7 +110,7 @@ const ManageLists = () => {
     <div>
       <h3>Add new list</h3>
       <select value={selectedListVal} onChange={(e) => setSelectedListVal(e.target.value)}>
-        { listsVal && listsVal.map(list => <option key={list._id}>{list.name}</option>) }
+        { listsVal.constructor === Array && listsVal.map(list => <option key={list._id}>{list.name}</option>) }
       </select>
       <button onClick={handleDelete}>Delete selected</button>
       <div>

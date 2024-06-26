@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import ManageDepts from './ManageDepts'
 import ManagePeople from './ManagePeople'
 import ManageHouses from './ManageHouses'
-import { Context } from '../App'
+import { Context } from '../AppWrapper'
 import ManageAccount from './ManageAccount'
 
 function Settings({setPage}) {

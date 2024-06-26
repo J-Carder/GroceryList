@@ -1,6 +1,6 @@
 import { Query, useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useContext, useState } from 'react'
-import { Context } from '../../App';
+import { Context } from '../../AppWrapper';
 
 const ChangeEmail = () => {
 

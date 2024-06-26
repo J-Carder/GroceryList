@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { Context } from '../App';
+import { Context } from '../AppWrapper';
 
 
 function ManagePeople() {

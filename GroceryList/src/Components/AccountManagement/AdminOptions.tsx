@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useContext, useEffect, useState } from 'react'
-import { Context } from '../../App';
+import { Context } from '../../AppWrapper';
 
 const AdminOptions = () => {
 

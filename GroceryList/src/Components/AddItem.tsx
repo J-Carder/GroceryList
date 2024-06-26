@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Context } from '../App'
+import { Context } from '../AppWrapper'
 
 function AddItem() {
 
@@ -37,7 +37,7 @@ function AddItem() {
   const fetchAddQuery = async () => {
 
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
-
+    console.log(item)
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${listId}`, {
             method: 'post',
             headers: {
@@ -96,10 +96,12 @@ function AddItem() {
     onMutate: async (payload) => {
       await queryClient.cancelQueries({queryKey: ["getQuery"]});
       addLocal();
-      setItem("");
     },
     onSuccess: () => {
         // queryClient.invalidateQueries({ queryKey: ["getQuery"]})
+    },
+    onSettled: () => {
+      setItem("");
     }
   })
 
@@ -144,12 +146,12 @@ function AddItem() {
         <h3>Wanted by:</h3>
         <select name="wantedBy" id="wantedBy" value={personSelectedVal} onChange={e => handlePersonChange(e.target.value)}>
           <option>None</option>
-          { personListVal.map(person => <option key={person._id}>{person.name}</option>)  } 
+          { personListVal.constructor === Array && personListVal.map(person => <option key={person._id}>{person.name}</option>)  } 
         </select>
         <h3>Department</h3>
         <select name="dept" id="dept" value={departmentSelectedVal} onChange={e => handleDepartmentChange(e.target.value)}>
           <option>None</option>
-          { departmentListVal.map(dept => <option key={dept._id}>{dept.department}</option>) } 
+          { departmentListVal.constructor === Array && departmentListVal.map(dept => <option key={dept._id}>{dept.department}</option>) } 
         </select>
       </div>
     </div>
