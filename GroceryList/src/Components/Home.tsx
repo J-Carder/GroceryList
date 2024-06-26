@@ -211,6 +211,10 @@ const Home = ({setPage}) => {
         : 
           <p>Welcome! First, head over to Settings to join a house</p>
         }
+        <button
+         onClick={() => {
+          console.log(deleteMutation.isPaused, updateMutation.isPaused);
+         }}>CHeck paused</button>
     </div>
   )
 }

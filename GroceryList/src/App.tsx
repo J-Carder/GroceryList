@@ -6,28 +6,16 @@ import Authenticate from './Components/Authenticate';
 import Logout from './Components/Logout';
 import "./css/App.css"
 import { Context } from './AppWrapper';
-import { PersistQueryClientProvider, persistQueryClientSave } from '@tanstack/react-query-persist-client';
 
 function App() {
 
   const queryClient = useQueryClient();
   const [page, setPage] = useState("home");
-  const {online, offlineState, authenticated} = useContext(Context);
+  const {online, offlineState, authenticated, user} = useContext(Context);
 
   const [onlineVal, setOnlineVal] = online;
-  const [offlineStateVal, setOfflineStateVal] = offlineState;
   const [authenticatedVal, setAuthenticatedVal] = authenticated;
-
-  useEffect(()=>{
-    window.addEventListener('online', function(e) {
-      setOnlineVal(true);
-    }, false);
-     
-    window.addEventListener('offline', function(e) {
-      setOnlineVal(false);
-    }, false);
-  },[])
-
+  const [userVal, setUserVal] = user;
 
   const offlineSync = useMutation({
     mutationFn: async (path, body) => {
@@ -43,14 +31,6 @@ function App() {
       offlineSync.mutate(item.path, item.body);
     })
   }
-
-
-  useEffect(() => {
-    if (onlineVal) {
-      // syncBackend(offlineStateVal)
-      // setOfflineStateVal([]);
-    }
-  }, [onlineVal])
 
   return (
     <div>
@@ -75,6 +55,11 @@ function App() {
         :
           <Settings setPage={setPage} />
       }
+      <button onClick={() => {
+        console.log(userVal, authenticatedVal)
+      }}>
+        DEBUG
+      </button>
     </div>
   )
 }

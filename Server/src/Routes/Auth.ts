@@ -8,7 +8,7 @@ import { omit, pick } from "../helpers.js";
 
 const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
 
-  app.delete("/logout", checkAuthenticated, (req, res, next) => {
+  app.delete("/logout", (req, res, next) => {
     try {
       req.logout((err) => {
         if (err) { return next(err); }

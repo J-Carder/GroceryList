@@ -60,23 +60,23 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 // USE BELOW IN PROD (STORES SESSIONS IN DB)!!!!!!!
-// app.use(session({ // PROD
-//   secret: process.env.SESSION_SECRET,
-//   resave: false,
-//   saveUninitialized: false,
-//   store: MongoStore.create({
-//     clientPromise: conn,
-//     dbName: "GroceryList",
-//     stringify: false,
-//     autoRemove: "interval",
-//     autoRemoveInterval: 1
-//   })
-// }))
-app.use(session({
+app.use(session({ // PROD
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  store: MongoStore.create({
+    clientPromise: conn,
+    dbName: "GroceryList",
+    stringify: false,
+    autoRemove: "interval",
+    autoRemoveInterval: 1
+  })
 }))
+// app.use(session({
+//   secret: process.env.SESSION_SECRET,
+//   resave: false,
+//   saveUninitialized: false
+// }))
 app.use(passport.initialize())
 app.use(passport.session())
 
