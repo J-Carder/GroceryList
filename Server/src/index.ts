@@ -56,7 +56,7 @@ const conn = mongoose.connect(process.env.DB).then(m => m.connection.getClient()
 
 app.use(jsonParserMiddleware);
 app.use(cors({credentials: true, origin: "http://localhost:5173"}));
-app.use(express.json())
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 // USE BELOW IN PROD (STORES SESSIONS IN DB)!!!!!!!
@@ -115,8 +115,9 @@ auth(app, checkAuthenticated, checkNotAuthenticated, passport);
 users(app, checkAuthenticated, checkNotAuthenticated);
 
 // test route
-app.get("/test", (req, res) => {
-  res.json({msg: "Test success"})
+app.post("/test/:id", (req, res) => {
+  console.log(req.body);
+  res.send({msg: "Test success"})
 })
 
 // ---------------------------- //

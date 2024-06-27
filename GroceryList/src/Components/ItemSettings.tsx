@@ -12,6 +12,16 @@ const ItemSettings = ({itemsList, setItemsList}) => {
 
   const queryClient = useQueryClient();
 
+  const fillLocal = (fill) => {
+    queryClient.setQueryData(["getQuery"], (itemsListTemp) => {
+      return itemsListTemp.map(item => {
+        const tempItem = {...item};
+        tempItem.completed = fill;
+        return tempItem;
+      })
+    })
+  }
+
   const fillQuery = useMutation({
     mutationFn: async (completed) => {
 
@@ -31,9 +41,19 @@ const ItemSettings = ({itemsList, setItemsList}) => {
       return req.json();
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({queryKey: ["getQuery"]})
+      // queryClient.invalidateQueries({queryKey: ["getQuery"]})
+    },
+    onMutate: async (payload) => {
+      await queryClient.cancelQueries({queryKey: ["getQuery"]});
+      fillLocal(payload);
     }
   })
+
+  const clearLocal = () => {
+    queryClient.setQueryData(["getQuery"], (itemsListTemp) => {
+      return itemsListTemp.filter((item) => !item.completed);
+    })
+  }
 
   const clearQuery = useMutation({
     mutationFn: async (completed) => {
@@ -53,7 +73,11 @@ const ItemSettings = ({itemsList, setItemsList}) => {
       return req.json();
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({queryKey: ["getQuery"]})
+      // queryClient.invalidateQueries({queryKey: ["getQuery"]})
+    },
+    onMutate: async () => {
+      await queryClient.cancelQueries({queryKey: ["getQuery"]});
+      clearLocal();
     }
   })
 

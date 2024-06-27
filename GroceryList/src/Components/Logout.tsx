@@ -23,6 +23,7 @@ const Logout = () => {
       if (data.msg == "Logged out") {
         console.log("test")
         setAuthVal(false);
+        localStorage.setItem("auth", JSON.stringify(false));
       }
     }
   })

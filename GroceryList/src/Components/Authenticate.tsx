@@ -78,6 +78,7 @@ const Authenticate = ({setPage}) => {
             setSelectedHouseVal("");
           }
         }
+        setLocalLogin(true);
         // queryClient.invalidateQueries({ queryKey: [""]})
     }
   }) 
@@ -93,7 +94,9 @@ const Authenticate = ({setPage}) => {
   }) 
 
   useEffect(() => {
+    setAuthenticatedVal(getLocalLogin())
     isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setAuthenticatedVal(true)
+    isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setLocalLogin(true);
     isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setUserVal(isAuthQuery.data.user)
     try {
       isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setSelectedHouseVal(isAuthQuery.data.user.houses[0]) 
@@ -102,12 +105,17 @@ const Authenticate = ({setPage}) => {
     }
   }, [isAuthQuery.isSuccess])
 
+  const setLocalLogin = (loggedIn : boolean) => {
+    localStorage.setItem('auth', JSON.stringify(loggedIn));
+  }
+
+  const getLocalLogin = () => JSON.parse(localStorage.getItem('auth'));
+
   const handleLogin = () => {
     loginMutation.mutate();
   }
 
   const handleRegister = () => {
-    console.log(registerEmail, registerName, registerPwd)
     registerMutation.mutate();
   }
 

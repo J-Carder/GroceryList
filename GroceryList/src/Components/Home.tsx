@@ -149,18 +149,6 @@ const Home = ({setPage}) => {
       }
     }
 
-    // if (sortByVal == "Department") {
-    //   itemsList.sort((a, b) => a.department > b.department ? 1 : -1)
-    // } else if (sortByVal == "Person") {
-    //   itemsList.sort((a, b) => a.wantedBy > b.wantedBy ? 1 : -1)
-    // } else {
-    //   itemsList.sort((a, b) => dateFromObjectId(a._id) < dateFromObjectId(b._id) ? 1 : -1)
-    // }
-
-    // if (orderVal == "Descending") {
-    //   itemsList.reverse();
-    // }
-
     return itemsList;
   }
 

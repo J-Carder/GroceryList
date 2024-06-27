@@ -9,6 +9,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       gcTime: Infinity,
+      // networkMode: "offlineFirst",
       networkMode: "offlineFirst"
     }
   }
