@@ -131,17 +131,35 @@ const Home = ({setPage}) => {
   };
 
   const refreshSort = (itemsList) => {
-    if (sortByVal == "Department") {
-      itemsList.sort((a, b) => a.department > b.department ? 1 : -1)
-    } else if (sortByVal == "Person") {
-      itemsList.sort((a, b) => a.wantedBy > b.wantedBy ? 1 : -1)
+    if (orderVal == "Descending") {
+      if (sortByVal == "Department") {
+        itemsList.sort((a, b) => a.department < b.department ? 1 : -1)
+      } else if (sortByVal == "Person") {
+        itemsList.sort((a, b) => a.wantedBy < b.wantedBy ? 1 : -1)
+      } else {
+        itemsList.sort((a, b) => dateFromObjectId(a._id) < dateFromObjectId(b._id) ? 1 : -1)
+      }
     } else {
-      itemsList.sort((a, b) => dateFromObjectId(a._id) > dateFromObjectId(b._id) ? 1 : -1)
+      if (sortByVal == "Department") {
+        itemsList.sort((a, b) => a.department > b.department ? 1 : -1)
+      } else if (sortByVal == "Person") {
+        itemsList.sort((a, b) => a.wantedBy > b.wantedBy ? 1 : -1)
+      } else {
+        itemsList.sort((a, b) => dateFromObjectId(a._id) > dateFromObjectId(b._id) ? 1 : -1)
+      }
     }
 
-    if (orderVal == "Descending") {
-      itemsList.reverse();
-    }
+    // if (sortByVal == "Department") {
+    //   itemsList.sort((a, b) => a.department > b.department ? 1 : -1)
+    // } else if (sortByVal == "Person") {
+    //   itemsList.sort((a, b) => a.wantedBy > b.wantedBy ? 1 : -1)
+    // } else {
+    //   itemsList.sort((a, b) => dateFromObjectId(a._id) < dateFromObjectId(b._id) ? 1 : -1)
+    // }
+
+    // if (orderVal == "Descending") {
+    //   itemsList.reverse();
+    // }
 
     return itemsList;
   }
@@ -154,7 +172,7 @@ const Home = ({setPage}) => {
   useEffect(() => {
     if (status == "success") {
       const tempItems = [...items];
-      setItemsList(tempItems.reverse());
+      setItemsList(tempItems);
     }
   }, [items, status])
   
@@ -163,7 +181,7 @@ const Home = ({setPage}) => {
       const tempItemsList = [...items];
       setItemsList(refreshSort(tempItemsList));
     }
-  }, [sortByVal, orderVal])
+  }, [sortByVal, orderVal, items])
 
 
   return (

@@ -98,6 +98,7 @@ function AddItem() {
         tempId: tempId,
         _id: tempId
       });
+      console.log(newList);
       return newList;
     })
   }

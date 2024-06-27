@@ -125,7 +125,7 @@ const fetchDeleteQuery = async (id : string) => {
       <input type="text" value={deptText} onChange={(e) => setDeptText(e.target.value)} onKeyDown={handleKeyDown}/>
       <button onClick={handleAdd}>Add</button>
       {
-        depts.length === 0 ? 
+        depts.length === 0 || depts.constructor !== Array ? 
         <div><h2>Empty!</h2></div>
         :
         depts.map(dept => 
@@ -140,4 +140,4 @@ const fetchDeleteQuery = async (id : string) => {
   )
 }
 
-export default ManageDepts
+export default ManageDepts;
