@@ -36,13 +36,14 @@ function App() {
 
   useEffect(() => {
     // setAuthenticatedVal(getLocalLogin())
-    isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setAuthenticatedVal(true)
-    isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setLocalLogin(true);
-    isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setUserVal(isAuthQuery.data.user)
-    try {
-      isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setSelectedHouseVal(isAuthQuery.data.user.houses[0]) 
-    } catch (e) {
-      isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setSelectedHouseVal("") 
+    if (isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated") {
+      setAuthenticatedVal(true)
+      setUserVal(isAuthQuery.data.user)
+      try {
+        setSelectedHouseVal(isAuthQuery.data.user.houses[0]) 
+      } catch (e) {
+        setSelectedHouseVal("") 
+      }
     }
   }, [isAuthQuery.isSuccess])
 

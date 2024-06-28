@@ -12,16 +12,13 @@ const Home = ({setPage}) => {
   const queryClient = useQueryClient()
 
   const [itemsList, setItemsList] = useState<Array<any>>([]);
-  const {user, lists, selectedList, selectedHouse, sortBy, order, online, offlineState, syncBackend} = useContext(Context);
+  const {user, lists, selectedList, sortBy, order} = useContext(Context);
 
   const [listsVal, setListsVal] = lists;
   const [selectedListVal, setSelectedListVal] = selectedList;
   const [userVal, setUserVal] = user;
-  const [selectedHouseVal, setSelectedHouseVal] = selectedHouse; 
   const [sortByVal, setSortByVal] = sortBy; 
   const [orderVal, setOrderVal] = order;
-  const [onlineVal, setOnlineVal] = online;
-  const [offlineStateVal, setOfflineStateVal] = offlineState;
 
   const fetchGetQuery = async () => {
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
@@ -31,7 +28,7 @@ const Home = ({setPage}) => {
     return req.json();
   }
 
-  const {data: items, status} = useQuery({
+  const itemsQuery = useQuery({
     queryFn: fetchGetQuery,
     queryKey: ["getQuery"],
     staleTime: Infinity,
@@ -127,29 +124,31 @@ const Home = ({setPage}) => {
 
 
   const dateFromObjectId = function (objectId) {
+    console.log(new Date(parseInt(objectId.substring(0, 8), 16) * 1000));
     return new Date(parseInt(objectId.substring(0, 8), 16) * 1000);
   };
 
   const refreshSort = (itemsList) => {
+    const tempList = itemsList;
     if (orderVal == "Descending") {
       if (sortByVal == "Department") {
-        itemsList.sort((a, b) => a.department < b.department ? 1 : -1)
+        tempList.sort((a, b) => a.department < b.department ? 1 : -1)
       } else if (sortByVal == "Person") {
-        itemsList.sort((a, b) => a.wantedBy < b.wantedBy ? 1 : -1)
+        tempList.sort((a, b) => a.wantedBy < b.wantedBy ? 1 : -1)
       } else {
-        itemsList.sort((a, b) => dateFromObjectId(a._id) < dateFromObjectId(b._id) ? 1 : -1)
+        tempList.sort((a, b) => a.originalTimeCreated < b.originalTimeCreated ? 1 : -1)
       }
     } else {
       if (sortByVal == "Department") {
-        itemsList.sort((a, b) => a.department > b.department ? 1 : -1)
+        tempList.sort((a, b) => a.department > b.department ? 1 : -1)
       } else if (sortByVal == "Person") {
-        itemsList.sort((a, b) => a.wantedBy > b.wantedBy ? 1 : -1)
+        tempList.sort((a, b) => a.wantedBy > b.wantedBy ? 1 : -1)
       } else {
-        itemsList.sort((a, b) => dateFromObjectId(a._id) > dateFromObjectId(b._id) ? 1 : -1)
+        tempList.sort((a, b) => a.originalTimeCreated > b.originalTimeCreated ? 1 : -1)
       }
     }
-
-    return itemsList;
+    console.log(tempList);
+    return tempList;
   }
 
   useEffect(() => {
@@ -158,18 +157,20 @@ const Home = ({setPage}) => {
 
 
   useEffect(() => {
-    if (status == "success") {
-      const tempItems = [...items];
+    if (itemsQuery.status == "success" && !itemsQuery.data.msg) {
+      const tempItems = [...itemsQuery.data];
       setItemsList(tempItems);
     }
-  }, [items, status])
+  }, [itemsQuery.data, itemsQuery.status])
   
   useEffect(() => {
-    if (status == "success") {
-      const tempItemsList = [...items];
+    if (itemsQuery.status == "success" && !itemsQuery.data.msg && listsVal.length != 0  && setSelectedListVal != "" ) {
+      const tempItemsList = [...itemsQuery.data];
+      const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
+      tempItemsList.filter((item) => item.apartOfList == listId);
       setItemsList(refreshSort(tempItemsList));
     }
-  }, [sortByVal, orderVal, items])
+  }, [sortByVal, orderVal, itemsQuery.data])
 
 
   return (

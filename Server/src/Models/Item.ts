@@ -23,6 +23,9 @@ const ItemSchema = new mongoose.Schema({
   },
   tempId: {
     type: String
+  },
+  originalTimeCreated: {
+    type: String
   }
 })
 

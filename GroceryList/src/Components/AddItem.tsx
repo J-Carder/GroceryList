@@ -34,7 +34,7 @@ function AddItem() {
     return req.json();
   }
 
-  const fetchAddQuery = async ({itemName, wantedBy, department, apartOflist, tempId}) => {
+  const fetchAddQuery = async ({itemName, wantedBy, department, apartOflist, tempId, originalTimeCreated}) => {
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
     let reqBody;
     if (tempId) {
@@ -43,6 +43,7 @@ function AddItem() {
               wantedBy: wantedBy,
               department: department,
               apartOfList: listId,
+              originalTimeCreated: originalTimeCreated,
               tempId: tempId
             })
     } else {
@@ -50,7 +51,8 @@ function AddItem() {
               item: itemName,
               wantedBy: wantedBy,
               department: department,
-              apartOfList: apartOflist
+              apartOfList: apartOflist,
+              originalTimeCreated: originalTimeCreated,
             })
     }
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${apartOflist}`, {
@@ -86,7 +88,8 @@ function AddItem() {
     }).toLowerCase();
   };
 
-  const addLocal = ({itemName, wantedBy, department, apartOflist, tempId}) => {
+  const addLocal = ({itemName, wantedBy, department, apartOflist, tempId, originalTimeCreated}) => {
+    
     queryClient.setQueryData(["getQuery"], (itemsList: Array<any>) => {
       const newList = [...itemsList];
       newList.push({
@@ -96,6 +99,7 @@ function AddItem() {
         item: itemName,
         apartOfList: apartOflist,
         tempId: tempId,
+        originalTimeCreated: originalTimeCreated,
         _id: tempId
       });
       console.log(newList);
@@ -121,7 +125,7 @@ function AddItem() {
     if (item != "" && selectedListVal != "") {
       const tempId = mongoObjectId();
       const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
-      addItemQuery.mutate({itemName: item, wantedBy: personSelectedVal, department: departmentSelectedVal, apartOflist: listId, tempId: tempId}); 
+      addItemQuery.mutate({originalTimeCreated: Date.now(), itemName: item, wantedBy: personSelectedVal, department: departmentSelectedVal, apartOflist: listId, tempId: tempId}); 
     } else {
       // TODO: send error cuz of blank string
     }

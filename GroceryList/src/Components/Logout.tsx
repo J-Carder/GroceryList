@@ -19,12 +19,8 @@ const Logout = () => {
 
   const logoutMutation = useMutation({
     mutationFn: fetchLogoutQuery,
-    onSuccess: (data) => {
-      if (data.msg == "Logged out") {
-        console.log("test")
-        setAuthVal(false);
-        localStorage.setItem("auth", JSON.stringify(false));
-      }
+    onSettled: () => {
+      setAuthVal(false);
     }
   })
 

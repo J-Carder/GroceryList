@@ -150,6 +150,7 @@ const items = (app, checkAuthenticated, checkNotAuthenticated) => {
           department: req.body.department,
           wantedBy: req.body.wantedBy,
           apartOfList: req.body.apartOfList,
+          originalTimeCreated: req.body.originalTimeCreated,
           tempId: req.body.tempId
         })
       } else {
@@ -158,6 +159,7 @@ const items = (app, checkAuthenticated, checkNotAuthenticated) => {
           department: req.body.department,
           wantedBy: req.body.wantedBy,
           apartOfList: req.body.apartOfList,
+          originalTimeCreated: req.body.originalTimeCreated
         })
       }
       res.json({msg: "Success"})
