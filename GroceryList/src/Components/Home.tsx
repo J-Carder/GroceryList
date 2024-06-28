@@ -124,7 +124,6 @@ const Home = ({setPage}) => {
 
 
   const dateFromObjectId = function (objectId) {
-    console.log(new Date(parseInt(objectId.substring(0, 8), 16) * 1000));
     return new Date(parseInt(objectId.substring(0, 8), 16) * 1000);
   };
 
@@ -147,28 +146,35 @@ const Home = ({setPage}) => {
         tempList.sort((a, b) => a.originalTimeCreated > b.originalTimeCreated ? 1 : -1)
       }
     }
-    console.log(tempList);
     return tempList;
   }
 
-  useEffect(() => {
-    queryClient.invalidateQueries({queryKey: ["getQuery"]});
-  }, [selectedListVal])
+  const refreshList = () => {
+    if (listsVal.length != 0  && setSelectedListVal != "" && itemsQuery.data) {
+      let tempItemsList = [...itemsQuery.data];
+      const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
+      tempItemsList = tempItemsList.filter((item) => item.apartOfList == listId);
+      setItemsList(refreshSort(tempItemsList));
+    }
+  }
 
 
   useEffect(() => {
     if (itemsQuery.status == "success" && !itemsQuery.data.msg) {
-      const tempItems = [...itemsQuery.data];
-      setItemsList(tempItems);
+      // const tempItems = [...itemsQuery.data];
+      // setItemsList(tempItems);
+      refreshList();
     }
   }, [itemsQuery.data, itemsQuery.status])
-  
+
   useEffect(() => {
-    if (itemsQuery.status == "success" && !itemsQuery.data.msg && listsVal.length != 0  && setSelectedListVal != "" ) {
-      const tempItemsList = [...itemsQuery.data];
-      const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
-      tempItemsList.filter((item) => item.apartOfList == listId);
-      setItemsList(refreshSort(tempItemsList));
+    queryClient.invalidateQueries({queryKey: ["getQuery"]});
+    refreshList();
+  }, [selectedListVal])
+
+  useEffect(() => {
+    if (itemsQuery.status == "success" && !itemsQuery.data.msg) {
+      refreshList();
     }
   }, [sortByVal, orderVal, itemsQuery.data])
 
