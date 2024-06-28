@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import App from './App'
-import { QueryClient, QueryClientProvider, onlineManager } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, onlineManager, useQuery } from '@tanstack/react-query';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import AsyncLocalStorage from '@createnextapp/async-local-storage'
 import { PersistQueryClientProvider, persistQueryClientRestore } from '@tanstack/react-query-persist-client';
@@ -10,7 +10,7 @@ const queryClient = new QueryClient({
     queries: {
       gcTime: Infinity,
       // networkMode: "offlineFirst",
-      networkMode: "offlineFirst"
+      networkMode: "offlineFirst",
     }
   }
 });
@@ -80,6 +80,7 @@ return (
       // onSuccess={() => {
       //   queryClient.resumePausedMutations()
       //   .then(() => queryClient.invalidateQueries())
+      //   console.log("burh")
       // }}
     >
       <Context.Provider value={{ offlineState: [offlineState, setOfflineState], online: [online, setOnline], order: [order, setOrder], sortBy: [sortBy, setSortBy], selectedHouse: [selectedHouse, setSelectedHouse], lists: [lists, setLists], personSelected: [personSelected, setPersonSelected], personList: [personList, setPersonList], departmentSelected: [departmentSelected, setDepartmentSelected], departmentList: [departmentList, setDepartmentList], selectedList: [selectedList, setSelectedList], user: [user, setUser], authenticated: [authenticated, setAuthenticated]}}>

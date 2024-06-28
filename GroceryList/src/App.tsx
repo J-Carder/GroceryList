@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Home from "./Components/Home";
-import {QueryClient, useMutation, useQueryClient} from "@tanstack/react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import Settings from "./Components/Settings";
 import Authenticate from './Components/Authenticate';
 import Logout from './Components/Logout';
@@ -11,26 +11,50 @@ function App() {
 
   const queryClient = useQueryClient();
   const [page, setPage] = useState("home");
-  const {online, offlineState, authenticated, user} = useContext(Context);
+  const {online, offlineState, authenticated, user, selectedHouse} = useContext(Context);
 
   const [onlineVal, setOnlineVal] = online;
   const [authenticatedVal, setAuthenticatedVal] = authenticated;
   const [userVal, setUserVal] = user;
+  const [selectedHouseVal, setSelectedHouseVal] = selectedHouse;
 
-  const offlineSync = useMutation({
-    mutationFn: async (path, body) => {
-      const req = await fetch(path, body);
-      return req.json();
-    }
+
+  const fetchIsAuthQuery = async () => {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/authenticated`, {
+          credentials: "include",
+        });
+    return req.json();
+  }
+
+  const isAuthQuery = useQuery({
+    queryFn: fetchIsAuthQuery,
+    queryKey: ["isAuthQuery"],
+    staleTime: Infinity,
+    gcTime: Infinity
   })
 
 
-  // TODO: this
-  const syncBackend = (offlineState) => {
-    offlineState.map(async (item) => {
-      offlineSync.mutate(item.path, item.body);
-    })
+  useEffect(() => {
+    // setAuthenticatedVal(getLocalLogin())
+    isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setAuthenticatedVal(true)
+    isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setLocalLogin(true);
+    isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setUserVal(isAuthQuery.data.user)
+    try {
+      isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setSelectedHouseVal(isAuthQuery.data.user.houses[0]) 
+    } catch (e) {
+      isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setSelectedHouseVal("") 
+    }
+  }, [isAuthQuery.isSuccess])
+
+  const setLocalLogin = (loggedIn : boolean) => {
+    localStorage.setItem('auth', JSON.stringify(loggedIn));
   }
+
+  const getLocalLogin = () => JSON.parse(localStorage.getItem('auth'));
+
+  useEffect(() => {
+    queryClient.invalidateQueries({queryKey: ["authQuery"]});
+  })
 
   return (
     <div>

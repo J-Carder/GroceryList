@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import "../css/Auth.css";
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Context } from '../AppWrapper';
 
+
 const Authenticate = ({setPage}) => {
+  const queryClient = useQueryClient();
   const [isLogin, setIsLogin] = useState(false)
 
   const [loginEmail, setLoginEmail] = useState("");
@@ -29,7 +31,7 @@ const Authenticate = ({setPage}) => {
             body: JSON.stringify({
               email: loginEmail,
               password: loginPwd
-            })
+            }),
           });
       return req.json();
   }

@@ -115,8 +115,7 @@ auth(app, checkAuthenticated, checkNotAuthenticated, passport);
 users(app, checkAuthenticated, checkNotAuthenticated);
 
 // test route
-app.post("/test/:id", (req, res) => {
-  console.log(req.body);
+app.get("/test", (req, res) => {
   res.send({msg: "Test success"})
 })
 
