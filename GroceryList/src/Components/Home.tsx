@@ -150,8 +150,9 @@ const Home = ({setPage}) => {
   }
 
   const refreshList = () => {
-    if (listsVal.length != 0  && setSelectedListVal != "" && itemsQuery.data) {
+    if (listsVal.length != 0 && !listsVal.msg && setSelectedListVal != "" && itemsQuery.data) {
       let tempItemsList = [...itemsQuery.data];
+      console.log(listsVal)
       const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
       tempItemsList = tempItemsList.filter((item) => item.apartOfList == listId);
       setItemsList(refreshSort(tempItemsList));

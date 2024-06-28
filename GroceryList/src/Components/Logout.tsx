@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Context } from '../AppWrapper'
 
 const Logout = () => {
@@ -22,6 +22,10 @@ const Logout = () => {
     onSettled: () => {
       setAuthVal(false);
     }
+  })
+
+  useEffect(() => {
+    console.log("bruh: ", authVal);
   })
 
   const handleLogout = () => {

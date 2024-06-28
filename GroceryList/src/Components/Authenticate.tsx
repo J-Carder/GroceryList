@@ -96,7 +96,6 @@ const Authenticate = ({setPage}) => {
   }) 
 
   useEffect(() => {
-    setAuthenticatedVal(getLocalLogin())
     isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setAuthenticatedVal(true)
     isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setLocalLogin(true);
     isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setUserVal(isAuthQuery.data.user)
