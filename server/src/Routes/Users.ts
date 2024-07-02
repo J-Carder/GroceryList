@@ -25,7 +25,7 @@ const users = (app, checkAuthenticated, checkNotAuthenticated) => {
 
       const passphrase = req.body.passphrase;
       const getHouse = await HouseModel.findOne({name: req.params.name});
-
+      console.log(await HouseModel.find())
       if (passphrase == getHouse.passphrase) {
         await UsersModel.findOneAndUpdate({email: req.user.email}, {houses: [req.params.name]})
       } else {
@@ -33,6 +33,7 @@ const users = (app, checkAuthenticated, checkNotAuthenticated) => {
       }
       res.json({msg: "Joined"})
     } catch (e) {
+      console.log(e)
       res.json({msg: "Error"})
     }
   })

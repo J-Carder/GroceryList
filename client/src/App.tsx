@@ -54,8 +54,8 @@ function App() {
   const getLocalLogin = () => JSON.parse(localStorage.getItem('auth'));
 
   useEffect(() => {
-    queryClient.invalidateQueries({queryKey: ["authQuery"]});
-  })
+    queryClient.invalidateQueries({queryKey: ["isAuthQuery"]});
+  }, [])
 
   return (
     <div>

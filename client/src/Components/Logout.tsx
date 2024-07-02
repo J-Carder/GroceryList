@@ -24,10 +24,6 @@ const Logout = () => {
     }
   })
 
-  useEffect(() => {
-    console.log("bruh: ", authVal);
-  })
-
   const handleLogout = () => {
     logoutMutation.mutate();
   }
