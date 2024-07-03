@@ -72,10 +72,6 @@ const AppWrapper = () => {
   //   onlineManager.setOnline(online);
   // }, [online])
 
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/src/sw.js");
-  }
-  
 
 return (
     <PersistQueryClientProvider

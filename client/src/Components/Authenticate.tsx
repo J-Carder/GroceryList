@@ -71,6 +71,7 @@ const Authenticate = ({setPage}) => {
     mutationFn: fetchLoginQuery,
     onSuccess: (data) => {
         if (data.msg == "Authenticated") {
+          console.log("AUTH NUMBA 2")
           setAuthenticatedVal(true);
           setUserVal(data.user);
           setPage("home");

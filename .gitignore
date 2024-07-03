@@ -27,3 +27,4 @@ dist-ssr
 # other
 .env
 TODO.txt
+*.pem

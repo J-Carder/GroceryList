@@ -10,10 +10,15 @@ const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
 
   app.delete("/logout", (req, res, next) => {
     try {
-      req.logout((err) => {
+      req.session.destroy((err) => {
         if (err) { return next(err); }
-        res.json({ msg: "Logged out"});
-      });
+        res.clearCookie('connect.sid');
+        res.json({ msg: "Logged out" })
+      })
+      // req.logout((err) => {
+      //   if (err) { return next(err); }
+      //   res.json({ msg: "Logged out"});
+      // });
     } catch (e) {
       res.json({msg: "Error"})
     }
@@ -33,7 +38,7 @@ const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
 
   app.post("/register", checkNotAuthenticated, async (req, res) => {
     try {
-      const hashedPassword = await bcrypt.hash(req.body.password, 15);
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
       const email = req.body.email.toLowerCase();
       await UsersModel.create({
         name: req.body.name,

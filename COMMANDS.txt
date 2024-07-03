@@ -1,0 +1,11 @@
+
+run npm install on both dirs before running if you don't have the packages installed
+
+CLIENT:
+to run dev: npm run dev
+to build: npm run build
+to preview build above: npm run preview
+
+
+SERVER:
+to start: npm run start

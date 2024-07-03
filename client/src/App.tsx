@@ -11,7 +11,7 @@ function App() {
 
   const queryClient = useQueryClient();
   const [page, setPage] = useState("home");
-  const {online, offlineState, authenticated, user, selectedHouse} = useContext(Context);
+  const {online, authenticated, user, selectedHouse} = useContext(Context);
 
   const [onlineVal, setOnlineVal] = online;
   const [authenticatedVal, setAuthenticatedVal] = authenticated;
@@ -37,6 +37,7 @@ function App() {
   useEffect(() => {
     // setAuthenticatedVal(getLocalLogin())
     if (isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated") {
+      console.log("IS AUTHED")
       setAuthenticatedVal(true)
       setUserVal(isAuthQuery.data.user)
       try {
@@ -56,6 +57,11 @@ function App() {
   useEffect(() => {
     queryClient.invalidateQueries({queryKey: ["isAuthQuery"]});
   }, [])
+
+  // DEBUG
+  useEffect(() => {
+    console.log(authenticatedVal);
+  })
 
   return (
     <div>

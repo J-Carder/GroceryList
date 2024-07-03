@@ -12,6 +12,11 @@ import session from "express-session";
 import initialize from "./Routes/Passport.js";
 import cookieParser from "cookie-parser";
 import MongoStore from 'connect-mongo';
+import fs from "fs";
+import https from "https";
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
 
 // route imports
 import items from "./Routes/Items.js";
@@ -55,7 +60,8 @@ const conn = mongoose.connect(process.env.DB).then(m => m.connection.getClient()
 // ---------------------------- //
 
 app.use(jsonParserMiddleware);
-app.use(cors({credentials: true, origin: "http://localhost:5173"}));
+app.use(cors({credentials: true, origin: ["http://localhost:4173", "http://localhost:5173", "https://localhost:4433"]}));
+// app.use(cors({credentials: true, origin: "http://localhost:4173"}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
@@ -123,8 +129,17 @@ app.get("/test", (req, res) => {
 // -----   START SERVER   ----- //
 // ---------------------------- //
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// const options = {
+//   key: fs.readFileSync(path.join(__dirname, "localhost-key.pem")),
+//   cert: fs.readFileSync(path.join(__dirname, "localhost.pem")),
+// };
+
+// const server = https.createServer(options, app);
+
 app.listen(process.env.PORT, () => {
-  console.log("--- Server is UP and running ---")
+  console.log(`--- Server is running on port ${process.env.PORT} ---`)
 });
 
 // ---------------------------- //
