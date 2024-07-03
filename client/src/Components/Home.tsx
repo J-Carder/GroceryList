@@ -54,7 +54,7 @@ const Home = ({setPage}) => {
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
 
     const reqPath = `${import.meta.env.VITE_REACT_APP_API}/items/${id}`
-    const reqBody = {
+    const reqBody : RequestInit= {
           method: 'put',
           headers: {
               "Content-Type": "application/json",

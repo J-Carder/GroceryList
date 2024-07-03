@@ -45,7 +45,7 @@ const AppWrapper = () => {
   const [personList, setPersonList] = useState<Array<any>>([]);
   const [departmentList, setDepartmentList] = useState<Array<any>>([]);
   const [selectedList, setSelectedList] = useState("");
-  const [user, setUser] = useState<Object<any>>({});
+  const [user, setUser] = useState<object>({});
   const [authenticated, setAuthenticated] = useState(false);
   const [lists, setLists] = useState<Array<any>>([]);
   const [selectedHouse, setSelectedHouse] = useState("");

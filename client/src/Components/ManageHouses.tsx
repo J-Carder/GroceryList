@@ -171,10 +171,7 @@ const ManageHouses = () => {
       deleteMutation.mutate({id: housesList.filter((h) => h.name == selectedHouseVal)[0]._id, passphrase: deletePassphrase}, 
       {onSuccess: (data) => {
         setDeletePassphrase("");  
-        setDeleteMsg(data.msg)
       }});
-    } else {
-      setDeleteMsg("No houses to delete")
     }
   }
 

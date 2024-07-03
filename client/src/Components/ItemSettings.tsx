@@ -13,7 +13,7 @@ const ItemSettings = ({itemsList, setItemsList}) => {
   const queryClient = useQueryClient();
 
   const fillLocal = (fill) => {
-    queryClient.setQueryData(["getQuery"], (itemsListTemp) => {
+    queryClient.setQueryData(["getQuery"], (itemsListTemp : Array<any>) => {
       return itemsListTemp.map(item => {
         const tempItem = {...item};
         tempItem.completed = fill;
@@ -23,7 +23,7 @@ const ItemSettings = ({itemsList, setItemsList}) => {
   }
 
   const fillQuery = useMutation({
-    mutationFn: async (completed) => {
+    mutationFn: async (completed : boolean) => {
 
       const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
       const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/fill`, {
@@ -50,13 +50,13 @@ const ItemSettings = ({itemsList, setItemsList}) => {
   })
 
   const clearLocal = () => {
-    queryClient.setQueryData(["getQuery"], (itemsListTemp) => {
+    queryClient.setQueryData(["getQuery"], (itemsListTemp : Array<any>) => {
       return itemsListTemp.filter((item) => !item.completed);
     })
   }
 
   const clearQuery = useMutation({
-    mutationFn: async (completed) => {
+    mutationFn: async () => {
 
       const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
       const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/clear`, {
