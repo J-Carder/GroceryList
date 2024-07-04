@@ -5,6 +5,7 @@ import { Context } from '../AppWrapper';
 
 
 const Authenticate = ({setPage}) => {
+  
   const queryClient = useQueryClient();
   const [isLogin, setIsLogin] = useState(false)
 
@@ -60,12 +61,12 @@ const Authenticate = ({setPage}) => {
     return req.json();
   }
 
-  const isAuthQuery = useQuery({
-    queryFn: fetchIsAuthQuery,
-    queryKey: ["isAuthQuery"],
-    staleTime: Infinity,
-    gcTime: Infinity
-  })
+  // const isAuthQuery = useQuery({
+  //   queryFn: fetchIsAuthQuery,
+  //   queryKey: ["isAuthQuery"],
+  //   staleTime: Infinity,
+  //   gcTime: Infinity
+  // })
 
   const loginMutation = useMutation({
     mutationFn: fetchLoginQuery,
@@ -96,16 +97,16 @@ const Authenticate = ({setPage}) => {
     }
   }) 
 
-  useEffect(() => {
-    isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setAuthenticatedVal(true)
-    isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setLocalLogin(true);
-    isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setUserVal(isAuthQuery.data.user)
-    try {
-      isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setSelectedHouseVal(isAuthQuery.data.user.houses[0]) 
-    } catch (e) {
-      isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setSelectedHouseVal("") 
-    }
-  }, [isAuthQuery.isSuccess])
+  // useEffect(() => {
+  //   isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setAuthenticatedVal(true)
+  //   isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setLocalLogin(true);
+  //   isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setUserVal(isAuthQuery.data.user)
+  //   try {
+  //     isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setSelectedHouseVal(isAuthQuery.data.user.houses[0]) 
+  //   } catch (e) {
+  //     isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated" && setSelectedHouseVal("") 
+  //   }
+  // }, [isAuthQuery.isSuccess])
 
   const setLocalLogin = (loggedIn : boolean) => {
     localStorage.setItem('auth', JSON.stringify(loggedIn));
