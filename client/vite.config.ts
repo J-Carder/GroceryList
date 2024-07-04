@@ -57,26 +57,24 @@ export default defineConfig({
           {
             src: "screenshots/wide.png",
             sizes: "1914x865",
-            type: "image/webp",
+            type: "image/png",
             form_factor: "wide",
             label: "Screenshot of the Grocery List app"
           }
         ]
       },
-      // workbox: {
-      //   runtimeCaching: [{
-      //     urlPattern: ({ url }) => {
-      //       return url.pathname.startsWith("/")
-      //     },
-      //     handler: "CacheFirst" as const,
-      //     options: {
-      //       cacheName: "api-cache",
-      //       cacheableResponse: {
-      //         statuses: [0, 200]
-      //       }
-      //     }
-      //   }]
-      // }
+      workbox: {
+        runtimeCaching: [{
+          urlPattern: ({url}) => url.origin == "http://localhost:3001",
+          handler: "NetworkFirst",
+          options: {
+            cacheName: "api-cache",
+            // cacheableResponse: {
+            //   statuses: [0, 200]
+            // }
+          }
+        }]
+      }
     })
 
   ],

@@ -30,8 +30,8 @@ function App() {
   const isAuthQuery = useQuery({
     queryFn: fetchIsAuthQuery,
     queryKey: ["isAuthQuery"],
-    staleTime: Infinity,
-    gcTime: Infinity
+    // staleTime: Infinity,
+    // gcTime: Infinity
   })
 
   useEffect(() => {
@@ -55,13 +55,13 @@ function App() {
   const getLocalLogin = () => JSON.parse(localStorage.getItem('auth')!);
 
   useEffect(() => {
+    console.log('invalidating...');
     queryClient.invalidateQueries({queryKey: ["isAuthQuery"]});
   }, [])
 
   // DEBUG
   useEffect(() => {
-    // console.log(authenticatedVal);
-    console.log("sl val: " + selectedListVal)
+    console.log(authenticatedVal);
   })
 
   return (

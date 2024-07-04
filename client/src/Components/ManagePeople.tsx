@@ -122,7 +122,7 @@ function ManagePeople() {
       <input type="text" value={peopleText} onChange={(e) => setPeopleText(e.target.value)} onKeyDown={handleKeyDown}/>
       <button onClick={handleAdd}>Add</button>
       {
-        people.length === 0 ? 
+        people.length == 0 || people.constructor != Array ? 
         <div><h2>Empty!</h2></div>
         :
         people.map(person => 

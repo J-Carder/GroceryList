@@ -27,5 +27,7 @@ dev-dist
 
 # other
 .env
-TODO.txt
 *.pem
+*.crt
+*.key
+*.txt

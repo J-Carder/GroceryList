@@ -103,7 +103,7 @@ const AdminOptions = () => {
     <div>
       <h4>Admin panel</h4>
       <select value={selectedEmail} onChange={(e) => setSelectedEmail(e.target.value)}>
-        {emails.map(e => { if (e.email != userVal.email) {return <option key={e.email}>{e.email}</option>}})};
+        {emails.constructor === Array && emails.length > 0 && emails.map(e => { if (e.email != userVal.email) {return <option key={e.email}>{e.email}</option>}})};
       </select>
       <input type="text" placeholder='New password' value={newPwd} onChange={(e) => setNewPwd(e.target.value)}/>
       <p>{status}</p>

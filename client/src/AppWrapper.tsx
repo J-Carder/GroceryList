@@ -35,6 +35,8 @@ interface Props {
   offlineState: Array<any>
 }
 
+
+
 export const Context = React.createContext<Props>({} as Props);
 
 
@@ -64,13 +66,13 @@ const AppWrapper = () => {
     }, false);
   },[])
 
-  // useEffect(() => {
-  //   if (online) {
-  //     // syncBackend(offlineStateVal)
-  //     // setOfflineStateVal([]);persistQueryClientRestore()
-  //   }
-  //   onlineManager.setOnline(online);
-  // }, [online])
+  useEffect(() => {
+    if (online) {
+      // syncBackend(offlineStateVal)
+      // setOfflineStateVal([]);persistQueryClientRestore()
+    }
+    onlineManager.setOnline(online);
+  }, [online])
 
 
 return (

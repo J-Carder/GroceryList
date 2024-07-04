@@ -14,7 +14,7 @@ import cookieParser from "cookie-parser";
 import MongoStore from 'connect-mongo';
 import fs from "fs";
 import https from "https";
-import path, { dirname } from 'path';
+import path, {dirname} from "path";
 import { fileURLToPath } from 'url';
 
 
@@ -65,18 +65,27 @@ app.use(cors({credentials: true, origin: ["http://localhost:4173", "http://local
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
+// app.use(cookieSession({
+//   name: "session",
+//   keys: ["secret", "test"],
+//   sameSite: "none"
+// }))
 // USE BELOW IN PROD (STORES SESSIONS IN DB)!!!!!!!
 app.use(session({ // PROD
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  cookie: {
+    // sameSite: "none",
+    // secure: true
+  },
   store: MongoStore.create({
     clientPromise: conn,
     dbName: "GroceryList",
     stringify: false,
     autoRemove: "interval",
     autoRemoveInterval: 1
-  })
+  }),
 }))
 // app.use(session({
 //   secret: process.env.SESSION_SECRET,
@@ -131,12 +140,12 @@ app.get("/test", (req, res) => {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// const options = {
-//   key: fs.readFileSync(path.join(__dirname, "localhost-key.pem")),
-//   cert: fs.readFileSync(path.join(__dirname, "localhost.pem")),
-// };
+const options = {
+  key: fs.readFileSync(path.join(__dirname, "localhost-key.pem")),
+  cert: fs.readFileSync(path.join(__dirname, "localhost.pem")),
+};
 
-// const server = https.createServer(options, app);
+const server = https.createServer(options, app);
 
 app.listen(process.env.PORT, () => {
   console.log(`--- Server is running on port ${process.env.PORT} ---`)
