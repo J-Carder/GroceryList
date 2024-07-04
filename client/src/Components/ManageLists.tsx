@@ -89,6 +89,14 @@ const ManageLists = () => {
     }
   }
 
+
+  useEffect(() => {
+    if (listsVal.length == 0) {
+      setSelectedListVal("");
+      console.log("listVal" + selectedListVal)
+    }
+  }, [listsVal])
+
   useEffect(() => {
     getQuery.isSuccess && setListsVal(getQuery.data) ;
     try {
@@ -108,11 +116,19 @@ const ManageLists = () => {
 
   return (
     <div>
-      <h3>Add new list</h3>
-      <select value={selectedListVal} onChange={(e) => setSelectedListVal(e.target.value)}>
-        { listsVal.constructor === Array && listsVal.map(list => <option key={list._id}>{list.name}</option>) }
-      </select>
-      <button onClick={handleDelete}>Delete selected</button>
+      <h3>Manage lists</h3>
+      {
+        listsVal.length > 0 ? 
+        <>
+          <select value={selectedListVal} onChange={(e) => setSelectedListVal(e.target.value)}>
+            { listsVal.constructor === Array && listsVal.map(list => <option key={list._id}>{list.name}</option>) }
+          </select>
+          <button onClick={handleDelete}>Delete selected</button>
+        </>
+        :
+        <p>No lists yet, add one below!</p>
+      }
+
       <div>
         <input type="text" placeholder="List name" value={listName} onChange={(e) => setListName(e.target.value)} onKeyDown={handleKeyDown} />
         <button onClick={handleAdd}>Add</button>

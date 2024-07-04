@@ -56,6 +56,11 @@ const lists = (app, checkAuthenticated, checkNotAuthenticated) => {
       if (!housesApartOf.includes(house)) {
         return res.json({msg: "Not authorized"});
       }
+
+      if ((await ListModel.find({apartOfHouse: house, name: req.body.name})).length > 0) {
+        return res.json({msg: "Duplicate"})
+      }
+
       await ListModel.create({
         name: req.body.name,
         apartOfHouse: house
@@ -63,6 +68,7 @@ const lists = (app, checkAuthenticated, checkNotAuthenticated) => {
 
       res.json({msg: "Success"});
     } catch (e) {
+      console.log(e)
       res.json({msg: "Error"});
     }
   })

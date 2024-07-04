@@ -11,12 +11,13 @@ function App() {
 
   const queryClient = useQueryClient();
   const [page, setPage] = useState("home");
-  const {online, authenticated, user, selectedHouse} = useContext(Context);
+  const {online, authenticated, user, selectedHouse, selectedList} = useContext(Context);
 
   const [onlineVal, setOnlineVal] = online;
   const [authenticatedVal, setAuthenticatedVal] = authenticated;
   const [userVal, setUserVal] = user;
   const [selectedHouseVal, setSelectedHouseVal] = selectedHouse;
+  const [selectedListVal, setSelectedListVal] = selectedList;
 
 
   const fetchIsAuthQuery = async () => {
@@ -32,7 +33,6 @@ function App() {
     staleTime: Infinity,
     gcTime: Infinity
   })
-
 
   useEffect(() => {
     // setAuthenticatedVal(getLocalLogin())
@@ -60,7 +60,8 @@ function App() {
 
   // DEBUG
   useEffect(() => {
-    console.log(authenticatedVal);
+    // console.log(authenticatedVal);
+    console.log("sl val: " + selectedListVal)
   })
 
   return (

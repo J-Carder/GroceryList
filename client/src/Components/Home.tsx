@@ -150,7 +150,7 @@ const Home = ({setPage}) => {
   }
 
   const refreshList = () => {
-    if (listsVal.length != 0 && !listsVal.msg && setSelectedListVal != "" && itemsQuery.data) {
+    if (listsVal.length != 0 && !listsVal.msg && selectedListVal != "" && !itemsQuery.data?.msg && itemsQuery.data) {
       let tempItemsList = [...itemsQuery.data];
       console.log(listsVal)
       const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
@@ -192,27 +192,35 @@ const Home = ({setPage}) => {
         <>
           <ManageLists />
           <hr />
-          <AddItem />
-          <SortItems />
-          <ItemSettings itemsList={itemsList} setItemsList={setItemsList} />
           {
-            itemsList.length === 0 ? 
-            <div><h2>Empty!</h2></div>
+            selectedListVal ?
+            <>
+              <AddItem />
+              <SortItems />
+              <ItemSettings itemsList={itemsList} setItemsList={setItemsList} />
+              {
+                itemsList.length === 0 ? 
+                <div><h2>Empty!</h2></div>
+                :
+                itemsList.map(item => 
+                  <div className="item" key={item._id} onClick={(e) => handleEdit(item._id, !item.completed, item.tempId ? item.tempId : false)}>
+                    <p className="itemContent"> 
+                      <input type="checkbox" onChange={(e) => handleEdit(item._id, e.target.checked, item.tempId ? item.tempId : false)} checked={item.completed} />
+                      <span className={item.completed ? "strike" : ""}>
+                        <span className="bold">{item.item}</span>
+                          {item.department != "" && item.department != "None" ? <> <span className="em">in</span> {item.department}</> : ""}
+                          {item.wantedBy != "" && item.wantedBy != "None" ? <> <span className="em">by</span> {item.wantedBy}</> : ""}
+                      </span>
+                      <button onClick={() => handleDelete(item._id)}>X</button>
+                    </p>
+                  </div> 
+                )
+              }
+          </>
             :
-            itemsList.map(item => 
-              <div className="item" key={item._id} onClick={(e) => handleEdit(item._id, !item.completed, item.tempId ? item.tempId : false)}>
-                <p className="itemContent"> 
-                  <input type="checkbox" onChange={(e) => handleEdit(item._id, e.target.checked, item.tempId ? item.tempId : false)} checked={item.completed} />
-                  <span className={item.completed ? "strike" : ""}>
-                    <span className="bold">{item.item}</span>
-                      {item.department != "" && item.department != "None" ? <> <span className="em">in</span> {item.department}</> : ""}
-                      {item.wantedBy != "" && item.wantedBy != "None" ? <> <span className="em">by</span> {item.wantedBy}</> : ""}
-                  </span>
-                  <button onClick={() => handleDelete(item._id)}>X</button>
-                </p>
-              </div> 
-            )
+            ""
           }
+
         </>
         : 
           <p>Welcome! First, head over to Settings to join a house</p>
