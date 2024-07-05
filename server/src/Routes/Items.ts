@@ -128,8 +128,11 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
       const query = await ItemModel.findByIdAndDelete({_id: id})
       // for deleting of items that weren't assigned a proper ID yet (ie. offline)
       const query2 = await ItemModel.deleteOne({tempId: req.body.tempId})
+
+      // MAKE ROOM
+      io.emit("delete", id)
       res.json({msg: "Success"})
-    } catch (e) {
+    } catch (e) {http://localhost:5173/
       console.log(e);
       res.json({msg: "Failed"});
     }
@@ -174,7 +177,7 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
       });
 
       console.log(`item added to house: ${houseRequested}`)
-      io.emit("message", item)
+      io.emit("add", item)
       // io.to(houseRequested).emit("message", item)
 
       res.json({msg: "Success"})

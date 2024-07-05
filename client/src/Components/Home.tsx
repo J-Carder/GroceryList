@@ -184,10 +184,11 @@ const Home = ({setPage}) => {
   }, [sortByVal, orderVal, itemsQuery.data])
 
   useEffect(() => {
-    socket.on("message", item => {
+    socket.on("add", item => {
       console.log("WS --->");
       console.log(item);
 
+      // get current query data
       const currentData : Array<any> = queryClient.getQueryData(["getQuery"])!;
       // make sure items aren't duplicated
       if (currentData.filter((data) => data._id == item._id).length == 0 &&
@@ -198,7 +199,12 @@ const Home = ({setPage}) => {
           return newData;
         });
       }
+    })
 
+    socket.on("delete", id => {
+      queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
+        return data.filter((item) => item._id != id)
+      });
     })
   }, []);
 
