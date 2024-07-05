@@ -139,35 +139,42 @@ const items = (app, checkAuthenticated, checkNotAuthenticated) => {
 
     try {
       // query param 
-      let {apartOfList} = req.params
+      let { apartOfList } = req.params;
       // the houses the user has attached to them
       let apartOfHouses = req.user.houses;
-      // the house the list they are requesting is apart of
-      let houseRequested = (await ListModel.findById(apartOfList)).apartOfHouse
+      let houseRequested;
+      try {
+        // the house the list they are requesting is apart of
+        houseRequested = (await ListModel.findById(req.body.apartOfList)).apartOfHouse
+      } catch (e) {
+        houseRequested = ((await ListModel.findOne({tempId: req.body.apartOfList})).apartOfHouse)
+      }
       if (!apartOfHouses.includes(houseRequested)) {
         // if they don't have this house error
-        return res.status(401).json({msg: "Not authorized"})
+        return res.status(401).json({msg: "Not authorized"});
       }
+
+      let tempId = null;
       if (req.body.tempId) {
-        await ItemModel.create({
-          item: req.body.item,
-          department: req.body.department,
-          wantedBy: req.body.wantedBy,
-          apartOfList: req.body.apartOfList,
-          originalTimeCreated: req.body.originalTimeCreated,
-          tempId: req.body.tempId
-        })
-      } else {
-        await ItemModel.create({
-          item: req.body.item,
-          department: req.body.department,
-          wantedBy: req.body.wantedBy,
-          apartOfList: req.body.apartOfList,
-          originalTimeCreated: req.body.originalTimeCreated
-        })
+        tempId = req.body.tempId
       }
+      const tempApartOfList = req.body.tempApartOfList;
+      const tempList = await ListModel.findOne({tempId: tempApartOfList});
+      console.log(tempApartOfList);
+      console.log(await ListModel.find());
+
+      await ItemModel.create({
+        item: req.body.item,
+        department: req.body.department,
+        wantedBy: req.body.wantedBy,
+        apartOfList: tempList._id, 
+        originalTimeCreated: req.body.originalTimeCreated,
+        tempId: tempId,
+        tempApartOfList: tempApartOfList
+      });
       res.json({msg: "Success"})
     } catch (e) {
+      console.log(e);
       res.json({msg: "Failed"});
     }
   })

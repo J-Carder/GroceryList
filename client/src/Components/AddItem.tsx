@@ -35,27 +35,17 @@ function AddItem() {
     return req.json();
   }
 // <><
-  const fetchAddQuery = async ({itemName, wantedBy, department, apartOflist, tempId, originalTimeCreated}) => {
+  const fetchAddQuery = async ({tempApartOfList, itemName, wantedBy, department, apartOflist, tempId, originalTimeCreated}) => {
     // const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
-    let reqBody;
-    if (tempId) {
-      reqBody = JSON.stringify({ 
-              item: itemName,
-              wantedBy: wantedBy,
-              department: department,
-              apartOfList: apartOflist,
-              originalTimeCreated: originalTimeCreated,
-              tempId: tempId
-            })
-    } else {
-      reqBody = JSON.stringify({ 
-              item: itemName,
-              wantedBy: wantedBy,
-              department: department,
-              apartOfList: apartOflist,
-              originalTimeCreated: originalTimeCreated,
-            })
-    }
+    const reqBody = JSON.stringify({ 
+            item: itemName,
+            wantedBy: wantedBy,
+            department: department,
+            apartOfList: apartOflist,
+            originalTimeCreated: originalTimeCreated,
+            tempId: tempId,
+            tempApartOfList: tempApartOfList
+          });
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${apartOflist}`, {
             method: 'post',
             headers: {
@@ -83,7 +73,7 @@ function AddItem() {
   })
 
 
-  const addLocal = ({itemName, wantedBy, department, apartOflist, tempId, originalTimeCreated}) => {
+  const addLocal = ({tempApartOflist, itemName, wantedBy, department, apartOflist, tempId, originalTimeCreated}) => {
     
     queryClient.setQueryData(["getQuery"], (itemsList: Array<any>) => {
       const newList = [...itemsList];
@@ -95,7 +85,8 @@ function AddItem() {
         apartOfList: apartOflist,
         tempId: tempId,
         originalTimeCreated: originalTimeCreated,
-        _id: tempId
+        _id: tempId,
+        tempApartOflist: tempApartOflist
       });
       return newList;
     })
@@ -118,8 +109,10 @@ function AddItem() {
   const handleAdd = async () => {
     if (item != "" && selectedListVal != "") {
       const tempId = mongoObjectId();
+      const tempListId = listsVal.filter(list => list.name == selectedListVal)[0].tempId;
       const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
-      addItemQuery.mutate({originalTimeCreated: Date.now(), itemName: item, wantedBy: personSelectedVal, department: departmentSelectedVal, apartOflist: listId, tempId: tempId}); 
+      console.log("tempApartOfList: " + listId);
+      addItemQuery.mutate({ tempApartOfList: tempListId, originalTimeCreated: Date.now(), itemName: item, wantedBy: personSelectedVal, department: departmentSelectedVal, apartOflist: listId, tempId: tempId}); 
     } else {
       // TODO: send error cuz of blank string
     }

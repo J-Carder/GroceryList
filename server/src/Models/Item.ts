@@ -26,6 +26,9 @@ const ItemSchema = new mongoose.Schema({
   },
   originalTimeCreated: {
     type: String
+  },
+  tempApartOfList: {
+    type: String
   }
 })
 
