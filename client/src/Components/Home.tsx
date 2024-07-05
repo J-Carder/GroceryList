@@ -206,6 +206,17 @@ const Home = ({setPage}) => {
         return data.filter((item) => item._id != id)
       });
     })
+
+    socket.on("update", ({id, completed}) => {
+      queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
+        return data.map(item => {
+          if (item._id == id) {
+            return {...item, completed: completed}
+          }
+          return item;
+        })
+      })
+    })
   }, []);
 
   return (

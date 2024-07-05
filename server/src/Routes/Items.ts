@@ -103,6 +103,8 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
       } else {
         await ItemModel.updateOne({tempId: req.body.tempId}, {completed: completed})
       }
+
+      io.emit("update", {id: id, completed: completed})
       res.json({msg: "Success"})
     } catch (e) {
       console.log(e);
