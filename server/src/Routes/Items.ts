@@ -42,7 +42,8 @@ const items = (app, checkAuthenticated, checkNotAuthenticated) => {
         // if they don't have this house error
         return res.status(401).json({msg: "Not authorized"})
       }
-
+      
+      console.log("MODEL= ", await ItemModel.find());
       await ItemModel.deleteMany({completed: true})
       res.json({msg: "Success"})
     } catch (e) {

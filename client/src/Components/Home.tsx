@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import AddItem from './AddItem'
 import '../css/Home.css'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { onlineManager, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import ManageLists from './ManageLists'
 import { Context } from '../AppWrapper'
 import SortItems from './SortItems'
@@ -170,7 +170,10 @@ const Home = ({setPage}) => {
   }, [itemsQuery.data, itemsQuery.status])
 
   useEffect(() => {
-    queryClient.invalidateQueries({queryKey: ["getQuery"]});
+    // don't invalidate if offline as this will send a query which will return the cache which won't include items added offline
+    if (onlineManager.isOnline()) {
+      queryClient.invalidateQueries({queryKey: ["getQuery"]});
+    }
     refreshList();
   }, [selectedListVal])
 
