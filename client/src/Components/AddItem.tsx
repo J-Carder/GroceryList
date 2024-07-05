@@ -34,16 +34,16 @@ function AddItem() {
     })
     return req.json();
   }
-
+// <><
   const fetchAddQuery = async ({itemName, wantedBy, department, apartOflist, tempId, originalTimeCreated}) => {
-    const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
+    // const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
     let reqBody;
     if (tempId) {
       reqBody = JSON.stringify({ 
               item: itemName,
               wantedBy: wantedBy,
               department: department,
-              apartOfList: listId,
+              apartOfList: apartOflist,
               originalTimeCreated: originalTimeCreated,
               tempId: tempId
             })

@@ -40,7 +40,9 @@ const lists = (app, checkAuthenticated, checkNotAuthenticated) => {
     try {
       const {id} = req.params
       const query = await ListModel.findByIdAndDelete({_id: id})
-      const query2 = await ListModel.deleteOne({tempId: req.body.tempId})
+      if (req.body.tempId) {
+        const query2 = await ListModel.deleteOne({tempId: req.body.tempId})
+      }
       res.json({success: true})
 
     } catch (e) {
