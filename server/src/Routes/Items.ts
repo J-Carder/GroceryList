@@ -123,7 +123,10 @@ const items = (app, checkAuthenticated, checkNotAuthenticated) => {
       }
 
       const {id} = req.params
+      console.log("temp id=> " + req.body.tempId);
       const query = await ItemModel.findByIdAndDelete({_id: id})
+      // for deleting of items that weren't assigned a proper ID yet (ie. offline)
+      const query2 = await ItemModel.deleteOne({tempId: req.body.tempId})
       res.json({msg: "Success"})
     } catch (e) {
       console.log(e);

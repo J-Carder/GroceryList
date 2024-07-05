@@ -65,7 +65,17 @@ export default defineConfig({
       },
       workbox: {
         runtimeCaching: [{
-          urlPattern: ({url}) => url.origin == "http://localhost:3001",
+          urlPattern: ({url}) => url.pathname == "/authenticate",
+          handler: "CacheFirst",
+          options: {
+            cacheName: "auth-cache",
+            // cacheableResponse: {
+            //   statuses: [0, 200]
+            // }
+          }
+        },
+        {
+          urlPattern: ({url}) => true,
           handler: "NetworkFirst",
           options: {
             cacheName: "api-cache",

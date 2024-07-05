@@ -35,7 +35,7 @@ const Home = ({setPage}) => {
     gcTime: Infinity
   })
 
-  const fetchDeleteQuery = async (id : string) => {
+  const fetchDeleteQuery = async ({id, tempId}) => {
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${id}`, {
             method: 'delete',
@@ -44,7 +44,8 @@ const Home = ({setPage}) => {
                 "Content-Type": "application/json",
               },
             body: JSON.stringify({
-              apartOfList: listId
+              apartOfList: listId,
+              tempId: tempId
             })
           });
       return req.json();
@@ -72,9 +73,9 @@ const Home = ({setPage}) => {
   }
 
 
-  const deleteLocal = (
-      id: string
-    ) => {
+  const deleteLocal = ({
+      id, tempId
+    }) => {
       queryClient.setQueryData(['getQuery'], (itemsList : Array<any>) => {
         return itemsList.filter(item => item._id != id);
       });
@@ -95,8 +96,8 @@ const Home = ({setPage}) => {
     updateMutation.mutate({ id: id, checked: checked, tempId: tempId });
   }
 
-  const handleDelete = (id) => {
-    deleteMutation.mutate(id);
+  const handleDelete = (id, tempId) => {
+    deleteMutation.mutate({id, tempId});
   }
 
   const updateLocal = (
@@ -211,7 +212,7 @@ const Home = ({setPage}) => {
                           {item.department != "" && item.department != "None" ? <> <span className="em">in</span> {item.department}</> : ""}
                           {item.wantedBy != "" && item.wantedBy != "None" ? <> <span className="em">by</span> {item.wantedBy}</> : ""}
                       </span>
-                      <button onClick={() => handleDelete(item._id)}>X</button>
+                      <button onClick={() => handleDelete(item._id, item.tempId)}>X</button>
                     </p>
                   </div> 
                 )
