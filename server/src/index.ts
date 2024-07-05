@@ -152,12 +152,13 @@ const checkNotAuthenticated = (req, res, next) => {
 // ---------------------------- //
 
 io.on("connection", socket => {
+  app.socket = socket;
   items(app, checkAuthenticated, checkNotAuthenticated, io);
   departments(app, checkAuthenticated, checkNotAuthenticated);
   houses(app, checkAuthenticated, checkNotAuthenticated);
   lists(app, checkAuthenticated, checkNotAuthenticated);
   people(app, checkAuthenticated, checkNotAuthenticated);
-  auth(app, checkAuthenticated, checkNotAuthenticated, passport, socket, io);
+  auth(app, checkAuthenticated, checkNotAuthenticated, passport, io);
   users(app, checkAuthenticated, checkNotAuthenticated);
 });
 

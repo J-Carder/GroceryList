@@ -23,7 +23,7 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
       }
 
       await ItemModel.updateMany({}, {"$set":{completed: req.body.completed}})
-      io.emit("fill", req.body.completed);
+      io.to(houseRequested).emit("fill", req.body.completed);
       res.json({msg: "Success"})
     } catch (e) {
       console.log(e);
@@ -48,7 +48,7 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
       await ItemModel.deleteMany({completed: true})
 
       // MAKE ROOM
-      io.emit("clear", "null")
+      io.to(houseRequested).emit("clear", "null")
 
       res.json({msg: "Success"})
     } catch (e) {
@@ -109,7 +109,7 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
         await ItemModel.updateOne({tempId: req.body.tempId}, {completed: completed})
       }
 
-      io.emit("update", {id: id, completed: completed})
+      io.to(houseRequested).emit("update", {id: id, completed: completed})
       res.json({msg: "Success"})
     } catch (e) {
       console.log(e);
@@ -137,7 +137,7 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
       const query2 = await ItemModel.deleteOne({tempId: req.body.tempId})
 
       // MAKE ROOM
-      io.emit("delete", id)
+      io.to(houseRequested).emit("delete", id)
       res.json({msg: "Success"})
     } catch (e) {http://localhost:5173/
       console.log(e);
@@ -184,9 +184,8 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
       });
 
       console.log(`item added to house: ${houseRequested}`)
-      io.emit("add", item)
+      io.to(houseRequested).emit("add", item)
       // io.to(houseRequested).emit("message", item)
-
       res.json({msg: "Success"})
     } catch (e) {
       console.log(e);

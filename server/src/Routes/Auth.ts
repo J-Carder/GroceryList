@@ -6,7 +6,7 @@ import { omit, pick } from "../helpers.js";
 // -----   AUTH ROUTES    ----- //
 // ---------------------------- //
 
-const auth = (app, checkAuthenticated, checkNotAuthenticated, passport, socket, io) => {
+const auth = function(app, checkAuthenticated, checkNotAuthenticated, passport, io)  {
 
   app.delete("/logout", (req, res, next) => {
     try {
@@ -18,8 +18,7 @@ const auth = (app, checkAuthenticated, checkNotAuthenticated, passport, socket, 
 
         // SOCKETIO LEAVE ROOM
         if (req.user.houses.length > 0) {
-          socket.leave(req.user.houses[0])
-          console.log("left room " + req.user.houses[0])
+          app.socket.leave(req.user.houses[0])
         }
 
         res.json({ msg: "Logged out" })
@@ -40,8 +39,7 @@ const auth = (app, checkAuthenticated, checkNotAuthenticated, passport, socket, 
       // SOCKETIO JOIN ROOM
 
       if (req.user.houses.length > 0) {
-        socket.join(req.user.houses[0])
-        console.log("joined room " + req.user.houses[0])
+        app.socket.join(req.user.houses[0])
       }
 
       res.json({
@@ -68,13 +66,13 @@ const auth = (app, checkAuthenticated, checkNotAuthenticated, passport, socket, 
     }
   })
 
-  app.get("/authenticated", checkAuthenticated, async (req, res) => {
+  app.get("/authenticated", checkAuthenticated, async function (req, res) {
     try {
+      console.log("authed");
 
-      // SOCKETIO JOIN ROOM
+      // // SOCKETIO JOIN ROOM
       if (req.user.houses.length > 0) {
-        socket.join(req.user.houses[0])
-        console.log("joined room " + req.user.houses[0])
+        app.socket.join(req.user.houses[0])
       }
 
       res.json({ msg: "Authenticated", user: pick(req.user, "name", "email", "houses", "admin")});
