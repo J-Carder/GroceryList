@@ -41,13 +41,16 @@ const ManageLists = () => {
     } 
   }
 
-  const fetchDeleteQuery = async (id : string) => {
+  const fetchDeleteQuery = async ({id, tempId}) => {
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/lists/${id}`, {
             method: 'delete',
             headers: {
               "Content-Type": "application/json",
             },
-            credentials: "include"
+            credentials: "include",
+            body: JSON.stringify({
+              tempId: tempId
+            })
           });
       return req.json();
   }
@@ -90,12 +93,23 @@ const ManageLists = () => {
     // }
   })
 
+
+  const deleteLocal = ({id, tempId}) => {
+    queryClient.setQueryData(["listGetQuery"], (listsList : Array<any>) => {
+      return listsList.filter(list => list._id != id);
+    });
+  }
+
   const deleteMutation = useMutation({
     mutationFn: fetchDeleteQuery,
-    onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["getQuery"]})
-        queryClient.invalidateQueries({ queryKey: ["listGetQuery"]})
-    }
+    onMutate: async (payload) => {
+      await queryClient.cancelQueries({queryKey: ["listGetQuery"]})
+      deleteLocal(payload);
+    },
+    // onSuccess: () => {
+    //     queryClient.invalidateQueries({ queryKey: ["getQuery"]})
+    //     queryClient.invalidateQueries({ queryKey: ["listGetQuery"]})
+    // }
   })
 
   const handleKeyDown = (e) => {
@@ -110,7 +124,9 @@ const ManageLists = () => {
 
   const handleDelete = () => {
     if (listsVal.length > 0) {
-      deleteMutation.mutate(listsVal.filter((l) => l.name == selectedListVal)[0]._id);
+      const id = listsVal.filter((l) => l.name == selectedListVal)[0]._id
+      const tempId = listsVal.filter((l) => l.name == selectedListVal)[0].tempId
+      deleteMutation.mutate({id: id, tempId: tempId});
     }
   }
 
