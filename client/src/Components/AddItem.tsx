@@ -73,7 +73,7 @@ function AddItem() {
   })
 
 
-  const addLocal = ({tempApartOflist, itemName, wantedBy, department, apartOflist, tempId, originalTimeCreated}) => {
+  const addLocal = ({tempApartOfList, itemName, wantedBy, department, apartOflist, tempId, originalTimeCreated}) => {
     
     queryClient.setQueryData(["getQuery"], (itemsList: Array<any>) => {
       const newList = [...itemsList];
@@ -86,7 +86,7 @@ function AddItem() {
         tempId: tempId,
         originalTimeCreated: originalTimeCreated,
         _id: tempId,
-        tempApartOflist: tempApartOflist
+        tempApartOflist: tempApartOfList
       });
       return newList;
     })
@@ -111,7 +111,6 @@ function AddItem() {
       const tempId = mongoObjectId();
       const tempListId = listsVal.filter(list => list.name == selectedListVal)[0].tempId;
       const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
-      console.log("tempApartOfList: " + listId);
       addItemQuery.mutate({ tempApartOfList: tempListId, originalTimeCreated: Date.now(), itemName: item, wantedBy: personSelectedVal, department: departmentSelectedVal, apartOflist: listId, tempId: tempId}); 
     } else {
       // TODO: send error cuz of blank string

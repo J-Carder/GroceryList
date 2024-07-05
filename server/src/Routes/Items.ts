@@ -173,7 +173,9 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
         tempApartOfList: tempApartOfList
       });
 
-      io.to(houseRequested).emit("message", item)
+      console.log(`item added to house: ${houseRequested}`)
+      io.emit("message", item)
+      // io.to(houseRequested).emit("message", item)
 
       res.json({msg: "Success"})
     } catch (e) {

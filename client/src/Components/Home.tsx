@@ -154,7 +154,6 @@ const Home = ({setPage}) => {
   const refreshList = () => {
     if (listsVal.length != 0 && !listsVal.msg && selectedListVal != "" && !itemsQuery.data?.msg && itemsQuery.data) {
       let tempItemsList = [...itemsQuery.data];
-      console.log(listsVal)
       const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
       tempItemsList = tempItemsList.filter((item) => item.apartOfList == listId);
       setItemsList(refreshSort(tempItemsList));
@@ -184,6 +183,24 @@ const Home = ({setPage}) => {
     }
   }, [sortByVal, orderVal, itemsQuery.data])
 
+  useEffect(() => {
+    socket.on("message", item => {
+      console.log("WS --->");
+      console.log(item);
+
+      const currentData : Array<any> = queryClient.getQueryData(["getQuery"])!;
+      // make sure items aren't duplicated
+      if (currentData.filter((data) => data._id == item._id).length == 0 &&
+          currentData.filter((data) => data.tempId == item.tempId).length == 0) {
+          queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
+          const newData = [...data];
+          newData.push(item);
+          return newData;
+        });
+      }
+
+    })
+  }, []);
 
   return (
     <div>

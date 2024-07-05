@@ -151,63 +151,20 @@ const checkNotAuthenticated = (req, res, next) => {
 // -----      ROUTES      ----- //
 // ---------------------------- //
 
-items(app, checkAuthenticated, checkNotAuthenticated, io);
-departments(app, checkAuthenticated, checkNotAuthenticated);
-houses(app, checkAuthenticated, checkNotAuthenticated);
-lists(app, checkAuthenticated, checkNotAuthenticated);
-people(app, checkAuthenticated, checkNotAuthenticated);
-auth(app, checkAuthenticated, checkNotAuthenticated, passport, io);
-users(app, checkAuthenticated, checkNotAuthenticated);
+io.on("connection", socket => {
+  items(app, checkAuthenticated, checkNotAuthenticated, io);
+  departments(app, checkAuthenticated, checkNotAuthenticated);
+  houses(app, checkAuthenticated, checkNotAuthenticated);
+  lists(app, checkAuthenticated, checkNotAuthenticated);
+  people(app, checkAuthenticated, checkNotAuthenticated);
+  auth(app, checkAuthenticated, checkNotAuthenticated, passport, socket, io);
+  users(app, checkAuthenticated, checkNotAuthenticated);
+});
 
 // test route
 app.get("/test", (req, res) => {
   res.send({msg: "Test success"})
 })
-
-// ---------------------------- //
-// -----   START SERVER   ----- //
-// ---------------------------- //
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-const options = {
-  key: fs.readFileSync(path.join(__dirname, "localhost-key.pem")),
-  cert: fs.readFileSync(path.join(__dirname, "localhost.pem")),
-};
-
-// const server = https.createServer(options, app);
-
-// const server = app.listen(process.env.PORT, () => {
-//   console.log(`--- Server is running on port ${process.env.PORT} ---`)
-// });
-
-// -------------------------------- //
-// -----   SOCKET.IO SERVER   ----- //
-// -------------------------------- //
-
-
-// const wsServer = new WebSocketServer({ port: process.env.WS_PORT })
-
-// wsServer.on("connection", socket => {
-//   socket.on("message", (message, isBinary) => {
-//     console.log(isBinary ? message : message.toString());
-//     socket.send("TESTING");
-//   })
-// })
-
-// const io = new sioServer(server, {
-//   cors: { origin: "*"}
-// });
-
-// io.on("connection", socket => {
-//   console.log("user connected");
-
-//   socket.on("message", (message) => {
-//     console.log(message);
-//     io.emit("message", `user sent: ${message}`)
-//   })
-// })
-
 
 
 // ---------------------------- //
