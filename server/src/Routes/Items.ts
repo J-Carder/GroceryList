@@ -23,6 +23,7 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
       }
 
       await ItemModel.updateMany({}, {"$set":{completed: req.body.completed}})
+      io.emit("fill", req.body.completed);
       res.json({msg: "Success"})
     } catch (e) {
       console.log(e);

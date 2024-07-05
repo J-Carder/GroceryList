@@ -219,10 +219,19 @@ const Home = ({setPage}) => {
     })
 
     socket.on("clear", (blank) => {
-        queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
-          return data.filter(item => !item.completed);
+      queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
+        return data.filter(item => !item.completed);
+      })
+    })
+
+    socket.on("fill", (comp) => {
+      console.log("completed is: " + comp);
+      queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
+        return data.map(item => {
+          return {...item, completed: comp};
         })
       })
+    })
   }, []);
 
   return (
