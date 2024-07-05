@@ -217,6 +217,12 @@ const Home = ({setPage}) => {
         })
       })
     })
+
+    socket.on("clear", (blank) => {
+        queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
+          return data.filter(item => !item.completed);
+        })
+      })
   }, []);
 
   return (

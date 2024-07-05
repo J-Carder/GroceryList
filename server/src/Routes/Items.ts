@@ -45,6 +45,10 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
       
       console.log("MODEL= ", await ItemModel.find());
       await ItemModel.deleteMany({completed: true})
+
+      // MAKE ROOM
+      io.emit("clear", "null")
+
       res.json({msg: "Success"})
     } catch (e) {
       console.log(e);
