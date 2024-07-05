@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Context } from '../AppWrapper';
+import { mongoObjectId } from '../helper';
 
 
 const ManageLists = () => {
@@ -25,7 +26,7 @@ const ManageLists = () => {
     return req.json();
   }
 
-  const fetchAddQuery = async (listName : string) => {
+  const fetchAddQuery = async ({listName, tempId}) => {
     if (listName != "") {
       const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/lists/${selectedHouseVal}`, {
               method: 'post',
@@ -33,8 +34,9 @@ const ManageLists = () => {
                 "Content-Type": "application/json",
               },
               credentials: "include",
-              body: JSON.stringify({ name: listName })
+              body: JSON.stringify({ name: listName, tempId: tempId })
             });
+        setListName("");
         return req.json();
     } 
   }
@@ -56,13 +58,36 @@ const ManageLists = () => {
     queryKey: ["listGetQuery"]
   })
 
+  const addLocal = ({listName, tempId}) => {
+    queryClient.setQueryData(["listGetQuery"], (listsList: Array<any>) => {
+      const newList = [...listsList];
+      newList.push({
+        name: listName,
+        apartOfHouse: selectedHouseVal,
+        tempId: tempId,
+        _id: tempId
+      });
+      return newList;
+    })
+  }
+
 
   const addMutation = useMutation({
     mutationFn: fetchAddQuery,
-    onSuccess: () => {
-      setListName("");
-      queryClient.invalidateQueries({ queryKey: ["listGetQuery"]})
-    }
+    onMutate: async (payload) => {
+      await queryClient.cancelQueries({queryKey: ["getQuery"]});
+      addLocal(payload);
+      if (!window.navigator.onLine) {
+        setListName("");
+      }
+    },
+    // onSettled: () => {
+    //   setListName("");
+    // },
+    // onSuccess: () => {
+    //   setListName("");
+    //   queryClient.invalidateQueries({ queryKey: ["listGetQuery"]})
+    // }
   })
 
   const deleteMutation = useMutation({
@@ -80,7 +105,7 @@ const ManageLists = () => {
   } 
 
   const handleAdd = () => {
-    addMutation.mutate(listName);
+    addMutation.mutate({listName: listName, tempId: mongoObjectId()});
   }
 
   const handleDelete = () => {

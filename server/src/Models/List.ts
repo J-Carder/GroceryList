@@ -9,6 +9,9 @@ const ListSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  tempId: {
+    type: String
+  }
 })
 
 const ListModel = mongoose.model("lists", ListSchema)

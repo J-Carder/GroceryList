@@ -61,10 +61,18 @@ const lists = (app, checkAuthenticated, checkNotAuthenticated) => {
         return res.json({msg: "Duplicate"})
       }
 
-      await ListModel.create({
-        name: req.body.name,
-        apartOfHouse: house
-      })
+      if (req.body.tempId) {
+        await ListModel.create({
+          name: req.body.name,
+          apartOfHouse: house,
+          tempId: req.body.tempId
+        })
+      } else {
+        await ListModel.create({
+          name: req.body.name,
+          apartOfHouse: house
+        })
+      }
 
       res.json({msg: "Success"});
     } catch (e) {

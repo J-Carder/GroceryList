@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { onlineManager, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Context } from '../AppWrapper'
+import { Context } from '../AppWrapper';
+import { mongoObjectId } from '../helper';
 
 function AddItem() {
 
@@ -81,12 +82,6 @@ function AddItem() {
     gcTime: Infinity
   })
 
-  const mongoObjectId =() => {
-    let timestamp = (new Date().getTime() / 1000 | 0).toString(16);
-    return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function() {
-        return (Math.random() * 16 | 0).toString(16);
-    }).toLowerCase();
-  };
 
   const addLocal = ({itemName, wantedBy, department, apartOflist, tempId, originalTimeCreated}) => {
     
@@ -102,7 +97,6 @@ function AddItem() {
         originalTimeCreated: originalTimeCreated,
         _id: tempId
       });
-      console.log(newList);
       return newList;
     })
   }
