@@ -24,13 +24,16 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "express-mongo-sanitize": "^2.2.0",
     "express-session": "^1.18.0",
     "express-session-mongo": "^0.1.0",
     "greenlock-express": "^4.0.3",
     "mongoose": "^8.4.1",
     "nodemon": "^3.1.4",
     "passport": "^0.7.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "socket.io": "^4.7.5",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "@types/node": "^20.14.8",

@@ -6,6 +6,7 @@ import Authenticate from './Components/Authenticate';
 import Logout from './Components/Logout';
 import "./css/App.css"
 import { Context } from './AppWrapper';
+import WS from './Components/WS';
 
 function App() {
 
@@ -92,6 +93,7 @@ function App() {
       }}>
         DEBUG
       </button>
+      <WS />
     </div>
   )
 }

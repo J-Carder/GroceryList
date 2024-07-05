@@ -6,6 +6,7 @@ import ManageLists from './ManageLists'
 import { Context } from '../AppWrapper'
 import SortItems from './SortItems'
 import ItemSettings from './ItemSettings'
+import { socket } from '../socket'
 
 const Home = ({setPage}) => {
 

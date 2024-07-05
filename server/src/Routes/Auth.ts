@@ -6,13 +6,24 @@ import { omit, pick } from "../helpers.js";
 // -----   AUTH ROUTES    ----- //
 // ---------------------------- //
 
-const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
+const auth = (app, checkAuthenticated, checkNotAuthenticated, passport, io) => {
 
   app.delete("/logout", (req, res, next) => {
     try {
+
       req.session.destroy((err) => {
         if (err) { return next(err); }
         res.clearCookie('connect.sid');
+
+
+        // SOCKETIO LEAVE ROOM
+        
+        io.on("connection", socket => {
+          if (req.user.houses.length > 0) {
+            socket.leave(req.user.houses[0])
+          }
+        })
+
         res.json({ msg: "Logged out" })
       })
       // req.logout((err) => {
@@ -27,6 +38,15 @@ const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
   // BAD ROUTE - cookie SHOULD be attached 
   app.post("/login", checkNotAuthenticated, passport.authenticate("local"), (req, res) => {
     try {
+
+      // SOCKETIO JOIN ROOM
+
+      io.on("connection", socket => {
+        if (req.user.houses.length > 0) {
+          socket.join(req.user.houses[0])
+        }
+      })
+
       res.json({
         msg: "Authenticated",
         user: pick(req.user, "name", "email", "houses", "admin")
@@ -53,6 +73,13 @@ const auth = (app, checkAuthenticated, checkNotAuthenticated, passport) => {
 
   app.get("/authenticated", checkAuthenticated, async (req, res) => {
     try {
+
+      // SOCKETIO JOIN ROOM
+      io.on("connection", socket => {
+        if (req.user.houses.length > 0) {
+          socket.join(req.user.houses[0])
+        }
+      })
       res.json({ msg: "Authenticated", user: pick(req.user, "name", "email", "houses", "admin")});
     } catch (e) {
       res.json({msg: "Error"})

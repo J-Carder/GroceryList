@@ -6,7 +6,7 @@ import ListModel from "../Models/List.js";
 // -----   ITEM ROUTES    ----- //
 // ---------------------------- //
 
-const items = (app, checkAuthenticated, checkNotAuthenticated) => {
+const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
 
 
   app.post("/items/fill", checkAuthenticated, async (req, res) => {
@@ -143,10 +143,12 @@ const items = (app, checkAuthenticated, checkNotAuthenticated) => {
       // the houses the user has attached to them
       let apartOfHouses = req.user.houses;
       let houseRequested;
+
       try {
         // the house the list they are requesting is apart of
         houseRequested = (await ListModel.findById(req.body.apartOfList)).apartOfHouse
       } catch (e) {
+        // if above fails, they might've created it offline so search the tempId
         houseRequested = ((await ListModel.findOne({tempId: req.body.apartOfList})).apartOfHouse)
       }
       if (!apartOfHouses.includes(houseRequested)) {
@@ -160,10 +162,8 @@ const items = (app, checkAuthenticated, checkNotAuthenticated) => {
       }
       const tempApartOfList = req.body.tempApartOfList;
       const tempList = await ListModel.findOne({tempId: tempApartOfList});
-      console.log(tempApartOfList);
-      console.log(await ListModel.find());
 
-      await ItemModel.create({
+      const item = await ItemModel.create({
         item: req.body.item,
         department: req.body.department,
         wantedBy: req.body.wantedBy,
@@ -172,6 +172,9 @@ const items = (app, checkAuthenticated, checkNotAuthenticated) => {
         tempId: tempId,
         tempApartOfList: tempApartOfList
       });
+
+      io.to(houseRequested).emit("message", item)
+
       res.json({msg: "Success"})
     } catch (e) {
       console.log(e);

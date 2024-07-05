@@ -14,8 +14,12 @@ import cookieParser from "cookie-parser";
 import MongoStore from 'connect-mongo';
 import fs from "fs";
 import https from "https";
+import http from "http";
 import path, {dirname} from "path";
 import { fileURLToPath } from 'url';
+import ExpressMongoSanitize from "express-mongo-sanitize";
+import { WebSocketServer } from "ws";
+import { Server as sioServer } from "socket.io"
 
 
 // route imports
@@ -26,6 +30,7 @@ import lists from "./Routes/Lists.js";
 import people from "./Routes/People.js";
 import auth from "./Routes/Auth.js";
 import users from "./Routes/Users.js";
+
 
 const getUserByEmail = async (email) => {
   return await UsersModel.findOne({email: email});
@@ -38,6 +43,34 @@ const getUserById = async (id) => {
 // new express app
 const app = express()
 
+// -------------------------------- //
+// -----     START SERVER     ----- //
+// -------------------------------- //
+
+const server = app.listen(process.env.PORT, () => {
+  console.log(`--- Server is running on port ${process.env.PORT} ---`)
+});
+
+// -------------------------------- //
+// -----   SOCKET.IO SERVER   ----- //
+// -------------------------------- //
+
+const io = new sioServer(server, {
+  cors: { origin: "*"}
+});
+
+io.on("connection", socket => {
+  console.log("user connected");
+
+  socket.on("message", (message) => {
+    console.log(message);
+    io.emit("message", `user sent: ${message}`)
+  })
+})
+
+// ---------------------------- //
+// -----     MIDDLEWARE   ----- //
+// ---------------------------- //
 
 const jsonParserMiddleware = async(req, res, next) => {
   if (!req.body || typeof req.body !== 'string') {
@@ -54,10 +87,6 @@ const jsonParserMiddleware = async(req, res, next) => {
 
 // connect to mongoDB
 const conn = mongoose.connect(process.env.DB).then(m => m.connection.getClient())
-
-// ---------------------------- //
-// -----     MIDDLEWARE   ----- //
-// ---------------------------- //
 
 app.use(jsonParserMiddleware);
 app.use(cors({credentials: true, origin: ["http://localhost:4173", "http://localhost:5173", "https://localhost:4433"]}));
@@ -94,6 +123,7 @@ app.use(session({ // PROD
 // }))
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(ExpressMongoSanitize())
 
 // initialize passport
 initialize(passport, getUserByEmail, getUserById)
@@ -121,12 +151,12 @@ const checkNotAuthenticated = (req, res, next) => {
 // -----      ROUTES      ----- //
 // ---------------------------- //
 
-items(app, checkAuthenticated, checkNotAuthenticated);
+items(app, checkAuthenticated, checkNotAuthenticated, io);
 departments(app, checkAuthenticated, checkNotAuthenticated);
 houses(app, checkAuthenticated, checkNotAuthenticated);
 lists(app, checkAuthenticated, checkNotAuthenticated);
 people(app, checkAuthenticated, checkNotAuthenticated);
-auth(app, checkAuthenticated, checkNotAuthenticated, passport);
+auth(app, checkAuthenticated, checkNotAuthenticated, passport, io);
 users(app, checkAuthenticated, checkNotAuthenticated);
 
 // test route
@@ -145,11 +175,40 @@ const options = {
   cert: fs.readFileSync(path.join(__dirname, "localhost.pem")),
 };
 
-const server = https.createServer(options, app);
+// const server = https.createServer(options, app);
 
-app.listen(process.env.PORT, () => {
-  console.log(`--- Server is running on port ${process.env.PORT} ---`)
-});
+// const server = app.listen(process.env.PORT, () => {
+//   console.log(`--- Server is running on port ${process.env.PORT} ---`)
+// });
+
+// -------------------------------- //
+// -----   SOCKET.IO SERVER   ----- //
+// -------------------------------- //
+
+
+// const wsServer = new WebSocketServer({ port: process.env.WS_PORT })
+
+// wsServer.on("connection", socket => {
+//   socket.on("message", (message, isBinary) => {
+//     console.log(isBinary ? message : message.toString());
+//     socket.send("TESTING");
+//   })
+// })
+
+// const io = new sioServer(server, {
+//   cors: { origin: "*"}
+// });
+
+// io.on("connection", socket => {
+//   console.log("user connected");
+
+//   socket.on("message", (message) => {
+//     console.log(message);
+//     io.emit("message", `user sent: ${message}`)
+//   })
+// })
+
+
 
 // ---------------------------- //
 // ---------------------------- //
