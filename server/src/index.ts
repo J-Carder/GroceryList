@@ -47,7 +47,7 @@ const app = express()
 // -----     START SERVER     ----- //
 // -------------------------------- //
 
-const server = app.listen(process.env.PORT, () => {
+const server = app.listen(process.env.PORT, '192.168.1.253', () => {
   console.log(`--- Server is running on port ${process.env.PORT} ---`)
 });
 
@@ -89,7 +89,7 @@ const jsonParserMiddleware = async(req, res, next) => {
 const conn = mongoose.connect(process.env.DB).then(m => m.connection.getClient())
 
 app.use(jsonParserMiddleware);
-app.use(cors({credentials: true, origin: ["http://localhost:4173", "http://localhost:5173", "https://localhost:4433"]}));
+app.use(cors({credentials: true, origin: ["http://localhost:4173", "http://localhost:5173", "https://localhost:4433", "http://192.168.1.253:5173"]}));
 // app.use(cors({credentials: true, origin: "http://localhost:4173"}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

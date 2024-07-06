@@ -186,10 +186,13 @@ const Home = ({setPage}) => {
   useEffect(() => {
     socket.on("add", item => {
       console.log("ADDING");
-
       // get current query data
       const currentData : Array<any> = queryClient.getQueryData(["getQuery"])!;
+
       // make sure items aren't duplicated
+      // if (currentData.filter((data) => data._id == item._id).length == 0 &&
+      //     currentData.filter((data) => data.tempId == item.tempId).length == 0) {
+
       if (currentData.filter((data) => data._id == item._id).length == 0 &&
           currentData.filter((data) => data.tempId == item.tempId).length == 0) {
           queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
@@ -200,7 +203,6 @@ const Home = ({setPage}) => {
       }
     })
 
-    // doesn't work
     socket.on("delete", id => {
       console.log("DELETING");
       queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
@@ -208,7 +210,6 @@ const Home = ({setPage}) => {
       });
     })
 
-    // doesn't work
     socket.on("update", ({id, completed}) => {
       console.log("UPDATING")
       queryClient.setQueryData(["getQuery"], (data : Array<any>) => {

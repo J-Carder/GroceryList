@@ -136,10 +136,10 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
       // for deleting of items that weren't assigned a proper ID yet (ie. offline)
       const query2 = await ItemModel.deleteOne({tempId: req.body.tempId})
 
-      // MAKE ROOM
+      // MAKE ROOM 
       io.to(houseRequested).emit("delete", id)
       res.json({msg: "Success"})
-    } catch (e) {http://localhost:5173/
+    } catch (e) {
       console.log(e);
       res.json({msg: "Failed"});
     }
@@ -183,7 +183,7 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
         tempApartOfList: tempApartOfList
       });
 
-      console.log(`item added to house: ${houseRequested}`)
+      console.log(item);
       io.to(houseRequested).emit("add", item)
       // io.to(houseRequested).emit("message", item)
       res.json({msg: "Success"})
