@@ -47,7 +47,7 @@ const app = express()
 // -----     START SERVER     ----- //
 // -------------------------------- //
 
-const server = app.listen(process.env.PORT, '192.168.1.253', () => {
+const server = app.listen(process.env.PORT, '0.0.0.0', () => {
   console.log(`--- Server is running on port ${process.env.PORT} ---`)
 });
 

@@ -93,8 +93,11 @@ const Home = ({setPage}) => {
     }
   });
   
-  const handleEdit = (id, checked, tempId) => {
-    updateMutation.mutate({ id: id, checked: checked, tempId: tempId });
+  const handleEdit = (id, checked, tempId, e) => {
+    // make sure we don't check when button (X button) is pressed
+    if (e.target.localName != "button") {
+      updateMutation.mutate({ id: id, checked: checked, tempId: tempId });
+    }
   }
 
   const handleDelete = (id, tempId) => {
@@ -262,7 +265,7 @@ const Home = ({setPage}) => {
                 <div><h2>Empty!</h2></div>
                 :
                 itemsList.map(item => 
-                  <div className="item" key={item._id} onClick={(e) => handleEdit(item._id, !item.completed, item.tempId ? item.tempId : false)}>
+                  <div className="item" key={item._id} onClick={(e) => handleEdit(item._id, !item.completed, item.tempId ? item.tempId : false, e)}>
                     <p className="itemContent"> 
                       <input type="checkbox" onChange={(e) => handleEdit(item._id, e.target.checked, item.tempId ? item.tempId : false)} checked={item.completed} />
                       <span className={item.completed ? "strike" : ""}>
