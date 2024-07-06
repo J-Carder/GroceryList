@@ -272,7 +272,7 @@ const Home = ({setPage}) => {
                 itemsList.map(item => 
                   <div className="item" key={item._id} onClick={(e) => handleEdit(item._id, !item.completed, item.tempId ? item.tempId : false, e)}>
                     <p className="itemContent"> 
-                      <input type="checkbox" onChange={(e) => handleEdit(item._id, e.target.checked, item.tempId ? item.tempId : false)} checked={item.completed} />
+                      <input type="checkbox" onChange={(e) => handleEdit(item._id, e.target.checked, item.tempId ? item.tempId : false, e)} checked={item.completed} />
                       <span className={item.completed ? "strike" : ""}>
                         <span className="bold">{item.item}</span> 
                         { DEBUG ? 

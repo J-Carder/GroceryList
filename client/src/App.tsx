@@ -7,6 +7,7 @@ import Logout from './Components/Logout';
 import "./css/App.css"
 import { Context } from './AppWrapper';
 import WS from './Components/WS';
+import Splash from './Components/Splash';
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
   const [userVal, setUserVal] = user;
   const [selectedHouseVal, setSelectedHouseVal] = selectedHouse;
   const [selectedListVal, setSelectedListVal] = selectedList;
+  const [splash, setSplash] = useState(false);
 
 
   const fetchIsAuthQuery = async () => {
@@ -56,14 +58,22 @@ function App() {
   const getLocalLogin = () => JSON.parse(localStorage.getItem('auth')!);
 
   useEffect(() => {
-    console.log('invalidating...');
     queryClient.invalidateQueries({queryKey: ["isAuthQuery"]});
   }, [])
 
-  // DEBUG
   useEffect(() => {
-    console.log(authenticatedVal);
+    console.log("splash =>", splash);
   })
+
+  // only run splash if not found in local storage, ideally only once
+  useEffect(() => {
+    if (JSON.parse(localStorage.getItem("runOnce")!)) {
+      setSplash(false);
+    } else {
+      setSplash(true);
+      localStorage.setItem("runOnce", JSON.stringify(true));
+    }
+  }, []);
 
   return (
     <div>
@@ -81,7 +91,10 @@ function App() {
       }
       {
         !authenticatedVal ?
-      <Authenticate setPage={setPage} />
+        splash ? 
+        <Splash setSplash={setSplash} />
+        :
+        <Authenticate setPage={setPage} />
       : 
         page == "home" ?
           <Home setPage={setPage} /> 
@@ -89,12 +102,21 @@ function App() {
           <Settings setPage={setPage} />
       }
       <button onClick={async () => {
-        const data = await fetch(`${import.meta.env.VITE_REACT_APP_API}/socket`);
-        const d = await data.text();
-        console.log("rooms", d);
+        // const data = await fetch(`${import.meta.env.VITE_REACT_APP_API}/socket`);
+        // const d = await data.text();
+        // console.log("rooms", d);
+        setAuthenticatedVal(!authenticatedVal);
       }}>
-        DEBUG
+        Auth toggle
       </button>
+      <button onClick={() =>{
+        setSplash(!splash)
+      }}>
+        Splash toggle
+      </button>
+      <h3 className='text-3xl font-bold underline'>
+        testsadfdasf
+      </h3>
       <WS />
     </div>
   )

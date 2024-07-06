@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import "../css/Auth.css";
 import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Context } from '../AppWrapper';
+import InputText from "./InputText";
+import Button from "./Button";
 
 
 const Authenticate = ({setPage}) => {
@@ -124,24 +126,34 @@ const Authenticate = ({setPage}) => {
 
   return (
     <div>
-      <h1>Welcome to the Grocery List App</h1>
-      <button onClick={() => setIsLogin(!isLogin)}>{isLogin ? "Create an account?" : "Log in to existing account"}</button>
+      <div className="bg-green">
+        <h1 className="text-white bold text-2xl text-center py-4">Login</h1>
+      </div>
 
-      {isLogin ? 
-      <>
-        <input type="text" placeholder="email" value={loginEmail} onChange={(e) => {setLoginEmail(e.target.value)}}/>
-        <input type="text" placeholder="password" value={loginPwd} onChange={(e) => {setLoginPwd(e.target.value)}}/>
-        <button onClick={handleLogin}>Login</button>
-      </>
-      :
-      <>
-        <input type="text" placeholder="name" value={registerName} onChange={(e) => {setRegisterName(e.target.value)}}/>
-        <input type="email" placeholder="email" value={registerEmail} onChange={(e) => {setRegisterEmail(e.target.value)}}/>
-        <input type="text" placeholder="password" value={registerPwd} onChange={(e) => {setRegisterPwd(e.target.value)}}/>
-        <input type="text" placeholder="password again" value={registerPwdConfirm} onChange={(e) => {setRegisterPwdConfirm(e.target.value)}}/>
-        <button onClick={handleRegister}>Register</button>
-      </>
-      }
+      <div className="p-3">
+        { isLogin ? 
+          <p className="italic">Need an account? <button className="inline italic underline" onClick={() => setIsLogin(false)}>Register</button></p>
+            :
+          <p className="italic">Already have an account? <button className="inline italic underline" onClick={() => setIsLogin(true)}>Login</button></p>
+        }
+
+        {isLogin ? 
+        <>
+          <InputText type="text" placeholder="email" value={loginEmail} change={(e) => {setLoginEmail(e.target.value)}}/>
+          <InputText type="text" placeholder="password" value={loginPwd} change={(e) => {setLoginPwd(e.target.value)}}/>
+          <Button click={handleLogin}>Login</Button>
+        </>
+        :
+        <>
+          <InputText type="text" placeholder="Name" value={registerName} change={(e) => {setRegisterName(e.target.value)}}/>
+          <InputText type="email" placeholder="Email" value={registerEmail} change={(e) => {setRegisterEmail(e.target.value)}}/>
+          <InputText type="text" placeholder="Password" value={registerPwd} change={(e) => {setRegisterPwd(e.target.value)}}/>
+          <InputText type="text" placeholder="Password again" value={registerPwdConfirm} change={(e) => {setRegisterPwdConfirm(e.target.value)}}/>
+          <Button click={handleRegister}>Register</Button>
+        </>
+        }
+      </div>
+      
     </div>
   )
 }
