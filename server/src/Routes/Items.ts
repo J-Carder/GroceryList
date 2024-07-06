@@ -109,7 +109,7 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
         await ItemModel.updateOne({tempId: req.body.tempId}, {completed: completed})
       }
 
-      io.to(houseRequested).emit("update", {id: id, completed: completed})
+      io.to(houseRequested).emit("update", {id: id, tempId: req.body.tempId, completed: completed})
       res.json({msg: "Success"})
     } catch (e) {
       console.log(e);
@@ -137,7 +137,7 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
       const query2 = await ItemModel.deleteOne({tempId: req.body.tempId})
 
       // MAKE ROOM 
-      io.to(houseRequested).emit("delete", id)
+      io.to(houseRequested).emit("delete", { id: id, tempId: req.body.tempId })
       res.json({msg: "Success"})
     } catch (e) {
       console.log(e);

@@ -20,6 +20,7 @@ const Home = ({setPage}) => {
   const [userVal, setUserVal] = user;
   const [sortByVal, setSortByVal] = sortBy; 
   const [orderVal, setOrderVal] = order;
+  const DEBUG = true;
 
   const fetchGetQuery = async () => {
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
@@ -186,6 +187,10 @@ const Home = ({setPage}) => {
     }
   }, [sortByVal, orderVal, itemsQuery.data])
 
+// ---------------------------- //
+// -----     SOCKET IO    ----- //
+// ---------------------------- //
+
   useEffect(() => {
     socket.on("add", item => {
       console.log("ADDING");
@@ -206,18 +211,18 @@ const Home = ({setPage}) => {
       }
     })
 
-    socket.on("delete", id => {
+    socket.on("delete", ({id, tempId}) => {
       console.log("DELETING");
       queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
-        return data.filter((item) => item._id != id && item.tempId != id);
+        return data.filter((item) => item._id != id && item.tempId != tempId);
       });
     })
 
-    socket.on("update", ({id, completed}) => {
+    socket.on("update", ({id, tempId, completed}) => {
       console.log("UPDATING")
       queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
         return data.map(item => {
-          if (item._id == id || item.tempId == id) {
+          if (item._id == id || item.tempId == tempId) {
             return {...item, completed: completed}
           }
           return item;
@@ -269,7 +274,13 @@ const Home = ({setPage}) => {
                     <p className="itemContent"> 
                       <input type="checkbox" onChange={(e) => handleEdit(item._id, e.target.checked, item.tempId ? item.tempId : false)} checked={item.completed} />
                       <span className={item.completed ? "strike" : ""}>
-                        <span className="bold">{item.item}</span>
+                        <span className="bold">{item.item}</span> 
+                        { DEBUG ? 
+                        
+                        <>id:<span style={{color: "blue"}}>{item._id.substring(item._id.length - 5)}</span> temp:<span style={{color: "red"}}>{item.tempId.substring(item.tempId.length - 5)}</span></>
+                          :
+                            ""
+                        }
                           {item.department != "" && item.department != "None" ? <> <span className="em">in</span> {item.department}</> : ""}
                           {item.wantedBy != "" && item.wantedBy != "None" ? <> <span className="em">by</span> {item.wantedBy}</> : ""}
                       </span>
