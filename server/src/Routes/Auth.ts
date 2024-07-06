@@ -11,15 +11,10 @@ const auth = function(app, checkAuthenticated, checkNotAuthenticated, passport, 
   app.delete("/logout", (req, res, next) => {
     try {
 
+      app.socket.leave(req.user.houses[0])
       req.session.destroy((err) => {
         if (err) { return next(err); }
         res.clearCookie('connect.sid');
-
-
-        // SOCKETIO LEAVE ROOM
-        if (req.user.houses.length > 0) {
-          app.socket.leave(req.user.houses[0])
-        }
 
         res.json({ msg: "Logged out" })
       })
@@ -32,13 +27,13 @@ const auth = function(app, checkAuthenticated, checkNotAuthenticated, passport, 
     }
   });
 
-  // BAD ROUTE - cookie SHOULD be attached 
   app.post("/login", checkNotAuthenticated, passport.authenticate("local"), (req, res) => {
     try {
 
       // SOCKETIO JOIN ROOM
 
       if (req.user.houses.length > 0) {
+        console.log(req.user.houses[0]);
         app.socket.join(req.user.houses[0])
       }
 

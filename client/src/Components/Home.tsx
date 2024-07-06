@@ -185,8 +185,7 @@ const Home = ({setPage}) => {
 
   useEffect(() => {
     socket.on("add", item => {
-      console.log("WS --->");
-      console.log(item);
+      console.log("ADDING");
 
       // get current query data
       const currentData : Array<any> = queryClient.getQueryData(["getQuery"])!;
@@ -201,16 +200,20 @@ const Home = ({setPage}) => {
       }
     })
 
+    // doesn't work
     socket.on("delete", id => {
+      console.log("DELETING");
       queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
-        return data.filter((item) => item._id != id)
+        return data.filter((item) => item._id != id && item.tempId != id);
       });
     })
 
+    // doesn't work
     socket.on("update", ({id, completed}) => {
+      console.log("UPDATING")
       queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
         return data.map(item => {
-          if (item._id == id) {
+          if (item._id == id || item.tempId == id) {
             return {...item, completed: completed}
           }
           return item;
@@ -219,13 +222,14 @@ const Home = ({setPage}) => {
     })
 
     socket.on("clear", (blank) => {
+      console.log("CLEARING")
       queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
         return data.filter(item => !item.completed);
       })
     })
 
     socket.on("fill", (comp) => {
-      console.log("completed is: " + comp);
+      console.log("FILLING")
       queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
         return data.map(item => {
           return {...item, completed: comp};

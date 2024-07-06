@@ -159,7 +159,14 @@ io.on("connection", socket => {
   lists(app, checkAuthenticated, checkNotAuthenticated);
   people(app, checkAuthenticated, checkNotAuthenticated);
   auth(app, checkAuthenticated, checkNotAuthenticated, passport, io);
-  users(app, checkAuthenticated, checkNotAuthenticated);
+  users(app, checkAuthenticated, checkNotAuthenticated, io);
+
+  app.get("/socket", (req, res) => {
+    console.log(app.socket.rooms)
+    res.json({
+      test: app.socket.rooms
+    });
+  })
 });
 
 // test route

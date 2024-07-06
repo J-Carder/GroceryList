@@ -8,12 +8,18 @@ import { pick } from "../helpers.js";
 // -----   USER ROUTES    ----- //
 // ---------------------------- //
 
-const users = (app, checkAuthenticated, checkNotAuthenticated) => {
+const users = (app, checkAuthenticated, checkNotAuthenticated, io) => {
 
   app.delete("/users/house", checkAuthenticated, async (req, res) => {
     try {
       const userEmail = req.user.email;
       const query = await UsersModel.findOneAndUpdate({email: userEmail}, {houses: []})
+      // leave rooms on socket
+      const rooms = app.socket.rooms;
+      let roomArr = Array.from(rooms);
+      for(const room of roomArr) {
+        app.socket.leave(room);
+      }
       res.json({success: true})
     } catch (e) {
       res.json({msg: "Error"})
@@ -28,6 +34,7 @@ const users = (app, checkAuthenticated, checkNotAuthenticated) => {
       console.log(await HouseModel.find())
       if (passphrase == getHouse.passphrase) {
         await UsersModel.findOneAndUpdate({email: req.user.email}, {houses: [req.params.name]})
+        app.socket.join(req.params.name);
       } else {
         return res.json({msg: "Wrong passphrase"})
       }

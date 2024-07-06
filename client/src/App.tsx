@@ -88,8 +88,10 @@ function App() {
         :
           <Settings setPage={setPage} />
       }
-      <button onClick={() => {
-        console.log(userVal, authenticatedVal)
+      <button onClick={async () => {
+        const data = await fetch(`${import.meta.env.VITE_REACT_APP_API}/socket`);
+        const d = await data.text();
+        console.log("rooms", d);
       }}>
         DEBUG
       </button>
