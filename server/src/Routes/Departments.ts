@@ -55,9 +55,9 @@ const departments = (app, checkAuthenticated, checkNotAuthenticated) => {
     try {
       const house = req.body.house;
       const dept = req.body.department;
-      if (dept.length < 1 || dept.length > 50) res.json({msg: "Invalid house name too long or short"})
+      if (dept.length < 1 || dept.length > 50) return res.json({msg: "Invalid house name too long or short"})
       
-      if (DepartmentModel.findOne({ department: dept })) res.json({msg: "Department already exists"})
+      if (await DepartmentModel.findOne({ department: dept, apartOfHouse: house })) return res.json({msg: "Department already exists"})
 
       if (req.user.houses.includes(house)) {
         await DepartmentModel.create({
