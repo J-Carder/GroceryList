@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react'
 import InputText from "../InputText";
 import Button from "../Button";
+import Status from '../Status';
 
 const ResetPassword = () => {
 
@@ -30,23 +31,27 @@ const ResetPassword = () => {
         setNewPwd("");
         setStatus("Password changed")
       } else {
-        setStatus("Error");
+        setStatus(data.msg);
       }
     }
   })
 
   const handleChange = () => {
+    if (newPwd != oldPwd) {
+      setStatus("Passwords don't match");
+      return;
+    }
     passwordChangeMutation.mutate();
   }
 
   return (
-    <div className="mt-3">
+    <form className="mt-3" onSubmit={(e) => {e.preventDefault(); handleChange()}}>
       <h4 className="bold">Change password</h4>
-      <InputText type="text" placeholder='Old password' value={oldPwd} onChange={(e) => setOldPwd(e.target.value)}/>
-      <InputText type="text" placeholder='New password' value={newPwd} onChange={(e) => setNewPwd(e.target.value)}/>
-      <p>{status}</p>
-      <Button className="!mx-0 my-1" onClick={handleChange}>Change</Button>
-    </div>
+      <InputText minLength={5} required={true} type="password" placeholder='Old password' value={oldPwd} onChange={(e) => setOldPwd(e.target.value)}/>
+      <InputText minLength={5} required={true} type="password" placeholder='New password' value={newPwd} onChange={(e) => setNewPwd(e.target.value)}/>
+      <Status>{status}</Status>
+      <Button submit={true} className="!mx-0 my-1">Change</Button>
+    </form>
   )
 }
 

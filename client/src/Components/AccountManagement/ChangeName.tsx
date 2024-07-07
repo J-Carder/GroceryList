@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react'
 import { Context } from '../../AppWrapper';
 import InputText from "../InputText";
 import Button from "../Button";
+import Status from '../Status';
 
 const ChangeName = () => {
 
@@ -11,6 +12,7 @@ const ChangeName = () => {
   const {user} = useContext(Context);
 
   const [userVal, setUserVal] = user;
+  const [status, setStatus] = useState("");
 
   const nameChangeMutation = useMutation({
     mutationFn: async () => {
@@ -31,7 +33,7 @@ const ChangeName = () => {
         setUserVal(userVal => {return {...userVal, name: name}})
         setName("");
       } else {
-        console.log("error");
+        setStatus(data.msg);
       }
     }
   })
@@ -41,11 +43,12 @@ const ChangeName = () => {
   }
 
   return (
-    <div>
+    <form onSubmit={(e) => {e.preventDefault(); handleChange()}}>
       <h4 className="bold">Change name</h4>
-      <InputText type="text" placeholder='New name' value={name} onChange={(e) => setName(e.target.value)} />
-      <Button className="!mx-0 my-1" onClick={handleChange}>Change</Button>
-    </div>
+      <InputText required={true} type="text" placeholder='New name' value={name} onChange={(e) => setName(e.target.value)} />
+      <Status>{status}</Status>
+      <Button submit={true} className="!mx-0 my-1">Change</Button>
+    </form>
   )
 }
 

@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react'
 import { Context } from '../../AppWrapper';
 import InputText from "../InputText";
 import Button from "../Button";
+import Status from '../Status';
 
 const ChangeEmail = () => {
 
@@ -35,7 +36,7 @@ const ChangeEmail = () => {
         setEmail("");
         setStatus("Changed")
       } else {
-        setStatus("Error")
+        setStatus(data.msg)
       }
     }
   })
@@ -45,7 +46,7 @@ const ChangeEmail = () => {
   }
 
   return (
-    <div className="mt-3">
+    <form className="mt-3" onSubmit={(e) => {e.preventDefault(); handleChange()}}>
 
       {/* <button onClick={(e) => {
         QueryClient.invalidateQueries({queryKey: ["listGetQuery"], refetchType: "active"});
@@ -53,10 +54,10 @@ const ChangeEmail = () => {
       }}>TEST BUTTON</button> */}
 
       <h4 className="bold">Change Email</h4>
-      <InputText type="text" placeholder='New email' value={email} onChange={(e) => setEmail(e.target.value)} />
-      <p>{status}</p>
-      <Button className="!mx-0 my-1" onClick={handleChange}>Change</Button>
-    </div>
+      <InputText required={true} type="email" placeholder='New email' value={email} onChange={(e) => setEmail(e.target.value)} />
+      <Status>{status}</Status>
+      <Button submit={true} className="!mx-0 my-1">Change</Button>
+    </form>
   )
 }
 
