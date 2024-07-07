@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import "../css/Auth.css";
 import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Context } from '../AppWrapper';
 import InputText from "./InputText";

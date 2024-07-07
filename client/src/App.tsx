@@ -4,9 +4,7 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import Settings from "./Components/Settings";
 import Authenticate from './Components/Authenticate';
 import Logout from './Components/Logout';
-import "./css/App.css"
 import { Context } from './AppWrapper';
-import WS from './Components/WS';
 import Splash from './Components/Splash';
 
 function App() {
@@ -96,7 +94,7 @@ function App() {
         :
           <Settings setPage={setPage} />
       }
-      <button onClick={async () => {
+      {/* <button onClick={async () => {
         // const data = await fetch(`${import.meta.env.VITE_REACT_APP_API}/socket`);
         // const d = await data.text();
         // console.log("rooms", d);
@@ -112,7 +110,7 @@ function App() {
       <button onClick={() => console.log(authenticatedVal)}>
         console log
       </button>
-      <WS />
+      <WS /> */}
     </div>
   )
 }

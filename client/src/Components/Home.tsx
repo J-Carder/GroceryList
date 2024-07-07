@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
 import AddItem from './AddItem'
-import '../css/Home.css'
 import { onlineManager, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import ManageLists from './ManageLists'
 import { Context } from '../AppWrapper'
@@ -345,7 +344,7 @@ const Home = ({setPage}) => {
                 <div><h2>Empty!</h2></div>
                 :
                 itemsList.map((item, index) => 
-                  <div>
+                  <div key={item._id}>
                     { sortByVal == "By department" && item.department != itemsList[index - 1]?.department ?
                       <p key={textColours[dupItemsList[index].colourCount % textColours.length]} className={`${textColours[dupItemsList[index].colourCount]} bold m-1`}>{item.department}</p>  
                       : 
@@ -356,8 +355,8 @@ const Home = ({setPage}) => {
                       : 
                       ""
                   }
-                  <div className={`border-solid border-l-8  ${ sortByVal != "Default" && colours[dupItemsList[index].colourCount % colours.length]}`}>
-                    <div className="p-3 border-t-2" key={item._id} onClick={(e) => handleEdit(item._id, !item.completed, item.tempId ? item.tempId : false, e)}>
+                  <div className={`border-solid border-l-8  ${ sortByVal != "Default" && sortByVal != "" && colours[dupItemsList[index].colourCount % colours.length]}`}>
+                    <div className="p-3 border-t-2"  onClick={(e) => handleEdit(item._id, !item.completed, item.tempId ? item.tempId : false, e)}>
                       <div className="flex justify-between"> 
                         <div>
                           <input type="checkbox"  className="inline accent-green transform scale-150" onChange={(e) => handleEdit(item._id, e.target.checked, item.tempId ? item.tempId : false, e)} checked={item.completed} />
