@@ -345,7 +345,7 @@ const Home = ({setPage}) => {
               <SortItems />
               {
                 itemsList.length === 0 ? 
-                <div><h2>Empty!</h2></div>
+                <div><Status type="success">Empty, add some items!</Status></div>
                 :
                 itemsList.map((item, index) => 
                   <div key={item._id}>

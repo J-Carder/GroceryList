@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Context } from '../AppWrapper';
-import InputText from "./InputText";
-import Button from "./Button";
-import Status from "./Status";
+import InputText from "./../Components/InputText";
+import Button from "./../Components/Button";
+import Status from "./../Components/Status";
 import { ImSpinner2 } from "react-icons/im";
 
 const Authenticate = ({setPage}) => {

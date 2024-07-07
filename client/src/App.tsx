@@ -2,10 +2,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import Home from "./Pages/Home";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import Settings from "./Pages/Settings";
-import Authenticate from './Components/Authenticate';
+import Authenticate from './Pages/Authenticate';
 import Logout from './Components/Logout';
 import { Context } from './AppWrapper';
-import Splash from './Components/Splash';
+import Splash from './Pages/Splash';
 
 function App() {
 

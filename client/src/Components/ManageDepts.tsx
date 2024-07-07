@@ -114,14 +114,6 @@ const fetchDeleteQuery = async (id : string) => {
     }
   }
 
-  if (deptStatus === "pending") {
-    return <h1>loading</h1>
-  }
-
-  if (deptStatus === "error") {
-    return <h1>error!</h1>
-  }
-
   return (
     <div>
       <h3 className="bold">Manage Departments</h3>

@@ -111,14 +111,6 @@ function ManagePeople() {
     }
   }
 
-  if (peopleStatus === "pending") {
-    return <h1>loading</h1>
-  }
-
-  if (peopleStatus === "error") {
-    return <h1>error!</h1>
-  }
-
   return (
     <div>
       <h3 className="bold mt-3">Manage People</h3>
