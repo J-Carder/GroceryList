@@ -161,12 +161,12 @@ io.on("connection", socket => {
   auth(app, checkAuthenticated, checkNotAuthenticated, passport, io);
   users(app, checkAuthenticated, checkNotAuthenticated, io);
 
-  app.get("/socket", (req, res) => {
-    console.log(app.socket.rooms)
-    res.json({
-      test: app.socket.rooms
-    });
-  })
+  // app.get("/socket", (req, res) => {
+  //   console.log(app.socket.rooms)
+  //   res.json({
+  //     test: app.socket.rooms
+  //   });
+  // })
 
 
 });
