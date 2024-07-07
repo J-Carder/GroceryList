@@ -1,5 +1,7 @@
 import React, { useContext } from 'react'
 import { Context } from '../AppWrapper';
+import { TbSortAscending } from "react-icons/tb";
+import { TbSortDescending } from "react-icons/tb";
 
 const SortItems = () => {
 
@@ -15,7 +17,7 @@ const SortItems = () => {
         <option>By department</option>
         <option>By person</option>
       </select>
-      <button className="mt-2 ml-2" onClick={() => setOrderVal(orderVal == "Descending" ? "Ascending" : "Descending")}>{orderVal}</button>
+      <button className="mt-2 ml-2" onClick={() => setOrderVal(orderVal == "Descending" ? "Ascending" : "Descending")}>{orderVal == "Descending" ? <TbSortDescending className="transform scale-150"/> : <TbSortAscending className="transform scale-150" /> }</button>
     </div>
   )
 }

@@ -6,6 +6,8 @@ import { Context } from '../AppWrapper'
 import ManageAccount from './ManageAccount'
 import Logout from "./Logout"
 import ManageLists from "./ManageLists"
+import { IoHomeSharp } from "react-icons/io5";
+
 
 function Settings({setPage}) {
 
@@ -18,7 +20,7 @@ function Settings({setPage}) {
       <div className="bg-green">
         <h1 className="text-white bold text-2xl text-center py-4">Settings</h1>
       </div>
-      <button className="absolute top-5 right-3" onClick={() => setPage("home")}>Home</button>
+      <button className="absolute top-4 right-5" onClick={() => setPage("home")}><IoHomeSharp className="text-white" /></button>
       <div className="p-3">
         <ManageHouses />
         <ManageLists />

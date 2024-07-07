@@ -8,6 +8,9 @@ import ItemSettings from './ItemSettings'
 import { socket } from '../socket'
 import SelectList from "./SelectList"
 import SelectListCustom from "./SelectListCustom"
+import { IoMdSettings } from "react-icons/io";
+import { ImCross } from "react-icons/im";
+
 
 const Home = ({setPage}) => {
 
@@ -333,7 +336,7 @@ const Home = ({setPage}) => {
       </div>
 
 
-      <button className="absolute top-4 right-5" onClick={() => setPage("settings")}>Settings</button>
+      <button className="absolute top-4 right-5" onClick={() => setPage("settings")}><IoMdSettings className="text-white" /></button>
       {
         userVal?.houses?.length > 0 ? 
         <>
@@ -370,7 +373,7 @@ const Home = ({setPage}) => {
                               </div>
                           </div>
                         </div>
-                        <button className="inline bold" onClick={() => handleDelete(item._id, item.tempId)}>X</button>
+                        <button className="inline bold" onClick={() => handleDelete(item._id, item.tempId)}><ImCross /></button>
                       </div>
                     </div> 
                   </div>
@@ -383,10 +386,10 @@ const Home = ({setPage}) => {
         : 
           <p>Welcome! First, head over to Settings to join a house</p>
         }
-        <button
+        {/* <button
          onClick={() => {
           console.log(dupItemsList.forEach(i => console.log(i.colourCount)));
-         }}>Check paused</button>
+         }}>Check paused</button> */}
     </div>
   )
 }

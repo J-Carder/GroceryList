@@ -109,7 +109,7 @@ const AdminOptions = () => {
       </select>
       <InputText type="text" placeholder='New password' value={newPwd} onChange={(e) => setNewPwd(e.target.value)}/>
       <p className="italic">{status}</p>
-      <Button className="!mx-0" onClick={handleChange}>Change password</Button>
+      <Button className="!mx-0 block mb-0" onClick={handleChange}>Change password</Button>
       <Button className="bg-red-500 !mx-0" onClick={handleDelete}>{ deleteForReal ? "DELETE USER for real?" : "Delete user"}</Button>
     </div>
   )
