@@ -9,14 +9,13 @@ const SortItems = () => {
   const [orderVal, setOrderVal] = order;
 
   return (
-    <div>
-      <h4>Sort items by:</h4>
-      <select value={sortByVal} onChange={(e) => setSortByVal(e.target.value)}>
+    <div className="flex justify-center mb-4">
+      <select className="rounded-xl bg-gray-200 p-1 mt-2" value={sortByVal} onChange={(e) => setSortByVal(e.target.value)}>
         <option>Default</option>
-        <option>Department</option>
-        <option>Person</option>
+        <option>By department</option>
+        <option>By person</option>
       </select>
-      <button onClick={() => setOrderVal(orderVal == "Descending" ? "Ascending" : "Descending")}>{orderVal}</button>
+      <button className="mt-2 ml-2" onClick={() => setOrderVal(orderVal == "Descending" ? "Ascending" : "Descending")}>{orderVal}</button>
     </div>
   )
 }

@@ -94,11 +94,10 @@ const ItemSettings = ({itemsList, setItemsList}) => {
   }
 
   return (
-    <div>
-      <h4>Selection</h4>
-      <button onClick={handleClear}>Clear checked</button>
-      <button onClick={handleAll}>Select all</button>
-      <button onClick={handleNone}>Select none</button>
+    <div className="flex mt-3">
+      <button className="bg-gray-200 p-1 px-2 rounded-xl bold ml-2" onClick={handleAll}>Select all</button>
+      <button className="bg-gray-200 p-1 px-2 rounded-xl bold ml-2" onClick={handleNone}>Select none</button>
+      <button className="bg-gray-200 p-1 px-2 rounded-xl bold ml-2" onClick={handleClear}>Clear checked</button>
     </div>
   )
 }

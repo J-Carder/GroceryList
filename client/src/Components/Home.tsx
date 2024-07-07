@@ -22,7 +22,33 @@ const Home = ({setPage}) => {
   const [userVal, setUserVal] = user;
   const [sortByVal, setSortByVal] = sortBy; 
   const [orderVal, setOrderVal] = order;
+  const [dupItemsList, setDupItemsList] = useState<Array<any>>([]);
   const DEBUG = false;
+  let prevEntry = "";
+
+  const colours = [
+    "border-blue-600",
+    "border-yellow-600",
+    "border-pink-600",
+    "border-indigo-600",
+    "border-red-600",
+    "border-teal-600",
+    "border-orange-600",
+    "border-blue-600",
+  ]
+
+  const textColours = [
+    "text-blue-600",
+    "text-yellow-600",
+    "text-pink-600",
+    "text-indigo-600",
+    "text-red-600",
+    "text-teal-600",
+    "text-orange-600",
+    "text-blue-600",
+  ] 
+
+  let count = 0;
 
   const fetchGetQuery = async () => {
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
@@ -138,17 +164,17 @@ const Home = ({setPage}) => {
   const refreshSort = (itemsList) => {
     const tempList = itemsList;
     if (orderVal == "Descending") {
-      if (sortByVal == "Department") {
+      if (sortByVal == "By department") {
         tempList.sort((a, b) => a.department < b.department ? 1 : -1)
-      } else if (sortByVal == "Person") {
+      } else if (sortByVal == "By person") {
         tempList.sort((a, b) => a.wantedBy < b.wantedBy ? 1 : -1)
       } else {
         tempList.sort((a, b) => a.originalTimeCreated < b.originalTimeCreated ? 1 : -1)
       }
     } else {
-      if (sortByVal == "Department") {
+      if (sortByVal == "By department") {
         tempList.sort((a, b) => a.department > b.department ? 1 : -1)
-      } else if (sortByVal == "Person") {
+      } else if (sortByVal == "By person") {
         tempList.sort((a, b) => a.wantedBy > b.wantedBy ? 1 : -1)
       } else {
         tempList.sort((a, b) => a.originalTimeCreated > b.originalTimeCreated ? 1 : -1)
@@ -162,7 +188,30 @@ const Home = ({setPage}) => {
       let tempItemsList = [...itemsQuery.data];
       const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
       tempItemsList = tempItemsList.filter((item) => item.apartOfList == listId);
-      setItemsList(refreshSort(tempItemsList));
+      const tempSortedList = refreshSort(tempItemsList);
+      setItemsList(tempSortedList);
+
+      let counter = -1;
+      let tempDupList;
+      if (sortByVal == "By department") {
+        tempDupList = tempSortedList.map((item, index) => {
+          if (item.department != tempSortedList[index - 1]?.department) {
+            counter++;
+          }
+          return {...item, colourCount: counter}
+        })
+      } else {
+        tempDupList = tempSortedList.map((item, index) => {
+          if (item.wantedBy != tempSortedList[index - 1]?.wantedBy) {
+            counter++;
+          }
+          return {...item, colourCount: counter}
+        })
+      }
+      
+      setDupItemsList(tempDupList);
+
+      console.log(tempDupList)
     }
   }
 
@@ -291,39 +340,53 @@ const Home = ({setPage}) => {
         <>
           <hr />
               <SortItems />
-              <ItemSettings itemsList={itemsList} setItemsList={setItemsList} />
               {
                 itemsList.length === 0 ? 
                 <div><h2>Empty!</h2></div>
                 :
-                itemsList.map(item => 
-                  <div className="item" key={item._id} onClick={(e) => handleEdit(item._id, !item.completed, item.tempId ? item.tempId : false, e)}>
-                    <p className="itemContent"> 
-                      <input type="checkbox" onChange={(e) => handleEdit(item._id, e.target.checked, item.tempId ? item.tempId : false, e)} checked={item.completed} />
-                      <span className={item.completed ? "strike" : ""}>
-                        <span className="bold">{item.item}</span> 
-                        { DEBUG ? 
-                        
-                        <>id:<span style={{color: "blue"}}>{item._id.substring(item._id.length - 5)}</span> temp:<span style={{color: "red"}}>{item.tempId.substring(item.tempId.length - 5)}</span></>
-                          :
-                            ""
-                        }
-                          {item.department != "" && item.department != "None" ? <> <span className="em">in</span> {item.department}</> : ""}
-                          {item.wantedBy != "" && item.wantedBy != "None" ? <> <span className="em">by</span> {item.wantedBy}</> : ""}
-                      </span>
-                      <button onClick={() => handleDelete(item._id, item.tempId)}>X</button>
-                    </p>
-                  </div> 
+                itemsList.map((item, index) => 
+                  <div>
+                    { sortByVal == "By department" && item.department != itemsList[index - 1]?.department ?
+                      <p key={textColours[dupItemsList[index].colourCount % textColours.length]} className={`${textColours[dupItemsList[index].colourCount]} bold m-1`}>{item.department}</p>  
+                      : 
+                      ""
+                  }
+                  { sortByVal == "By person" && item.wantedBy != itemsList[index - 1]?.wantedBy ?
+                      <p key={textColours[dupItemsList[index].colourCount % textColours.length]} className={`${textColours[dupItemsList[index].colourCount]} bold m-1`}>{item.wantedBy}</p>  
+                      : 
+                      ""
+                  }
+                  <div className={`border-solid border-l-8  ${ sortByVal != "Default" && colours[dupItemsList[index].colourCount % colours.length]}`}>
+                    <div className="p-3 border-t-2" key={item._id} onClick={(e) => handleEdit(item._id, !item.completed, item.tempId ? item.tempId : false, e)}>
+                      <div className="flex justify-between"> 
+                        <div>
+                          <input type="checkbox"  className="inline accent-green transform scale-150" onChange={(e) => handleEdit(item._id, e.target.checked, item.tempId ? item.tempId : false, e)} checked={item.completed} />
+                          <div className={` ${item.completed ? "line-through inline" : "inline"}`}>
+                              <span className="bold ml-3">{item.item}</span> 
+                              <div>
+                                { sortByVal != "By department" && item.department != "" && item.department != "None" ? <> <span className="italic">in {item.department}</span> </> : ""}
+                                { sortByVal != "By person" && item.wantedBy != "" && item.wantedBy != "None" ? <> <span className="italic">by {item.wantedBy}</span> </> : ""}
+                                {/* { item.department != "" && item.department != "None" ? <> <span className="italic">in {item.department}</span> </> : ""}
+                                { item.wantedBy != "" && item.wantedBy != "None" ? <> <span className="italic">by {item.wantedBy}</span> </> : ""} */}
+                              </div>
+                          </div>
+                        </div>
+                        <button className="inline bold" onClick={() => handleDelete(item._id, item.tempId)}>X</button>
+                      </div>
+                    </div> 
+                  </div>
+                  </div>
                 )
               }
-
+              <hr />
+            <ItemSettings itemsList={itemsList} setItemsList={setItemsList} />
         </>
         : 
           <p>Welcome! First, head over to Settings to join a house</p>
         }
         <button
          onClick={() => {
-          console.log(deleteMutation.isPaused, updateMutation.isPaused);
+          console.log(dupItemsList.forEach(i => console.log(i.colourCount)));
          }}>Check paused</button>
     </div>
   )

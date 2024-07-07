@@ -148,9 +148,9 @@ function AddItem() {
       <InputAdd onClick={handleAdd} type="text" placeholder="Add item" value={item} onChange={(e) => setItem(e.target.value)} onKeyDown={handleKeyDown} />
       <div className="flex justify-center mt-4 mb-2">
         <p className="text-white bold mt-1 mr-1">by</p>
-        <SelectListCustom listVal={personListVal} listFn={person => <option key={person._id}>{person.name}</option>} value={personSelectedVal} setFn={e => handlePersonChange(e.target.value)}/>
+        <SelectListCustom defaultVal={"None"} listVal={personListVal} listFn={person => <option key={person._id}>{person.name}</option>} value={personSelectedVal} setFn={e => handlePersonChange(e.target.value)}/>
         <p className="text-white bold mt-1 mr-1">in</p>
-        <SelectListCustom listVal={departmentListVal} listFn={dept => <option key={dept._id}>{dept.department}</option>} value={departmentSelectedVal} setFn={e => handleDepartmentChange(e.target.value)}/>
+        <SelectListCustom defaultVal={"None"} listVal={departmentListVal} listFn={dept => <option key={dept._id}>{dept.department}</option>} value={departmentSelectedVal} setFn={e => handleDepartmentChange(e.target.value)}/>
       </div>
 
       {/* <div className="categories">
