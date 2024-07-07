@@ -31,7 +31,7 @@ const users = (app, checkAuthenticated, checkNotAuthenticated, io) => {
 
       const passphrase = req.body.passphrase;
       const getHouse = await HouseModel.findOne({name: req.params.name});
-      console.log(await HouseModel.find())
+      
       if (passphrase == getHouse.passphrase) {
         await UsersModel.findOneAndUpdate({email: req.user.email}, {houses: [req.params.name]})
         app.socket.join(req.params.name);

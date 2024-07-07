@@ -22,17 +22,17 @@ const people = (app, checkAuthenticated, checkNotAuthenticated) => {
   })
 
   // UPDATE probably not needed
-  app.put("/people/:id", checkAuthenticated, async (req, res) => {
-    try {
-      const {id} = req.params
-      const name = req.body.name
-      const query = await PeopleModel.findByIdAndUpdate({_id: id}, {name: name})
-      res.json({success: true})
+  // app.put("/people/:id", checkAuthenticated, async (req, res) => {
+  //   try {
+  //     const {id} = req.params
+  //     const name = req.body.name
+  //     const query = await PeopleModel.findByIdAndUpdate({_id: id}, {name: name})
+  //     res.json({success: true})
 
-    } catch (e) {
-      res.json({msg: "Error"})
-    }
-  })
+  //   } catch (e) {
+  //     res.json({msg: "Error"})
+  //   }
+  // })
 
   // DELETE
   app.delete("/people/:id", checkAuthenticated, async (req, res) => {
@@ -56,6 +56,7 @@ const people = (app, checkAuthenticated, checkNotAuthenticated) => {
   app.post("/people", checkAuthenticated, async (req, res) => {
     try {
       const house = req.body.house;
+      if (req.body.name.length < 1 || req.body.name.length > 100) return res.json({msg: "Person name must be within 1 and 100 characters"});
       if (req.user.houses.includes(house)) {
         await PeopleModel.create({
           name: req.body.name,
