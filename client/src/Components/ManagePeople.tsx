@@ -4,6 +4,7 @@ import { Context } from '../AppWrapper';
 import InputText from "./InputText";
 import Button from "./Button";
 import XButtonText from "./XButtonText";
+import Status from './Status';
 
 
 function ManagePeople() {
@@ -16,6 +17,7 @@ function ManagePeople() {
   const [personSelectedVal, setPersonSelectedVal] = personSelected;
   const [personListVal, setPersonListVal] = personList;
   const [selectedHouseVal, setSelectedHouseVal] = selectedHouse;
+  const [status, setStatus] = useState("");
 
   const fetchGetQuery = async () => {
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people/${selectedHouseVal}`, {
@@ -70,8 +72,10 @@ function ManagePeople() {
 
   const addMutation = useMutation({
     mutationFn: fetchAddQuery,
-    onSuccess: () => {
+    onSuccess: (data) => {
         queryClient.invalidateQueries({ queryKey: ["peopleGetQuery"]})
+        if (data.msg != "Success") setStatus(data.msg);
+        else setStatus("");
     }
   })
 
@@ -112,10 +116,11 @@ function ManagePeople() {
   }
 
   return (
-    <div>
+    <form onSubmit={e => {e.preventDefault(); handleAdd()}}>
       <h3 className="bold mt-3">Manage People</h3>
-      <InputText type="text" placeholder="Person name" value={peopleText} onChange={(e) => setPeopleText(e.target.value)} onKeyDown={handleKeyDown}/>
-      <Button className="!mx-0 my-1"onClick={handleAdd}>Add</Button>
+      <InputText required={true} type="text" placeholder="Person name" value={peopleText} onChange={(e) => setPeopleText(e.target.value)} onKeyDown={handleKeyDown}/>
+      <Status>{status}</Status>
+      <Button submit={true} className="!mx-0 my-1">Add</Button>
       {
         people.length == 0 || people.constructor != Array ? 
         <p className="italic mt-0">No people yet, add someone!</p>
@@ -132,7 +137,7 @@ function ManagePeople() {
         </div>
       }
 
-    </div>
+    </form>
   )
 }
 

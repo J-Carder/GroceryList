@@ -348,7 +348,7 @@ const Home = ({setPage}) => {
                 <div><Status type="success">Empty, add some items!</Status></div>
                 :
                 itemsList.map((item, index) => 
-                  <div key={item._id}>
+                  <div key={item._id} className="hover:bg-gray-100 transition-all">
                     { sortByVal == "By department" && item.department != itemsList[index - 1]?.department ?
                       <p key={textColours[dupItemsList[index].colourCount % textColours.length]} className={`${textColours[dupItemsList[index].colourCount]} bold m-1`}>{item.department}</p>  
                       : 
@@ -374,7 +374,7 @@ const Home = ({setPage}) => {
                               </div>
                           </div>
                         </div>
-                        <button className="inline bold" onClick={() => handleDelete(item._id, item.tempId)}><ImCross /></button>
+                        <button className="inline bold hover:bg-red-400 p-1 rounded transition-all" onClick={() => handleDelete(item._id, item.tempId)}><ImCross /></button>
                       </div>
                     </div> 
                   </div>

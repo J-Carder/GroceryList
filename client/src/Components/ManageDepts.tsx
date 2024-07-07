@@ -4,6 +4,7 @@ import { Context } from '../AppWrapper';
 import InputText from "./InputText";
 import Button from "./Button";
 import XButtonText from "./XButtonText";
+import Status from './Status';
 
 function ManageDepts() {
 
@@ -15,6 +16,8 @@ function ManageDepts() {
   const [departmentSelectedVal, setDepartmentSelectedVal] = departmentSelected;
   const [departmentListVal, setDepartmentListVal] = departmentSelected;
   const [selectedHouseVal, setSelectedHouseVal] = selectedHouse;
+
+  const [status, setStatus] = useState("");
   
   const fetchGetQuery = async () => {
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/departments/${selectedHouseVal}`, {
@@ -74,8 +77,13 @@ const fetchDeleteQuery = async (id : string) => {
 
   const addMutation = useMutation({
     mutationFn: fetchAddQuery,
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["deptGetQuery"]})
+      if (data.msg != "Success") {
+        setStatus(data.msg)
+      } else {
+        setStatus("");
+      }
     }
   })
 
@@ -115,10 +123,11 @@ const fetchDeleteQuery = async (id : string) => {
   }
 
   return (
-    <div>
+    <form onSubmit={e => {e.preventDefault(); handleAdd()}}>
       <h3 className="bold">Manage Departments</h3>
-      <InputText type="text" placeholder="Department name" value={deptText} onChange={(e) => setDeptText(e.target.value)} onKeyDown={handleKeyDown}/>
-      <Button className="!mx-0 my-1" onClick={handleAdd}>Add</Button>
+      <InputText required={true} type="text" placeholder="Department name" value={deptText} onChange={(e) => setDeptText(e.target.value)} onKeyDown={handleKeyDown}/>
+      <Status>{status}</Status>
+      <Button submit={true} className="!mx-0 my-1">Add</Button>
       {
         depts.length === 0 || depts.constructor !== Array ? 
         <p className="italic mt-0">No departments yet, add one!</p>
@@ -137,7 +146,7 @@ const fetchDeleteQuery = async (id : string) => {
 
       }
 
-    </div>
+    </form>
   )
 }
 

@@ -57,6 +57,7 @@ const people = (app, checkAuthenticated, checkNotAuthenticated) => {
     try {
       const house = req.body.house;
       if (req.body.name.length < 1 || req.body.name.length > 100) return res.json({msg: "Person name must be within 1 and 100 characters"});
+      if (await PeopleModel.findOne({name: req.body.name, apartOfHouse: house})) return res.json({msg: "Person already exists"})
       if (req.user.houses.includes(house)) {
         await PeopleModel.create({
           name: req.body.name,
