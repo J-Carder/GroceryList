@@ -336,7 +336,6 @@ const Home = ({setPage}) => {
         </div>
       </div>
 
-
       <button className="absolute top-4 right-5" onClick={() => setPage("settings")}><IoMdSettings className="text-white" /></button>
       {
         userVal?.houses?.length > 0 ? 
@@ -385,7 +384,7 @@ const Home = ({setPage}) => {
             <ItemSettings itemsList={itemsList} setItemsList={setItemsList} />
         </>
         : 
-          <Status type={"success"}>Welcome! First, head over to Settings to join a house</Status>
+          <Status type={"success"}>Welcome! First, head over to <button className="italic underline" onClick={() => setPage("Settings")}>Settings</button> to join a house</Status>
         }
         {/* <button
          onClick={() => {

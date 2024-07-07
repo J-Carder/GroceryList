@@ -7,6 +7,7 @@ import ManageAccount from './../Components/ManageAccount'
 import Logout from "./../Components/Logout"
 import ManageLists from "./../Components/ManageLists"
 import { IoHomeSharp } from "react-icons/io5";
+import Status from '../Components/Status'
 
 
 function Settings({setPage}) {
@@ -36,6 +37,7 @@ function Settings({setPage}) {
         <ManageAccount />
         <hr className="mt-5"/>
         <Logout />
+        <p>Jeremy Carder &copy; 2024</p>
       </div>
     </div>
   )
