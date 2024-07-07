@@ -131,15 +131,18 @@ const fetchDeleteQuery = async (id : string) => {
         depts.length === 0 || depts.constructor !== Array ? 
         <p className="italic mt-0">No departments yet, add one!</p>
         :
-        depts.map(dept => 
-          <XButtonText onClick={() => handleDelete(dept._id)} key={dept._id}>
-            {dept.department}
-          </XButtonText> 
-          // <div key={dept._id}>
-          //   <p>{dept.department}</p> 
-          //   <button onClick={() => handleDelete(dept._id)}>X</button>
-          // </div> 
-        )
+        <div className="flex flex-wrap">
+          { depts.map(dept => 
+            <XButtonText onClick={() => handleDelete(dept._id)} key={dept._id}>
+              {dept.department}
+            </XButtonText> 
+            // <div key={dept._id}>
+            //   <p>{dept.department}</p> 
+            //   <button onClick={() => handleDelete(dept._id)}>X</button>
+            // </div> 
+          )}
+        </div>
+
       }
 
     </div>

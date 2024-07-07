@@ -128,15 +128,16 @@ function ManagePeople() {
         people.length == 0 || people.constructor != Array ? 
         <p className="italic mt-0">No people yet, add someone!</p>
         :
-        people.map(person => 
-          // <div key={person._id}>
-          //   <p>{person.name}</p> 
-          //   <button onClick={() => handleDelete(person._id)}>X</button>
-          // </div> 
-          <XButtonText onClick={() => handleDelete(person._id)} key={person._id}>
-            {person.name}
-          </XButtonText> 
-        )
+        <div className="flex flex-wrap">
+           { people.map(person => 
+              // <div key={person._id}>
+              //   <p>{person.name}</p> 
+              //   <button onClick={() => handleDelete(person._id)}>X</button>
+              // </div> 
+              <XButtonText onClick={() => handleDelete(person._id)} key={person._id}>
+                {person.name}
+              </XButtonText> )}
+        </div>
       }
 
     </div>
