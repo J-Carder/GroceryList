@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useContext, useEffect, useState } from 'react'
 import { Context } from '../../AppWrapper';
+import Button from "../Button";
+import InputText from "../InputText";
 
 const AdminOptions = () => {
 
@@ -101,14 +103,14 @@ const AdminOptions = () => {
 
   return (
     <div>
-      <h4>Admin panel</h4>
-      <select value={selectedEmail} onChange={(e) => setSelectedEmail(e.target.value)}>
-        {emails.constructor === Array && emails.length > 0 && emails.map(e => { if (e.email != userVal.email) {return <option key={e.email}>{e.email}</option>}})};
+      <h4 className="bold mt-3"> Admin panel</h4>
+      <select className="rounded-xl bg-gray-800 p-2 text-white" value={selectedEmail} onChange={(e) => setSelectedEmail(e.target.value)}>
+        {emails.constructor === Array && emails.length > 0 && emails.map(e => {return <option key={e.email}>{e.email}</option>})};
       </select>
-      <input type="text" placeholder='New password' value={newPwd} onChange={(e) => setNewPwd(e.target.value)}/>
-      <p>{status}</p>
-      <button onClick={handleChange}>Change password</button>
-      <button onClick={handleDelete}>{ deleteForReal ? "DELETE USER for real?" : "Delete user"}</button>
+      <InputText type="text" placeholder='New password' value={newPwd} onChange={(e) => setNewPwd(e.target.value)}/>
+      <p className="italic">{status}</p>
+      <Button className="!mx-0" onClick={handleChange}>Change password</Button>
+      <Button className="bg-red-500 !mx-0" onClick={handleDelete}>{ deleteForReal ? "DELETE USER for real?" : "Delete user"}</Button>
     </div>
   )
 }
