@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import Home from "./Components/Home";
+import Home from "./Pages/Home";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import Settings from "./Components/Settings";
+import Settings from "./Pages/Settings";
 import Authenticate from './Components/Authenticate';
 import Logout from './Components/Logout';
 import { Context } from './AppWrapper';

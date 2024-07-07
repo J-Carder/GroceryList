@@ -5,6 +5,7 @@ import { mongoObjectId } from '../helper';
 import InputText from "./InputText";
 import InputAdd from "./InputAdd";
 import SelectListCustom from "./SelectListCustom";
+import Status from "./Status";
 
 function AddItem() {
 
@@ -23,6 +24,8 @@ function AddItem() {
   const [selectedHouseVal, setSelectedHouseVal] = selectedHouse;
 
   const [listsVal, setListsVal] = lists;
+
+  const [status, setStatus] = useState("");
 
   const fetchGetDepts = async () => {
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/departments/${selectedHouseVal}`, {
@@ -111,12 +114,14 @@ function AddItem() {
 
   const handleAdd = async () => {
     if (item != "" && selectedListVal != "") {
+      setStatus("");
       const tempId = mongoObjectId();
       const tempListId = listsVal.filter(list => list.name == selectedListVal)[0].tempId;
       const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
       addItemQuery.mutate({ tempApartOfList: tempListId, originalTimeCreated: Date.now(), itemName: item, wantedBy: personSelectedVal, department: departmentSelectedVal, apartOflist: listId, tempId: tempId}); 
     } else {
-      // TODO: send error cuz of blank string
+      if (item == "") setStatus("Can't add blank item")
+      if (selectedListVal == "") setStatus("Can't add to blank list")
     }
   }
 
@@ -146,6 +151,7 @@ function AddItem() {
   return (
     <div className="m-2 w-full">
       <InputAdd onClick={handleAdd} type="text" placeholder="Add item" value={item} onChange={(e) => setItem(e.target.value)} onKeyDown={handleKeyDown} />
+      <Status>{status}</Status>
       <div className="flex justify-center mt-4 mb-2">
         <p className="text-white bold mt-1 mr-1">by</p>
         <SelectListCustom defaultVal={"None"} listVal={personListVal} listFn={person => <option key={person._id}>{person.name}</option>} value={personSelectedVal} setFn={e => handlePersonChange(e.target.value)}/>

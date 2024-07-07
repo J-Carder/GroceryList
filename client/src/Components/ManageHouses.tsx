@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Context } from '../AppWrapper';
 import Button from "./Button";
 import InputText from "./InputText";
+import Status from "./Status";
 
 
 const ManageHouses = () => {
@@ -23,6 +24,8 @@ const ManageHouses = () => {
   const [listsVal, setListsVal] = lists;
   const [selectedHouseVal, setSelectedHouseVal] = selectedHouse;
   const [departmentListVal, setDepartmentListVal] = departmentList;
+
+  const [status, setStatus] = useState("");
 
   const fetchGetQuery = async () => {
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/houses`, {
@@ -150,7 +153,7 @@ const ManageHouses = () => {
     },
     onSuccess: (data) => {
       if (data.msg != "Joined") {
-        console.log("Error");
+        setStatus(data.msg);
       } else {
         setUserVal(userVal => { return {...userVal, houses: [joinHouseName]}});
         try {
@@ -199,11 +202,12 @@ const ManageHouses = () => {
         :
         <>
           <p className="italic">Join a house</p>
-          <div>
-            <InputText type="text" placeholder="House name" value={joinHouseName} onChange={e => setJoinHouseName(e.target.value)}/>
-            <InputText type="text" placeholder="Passphrase" value={joinHousePassphrase} onChange={e => setJoinHousePassphrase(e.target.value)}/>
-            <Button className="!mx-0 mt-1" onClick={handleJoinHouse}>Join!</Button> 
-          </div>
+          <form onSubmit={(e) => { e.preventDefault(); handleJoinHouse()}}>
+            <InputText required={true} type="text" placeholder="House name" value={joinHouseName} onChange={e => setJoinHouseName(e.target.value)}/>
+            <InputText required={true} type="password" placeholder="Passphrase" value={joinHousePassphrase} onChange={e => setJoinHousePassphrase(e.target.value)}/>
+            <Status>{status}</Status>
+            <Button submit={true} className="!mx-0 mt-1">Join!</Button> 
+          </form>
         </>
       }
 

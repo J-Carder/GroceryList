@@ -3,7 +3,8 @@ import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/re
 import { Context } from '../AppWrapper';
 import InputText from "./InputText";
 import Button from "./Button";
-
+import Status from "./Status";
+import { ImSpinner2 } from "react-icons/im";
 
 const Authenticate = ({setPage}) => {
   
@@ -22,6 +23,7 @@ const Authenticate = ({setPage}) => {
   const [userVal, setUserVal] = user;
   const [authenticatedVal, setAuthenticatedVal] = authenticated;
   const [selectedHouseVal, setSelectedHouseVal] = selectedHouse;
+  const [status, setStatus] = useState("");
 
   const fetchLoginQuery = async () => {
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/login`, {
@@ -85,6 +87,9 @@ const Authenticate = ({setPage}) => {
         }
         setLocalLogin(true);
         // queryClient.invalidateQueries({ queryKey: [""]})
+    },
+    onError: (e) => {
+      setStatus("Incorrect password or email");
     }
   }) 
 
@@ -93,9 +98,11 @@ const Authenticate = ({setPage}) => {
     onSuccess: (data) => {
       if (data.msg == "Registered new user") {
         setIsLogin(true);
+      } else {
+        setStatus(data.msg);
       }
         // queryClient.invalidateQueries({ queryKey: [""]})
-    }
+    },
   }) 
 
   // useEffect(() => {
@@ -120,6 +127,10 @@ const Authenticate = ({setPage}) => {
   }
 
   const handleRegister = () => {
+    if (!(registerPwd == registerPwdConfirm)) {
+      setStatus("Passwords don't match"); 
+      return;
+    }
     registerMutation.mutate();
   }
 
@@ -131,26 +142,29 @@ const Authenticate = ({setPage}) => {
 
       <div className="p-3">
         { isLogin ? 
-          <p className="italic">Need an account? <button className="inline italic underline" onClick={() => setIsLogin(false)}>Register</button></p>
+          <p className="italic">Need an account? <button className="inline italic underline" onClick={() => {setIsLogin(false); setStatus("")}}>Register</button></p>
             :
-          <p className="italic">Already have an account? <button className="inline italic underline" onClick={() => setIsLogin(true)}>Login</button></p>
+          <p className="italic">Already have an account? <button className="inline italic underline" onClick={() => {setIsLogin(true); setStatus("")}}>Login</button></p>
         }
-
-        {isLogin ? 
-        <>
-          <InputText type="text" placeholder="email" value={loginEmail} onChange={(e) => {setLoginEmail(e.target.value)}}/>
-          <InputText type="text" placeholder="password" value={loginPwd} onChange={(e) => {setLoginPwd(e.target.value)}}/>
-          <Button onClick={handleLogin}>Login</Button>
-        </>
-        :
-        <>
-          <InputText type="text" placeholder="Name" value={registerName} onChange={(e) => {setRegisterName(e.target.value)}}/>
-          <InputText type="email" placeholder="Email" value={registerEmail} onChange={(e) => {setRegisterEmail(e.target.value)}}/>
-          <InputText type="text" placeholder="Password" value={registerPwd} onChange={(e) => {setRegisterPwd(e.target.value)}}/>
-          <InputText type="text" placeholder="Password again" value={registerPwdConfirm} onChange={(e) => {setRegisterPwdConfirm(e.target.value)}}/>
-          <Button onClick={handleRegister}>Register</Button>
-        </>
-        }
+        <form onSubmit={(e) => {e.preventDefault(); isLogin ? handleLogin() : handleRegister()}}>
+          {isLogin ? 
+          <>
+            <InputText required={true} type="email" placeholder="email" value={loginEmail} onChange={(e) => {setLoginEmail(e.target.value)}}/>
+            <InputText required={true} type="password" placeholder="password" value={loginPwd} onChange={(e) => {setLoginPwd(e.target.value)}}/>
+            <Status>{status}</Status>
+            <Button submit={true}>Login { loginMutation.isPending ? <ImSpinner2 className="inline animate-spin" /> : ""}</Button>
+          </>
+          :
+          <>
+            <InputText minLength={1} maxLength={100} required={true} type="text" placeholder="Name" value={registerName} onChange={(e) => {setRegisterName(e.target.value)}}/>
+            <InputText minLength={1} maxLength={100} required={true} type="email" placeholder="Email" value={registerEmail} onChange={(e) => {setRegisterEmail(e.target.value)}}/>
+            <InputText minLength={5} maxLength={100} required={true} type="password" placeholder="Password" value={registerPwd} onChange={(e) => {setRegisterPwd(e.target.value)}}/>
+            <InputText minLength={5} maxLength={100} required={true} type="password" placeholder="Password again" value={registerPwdConfirm} onChange={(e) => {setRegisterPwdConfirm(e.target.value)}}/>
+            <Status>{status}</Status>
+            <Button submit={true}>Register { registerMutation.isPending ? <ImSpinner2 className="inline animate-spin" /> : ""} </Button>
+          </>
+          }
+        </form>
       </div>
       
     </div>

@@ -1,11 +1,11 @@
 import React, { useContext } from 'react'
-import ManageDepts from './ManageDepts'
-import ManagePeople from './ManagePeople'
-import ManageHouses from './ManageHouses'
+import ManageDepts from './../Components/ManageDepts'
+import ManagePeople from './../Components/ManagePeople'
+import ManageHouses from './../Components/ManageHouses'
 import { Context } from '../AppWrapper'
-import ManageAccount from './ManageAccount'
-import Logout from "./Logout"
-import ManageLists from "./ManageLists"
+import ManageAccount from './../Components/ManageAccount'
+import Logout from "./../Components/Logout"
+import ManageLists from "./../Components/ManageLists"
 import { IoHomeSharp } from "react-icons/io5";
 
 

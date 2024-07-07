@@ -1,15 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react'
-import AddItem from './AddItem'
+import AddItem from '../Components/AddItem'
 import { onlineManager, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import ManageLists from './ManageLists'
+import ManageLists from '../Components/ManageLists'
 import { Context } from '../AppWrapper'
-import SortItems from './SortItems'
-import ItemSettings from './ItemSettings'
+import SortItems from '../Components/SortItems'
+import ItemSettings from '../Components/ItemSettings'
 import { socket } from '../socket'
-import SelectList from "./SelectList"
-import SelectListCustom from "./SelectListCustom"
+import SelectList from "../Components/SelectList"
+import SelectListCustom from "../Components/SelectListCustom"
 import { IoMdSettings } from "react-icons/io";
 import { ImCross } from "react-icons/im";
+import Status from "../Components/Status"
 
 
 const Home = ({setPage}) => {
@@ -384,7 +385,7 @@ const Home = ({setPage}) => {
             <ItemSettings itemsList={itemsList} setItemsList={setItemsList} />
         </>
         : 
-          <p>Welcome! First, head over to Settings to join a house</p>
+          <Status type={"success"}>Welcome! First, head over to Settings to join a house</Status>
         }
         {/* <button
          onClick={() => {
