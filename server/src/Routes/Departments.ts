@@ -9,6 +9,7 @@ const departments = (app, checkAuthenticated, checkNotAuthenticated) => {
   app.get("/departments/:house", checkAuthenticated, async (req, res) => {
     try {
       const house = req.params.house;
+      if (house.length < 1) res.json({ msg: "Invalid house"})
       if (req.user.houses.includes(house)) {
         let query = await DepartmentModel.find({apartOfHouse: house})
         res.json(query)
@@ -21,17 +22,17 @@ const departments = (app, checkAuthenticated, checkNotAuthenticated) => {
   })
 
   // probably not needed
-  app.put("/departments/:id", checkAuthenticated, async (req, res) => {
-    try {
-      const {id} = req.params
-      const department = req.body.department
-      const query = await DepartmentModel.findByIdAndUpdate({_id: id}, {department: department})
-      res.json({success: true})
+  // app.put("/departments/:id", checkAuthenticated, async (req, res) => {
+  //   try {
+  //     const {id} = req.params
+  //     const department = req.body.department
+  //     const query = await DepartmentModel.findByIdAndUpdate({_id: id}, {department: department})
+  //     res.json({success: true})
 
-    } catch(e) {
-      res.json({msg: "Error"})
-    }
-  })
+  //   } catch(e) {
+  //     res.json({msg: "Error"})
+  //   }
+  // })
 
   app.delete("/departments/:id", checkAuthenticated, async (req, res) => {
     try {
@@ -53,10 +54,14 @@ const departments = (app, checkAuthenticated, checkNotAuthenticated) => {
   app.post("/departments", checkAuthenticated, async (req, res) => {
     try {
       const house = req.body.house;
+      const dept = req.body.department;
+      if (dept.length < 1 || dept.length > 50) res.json({msg: "Invalid house name too long or short"})
+      
+      if (DepartmentModel.findOne({ department: dept })) res.json({msg: "Department already exists"})
+
       if (req.user.houses.includes(house)) {
-        console.log(house, req.body.department);
         await DepartmentModel.create({
-          department: req.body.department,
+          department: dept,
           apartOfHouse: house
         })
         return res.json({msg: "Success"});
@@ -64,7 +69,6 @@ const departments = (app, checkAuthenticated, checkNotAuthenticated) => {
         res.json({msg: "Not authorized"})
       }
     } catch (e) {
-      console.log(e);
       res.json({msg: "Error"})
     }
   })
