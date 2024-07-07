@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import React, { useContext, useEffect } from 'react'
 import { Context } from '../AppWrapper'
+import Button from "./Button";
 
 const Logout = () => {
 
@@ -30,12 +31,9 @@ const Logout = () => {
 
   return (
     <div>
-      <div>
-        <p>Hi, {userVal.name}</p>
-      </div>
-      <button onClick={handleLogout}>
+      <Button onClick={handleLogout}>
         Logout
-      </button>
+      </Button>
     </div>
   )
 }

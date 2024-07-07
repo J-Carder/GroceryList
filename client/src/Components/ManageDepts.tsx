@@ -1,6 +1,9 @@
 import React, { useContext, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Context } from '../AppWrapper';
+import InputText from "./InputText";
+import Button from "./Button";
+import XButtonText from "./XButtonText";
 
 function ManageDepts() {
 
@@ -121,18 +124,21 @@ const fetchDeleteQuery = async (id : string) => {
 
   return (
     <div>
-      <h3>Manage Departments</h3>
-      <input type="text" value={deptText} onChange={(e) => setDeptText(e.target.value)} onKeyDown={handleKeyDown}/>
-      <button onClick={handleAdd}>Add</button>
+      <h3 className="bold">Manage Departments</h3>
+      <InputText type="text" placeholder="Department name" value={deptText} onChange={(e) => setDeptText(e.target.value)} onKeyDown={handleKeyDown}/>
+      <Button className="!mx-0 my-1" onClick={handleAdd}>Add</Button>
       {
         depts.length === 0 || depts.constructor !== Array ? 
-        <div><h2>Empty!</h2></div>
+        <p className="italic mt-0">No departments yet, add one!</p>
         :
         depts.map(dept => 
-          <div key={dept._id}>
-            <p>{dept.department}</p> 
-            <button onClick={() => handleDelete(dept._id)}>X</button>
-          </div> 
+          <XButtonText onClick={() => handleDelete(dept._id)} key={dept._id}>
+            {dept.department}
+          </XButtonText> 
+          // <div key={dept._id}>
+          //   <p>{dept.department}</p> 
+          //   <button onClick={() => handleDelete(dept._id)}>X</button>
+          // </div> 
         )
       }
 

@@ -1,6 +1,8 @@
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query'
 import React, { useContext, useEffect, useState } from 'react'
 import { Context } from '../AppWrapper';
+import Button from "./Button";
+import InputText from "./InputText";
 
 
 const ManageHouses = () => {
@@ -186,23 +188,21 @@ const ManageHouses = () => {
 
   return (
     <div>
-      <h3>Manage Houses</h3>
+      <h3 className="bold">Manage Houses</h3>
 
       {
         userVal?.houses?.length > 0 ? 
         <>
-          <h3>Current house</h3>
-          <p>{userVal?.houses && userVal?.houses[0]}</p>
-          <h3>Leave current house</h3>
-          <button onClick={handleLeaveHouse}>Leave</button>
+          <p className="italic">Current house: {userVal?.houses && userVal?.houses[0]}</p>
+          <Button className="!mx-0 mt-1" onClick={handleLeaveHouse}>Leave</Button>
         </>
         :
         <>
-          <h3>Join a house</h3>
+          <p className="italic">Join a house</p>
           <div>
-            <input type="text" placeholder="House name" value={joinHouseName} onChange={e => setJoinHouseName(e.target.value)}/>
-            <input type="text" placeholder="Passphrase" value={joinHousePassphrase} onChange={e => setJoinHousePassphrase(e.target.value)}/>
-            <button onClick={handleJoinHouse}>Join!</button> 
+            <InputText type="text" placeholder="House name" value={joinHouseName} onChange={e => setJoinHouseName(e.target.value)}/>
+            <InputText type="text" placeholder="Passphrase" value={joinHousePassphrase} onChange={e => setJoinHousePassphrase(e.target.value)}/>
+            <Button className="!mx-0 mt-1" onClick={handleJoinHouse}>Join!</Button> 
           </div>
         </>
       }

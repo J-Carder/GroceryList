@@ -1,6 +1,8 @@
 import { QueryClient, useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useContext, useState } from 'react'
 import { Context } from '../../AppWrapper';
+import InputText from "../InputText";
+import Button from "../Button";
 
 const ChangeName = () => {
 
@@ -40,9 +42,9 @@ const ChangeName = () => {
 
   return (
     <div>
-      <h4>Change name</h4>
-      <input type="text" placeholder='New name' value={name} onChange={(e) => setName(e.target.value)} />
-      <button onClick={handleChange}>Change</button>
+      <h4 className="bold">Change name</h4>
+      <InputText type="text" placeholder='New name' value={name} onChange={(e) => setName(e.target.value)} />
+      <Button className="!mx-0 my-1" onClick={handleChange}>Change</Button>
     </div>
   )
 }

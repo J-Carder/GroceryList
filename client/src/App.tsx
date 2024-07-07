@@ -84,11 +84,6 @@ function App() {
       : 
         ""
       }
-      { authenticatedVal ? 
-        <Logout />
-      :
-        ""
-      }
       {
         !authenticatedVal ?
         splash ? 
@@ -114,9 +109,9 @@ function App() {
       }}>
         Splash toggle
       </button>
-      <h3 className='text-3xl font-bold underline'>
-        testsadfdasf
-      </h3>
+      <button onClick={() => console.log(authenticatedVal)}>
+        console log
+      </button>
       <WS />
     </div>
   )

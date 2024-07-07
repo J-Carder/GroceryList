@@ -139,17 +139,17 @@ const Authenticate = ({setPage}) => {
 
         {isLogin ? 
         <>
-          <InputText type="text" placeholder="email" value={loginEmail} change={(e) => {setLoginEmail(e.target.value)}}/>
-          <InputText type="text" placeholder="password" value={loginPwd} change={(e) => {setLoginPwd(e.target.value)}}/>
-          <Button click={handleLogin}>Login</Button>
+          <InputText type="text" placeholder="email" value={loginEmail} onChange={(e) => {setLoginEmail(e.target.value)}}/>
+          <InputText type="text" placeholder="password" value={loginPwd} onChange={(e) => {setLoginPwd(e.target.value)}}/>
+          <Button onClick={handleLogin}>Login</Button>
         </>
         :
         <>
-          <InputText type="text" placeholder="Name" value={registerName} change={(e) => {setRegisterName(e.target.value)}}/>
-          <InputText type="email" placeholder="Email" value={registerEmail} change={(e) => {setRegisterEmail(e.target.value)}}/>
-          <InputText type="text" placeholder="Password" value={registerPwd} change={(e) => {setRegisterPwd(e.target.value)}}/>
-          <InputText type="text" placeholder="Password again" value={registerPwdConfirm} change={(e) => {setRegisterPwdConfirm(e.target.value)}}/>
-          <Button click={handleRegister}>Register</Button>
+          <InputText type="text" placeholder="Name" value={registerName} onChange={(e) => {setRegisterName(e.target.value)}}/>
+          <InputText type="email" placeholder="Email" value={registerEmail} onChange={(e) => {setRegisterEmail(e.target.value)}}/>
+          <InputText type="text" placeholder="Password" value={registerPwd} onChange={(e) => {setRegisterPwd(e.target.value)}}/>
+          <InputText type="text" placeholder="Password again" value={registerPwdConfirm} onChange={(e) => {setRegisterPwdConfirm(e.target.value)}}/>
+          <Button onClick={handleRegister}>Register</Button>
         </>
         }
       </div>

@@ -12,8 +12,8 @@ const ManageAccount = () => {
   const [userVal, setUserVal] = user;
 
   return (
-    <div>
-      <h3>Manage Account</h3>
+    <div className="mt-3">
+      <h3 className="bold">Manage Account</h3>
       <ChangeName />
       <ChangeEmail />
       <ResetPassword />

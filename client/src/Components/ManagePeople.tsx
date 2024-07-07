@@ -1,6 +1,9 @@
 import React, { useState, useContext } from 'react'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { Context } from '../AppWrapper';
+import InputText from "./InputText";
+import Button from "./Button";
+import XButtonText from "./XButtonText";
 
 
 function ManagePeople() {
@@ -118,18 +121,21 @@ function ManagePeople() {
 
   return (
     <div>
-      <h3>Manage People</h3>
-      <input type="text" value={peopleText} onChange={(e) => setPeopleText(e.target.value)} onKeyDown={handleKeyDown}/>
-      <button onClick={handleAdd}>Add</button>
+      <h3 className="bold mt-3">Manage People</h3>
+      <InputText type="text" placeholder="Person name" value={peopleText} onChange={(e) => setPeopleText(e.target.value)} onKeyDown={handleKeyDown}/>
+      <Button className="!mx-0 my-1"onClick={handleAdd}>Add</Button>
       {
         people.length == 0 || people.constructor != Array ? 
-        <div><h2>Empty!</h2></div>
+        <p className="italic mt-0">No people yet, add someone!</p>
         :
         people.map(person => 
-          <div key={person._id}>
-            <p>{person.name}</p> 
-            <button onClick={() => handleDelete(person._id)}>X</button>
-          </div> 
+          // <div key={person._id}>
+          //   <p>{person.name}</p> 
+          //   <button onClick={() => handleDelete(person._id)}>X</button>
+          // </div> 
+          <XButtonText onClick={() => handleDelete(person._id)} key={person._id}>
+            {person.name}
+          </XButtonText> 
         )
       }
 

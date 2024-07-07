@@ -1,5 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react'
+import InputText from "../InputText";
+import Button from "../Button";
 
 const ResetPassword = () => {
 
@@ -38,12 +40,12 @@ const ResetPassword = () => {
   }
 
   return (
-    <div>
-      <h4>Change password</h4>
-      <input type="text" placeholder='Old password' value={oldPwd} onChange={(e) => setOldPwd(e.target.value)}/>
-      <input type="text" placeholder='New password' value={newPwd} onChange={(e) => setNewPwd(e.target.value)}/>
+    <div className="mt-3">
+      <h4 className="bold">Change password</h4>
+      <InputText type="text" placeholder='Old password' value={oldPwd} onChange={(e) => setOldPwd(e.target.value)}/>
+      <InputText type="text" placeholder='New password' value={newPwd} onChange={(e) => setNewPwd(e.target.value)}/>
       <p>{status}</p>
-      <button onClick={handleChange}>Change password</button>
+      <Button className="!mx-0 my-1" onClick={handleChange}>Change</Button>
     </div>
   )
 }

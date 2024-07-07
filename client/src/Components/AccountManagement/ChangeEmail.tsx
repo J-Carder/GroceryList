@@ -1,6 +1,8 @@
 import { Query, useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useContext, useState } from 'react'
 import { Context } from '../../AppWrapper';
+import InputText from "../InputText";
+import Button from "../Button";
 
 const ChangeEmail = () => {
 
@@ -43,17 +45,17 @@ const ChangeEmail = () => {
   }
 
   return (
-    <div>
+    <div className="mt-3">
 
       {/* <button onClick={(e) => {
         QueryClient.invalidateQueries({queryKey: ["listGetQuery"], refetchType: "active"});
         console.log("test")
       }}>TEST BUTTON</button> */}
 
-      <h4>Change Email</h4>
-      <input type="text" placeholder='New email' value={email} onChange={(e) => setEmail(e.target.value)} />
+      <h4 className="bold">Change Email</h4>
+      <InputText type="text" placeholder='New email' value={email} onChange={(e) => setEmail(e.target.value)} />
       <p>{status}</p>
-      <button onClick={handleChange}>Change</button>
+      <Button className="!mx-0 my-1" onClick={handleChange}>Change</Button>
     </div>
   )
 }
