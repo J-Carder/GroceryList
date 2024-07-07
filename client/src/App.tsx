@@ -12,7 +12,7 @@ import Splash from './Components/Splash';
 function App() {
 
   const queryClient = useQueryClient();
-  const [page, setPage] = useState("home");
+  const [page, setPage] = useState("home"); 
   const {online, authenticated, user, selectedHouse, selectedList} = useContext(Context);
 
   const [onlineVal, setOnlineVal] = online;

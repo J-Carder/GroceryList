@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Context } from '../AppWrapper';
 import { mongoObjectId } from '../helper';
+import Button from "./Button";
+import InputText from "./InputText";
 
 
 const ManageLists = () => {
@@ -156,25 +158,28 @@ const ManageLists = () => {
   }
 
   return (
+    selectedHouseVal ?
     <div>
-      <h3>Manage lists</h3>
+      <h3 className="bold">Manage lists</h3>
       {
         listsVal.length > 0 ? 
         <>
-          <select value={selectedListVal} onChange={(e) => setSelectedListVal(e.target.value)}>
+          <select className="border bg-gray-800 text-white rounded-xl p-2" value={selectedListVal} onChange={(e) => setSelectedListVal(e.target.value)}>
             { listsVal.constructor === Array && listsVal.map(list => <option key={list._id}>{list.name}</option>) }
           </select>
-          <button onClick={handleDelete}>Delete selected</button>
+          <Button className="!mx-0 inline px-3" onClick={handleDelete}>Delete</Button>
         </>
         :
         <p>No lists yet, add one below!</p>
       }
 
       <div>
-        <input type="text" placeholder="List name" value={listName} onChange={(e) => setListName(e.target.value)} onKeyDown={handleKeyDown} />
-        <button onClick={handleAdd}>Add</button>
+        <InputText type="text" placeholder="List name" value={listName} onChange={(e) => setListName(e.target.value)} onKeyDown={handleKeyDown} />
+        <Button className="!mx-0 inline px-3 mt-1" onClick={handleAdd}>Add</Button>
       </div>
     </div>
+    : 
+    ""
   )
 }
 

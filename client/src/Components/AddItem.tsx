@@ -2,6 +2,9 @@ import React, { useEffect, useState, useContext } from 'react'
 import { onlineManager, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Context } from '../AppWrapper';
 import { mongoObjectId } from '../helper';
+import InputText from "./InputText";
+import InputAdd from "./InputAdd";
+import SelectListCustom from "./SelectListCustom";
 
 function AddItem() {
 
@@ -141,12 +144,16 @@ function AddItem() {
   }, [peopleQuery.isSuccess, deptQuery.isSuccess]);
 
   return (
-    <div>
-      <h1>Add to list</h1>
-      <input type="text" value={item} onChange={(e) => setItem(e.target.value)} onKeyDown={handleKeyDown} />
-      <button onClick={handleAdd}>Add</button>
+    <div className="m-2 w-full">
+      <InputAdd onClick={handleAdd} type="text" placeholder="Add item" value={item} onChange={(e) => setItem(e.target.value)} onKeyDown={handleKeyDown} />
+      <div className="flex justify-center mt-4 mb-2">
+        <p className="text-white bold mt-1 mr-1">by</p>
+        <SelectListCustom listVal={personListVal} listFn={person => <option key={person._id}>{person.name}</option>} value={personSelectedVal} setFn={e => handlePersonChange(e.target.value)}/>
+        <p className="text-white bold mt-1 mr-1">in</p>
+        <SelectListCustom listVal={departmentListVal} listFn={dept => <option key={dept._id}>{dept.department}</option>} value={departmentSelectedVal} setFn={e => handleDepartmentChange(e.target.value)}/>
+      </div>
 
-      <div className="categories">
+      {/* <div className="categories">
         <h3>Wanted by:</h3>
         <select name="wantedBy" id="wantedBy" value={personSelectedVal} onChange={e => handlePersonChange(e.target.value)}>
           <option>None</option>
@@ -157,7 +164,7 @@ function AddItem() {
           <option>None</option>
           { departmentListVal.constructor === Array && departmentListVal.map(dept => <option key={dept._id}>{dept.department}</option>) } 
         </select>
-      </div>
+      </div> */}
     </div>
   )
 }

@@ -7,6 +7,8 @@ import { Context } from '../AppWrapper'
 import SortItems from './SortItems'
 import ItemSettings from './ItemSettings'
 import { socket } from '../socket'
+import SelectList from "./SelectList"
+import SelectListCustom from "./SelectListCustom"
 
 const Home = ({setPage}) => {
 
@@ -20,7 +22,7 @@ const Home = ({setPage}) => {
   const [userVal, setUserVal] = user;
   const [sortByVal, setSortByVal] = sortBy; 
   const [orderVal, setOrderVal] = order;
-  const DEBUG = true;
+  const DEBUG = false;
 
   const fetchGetQuery = async () => {
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
@@ -247,22 +249,47 @@ const Home = ({setPage}) => {
     })
   }, []);
 
+
+
+  const fetchGetListQuery = async () => {
+    const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/lists/${userVal.houses[0]}`, 
+      {
+        method: "get",
+        credentials: "include"
+      }
+    )
+    return req.json();
+  }
+  
+  const getQuery = useQuery({
+    queryFn: fetchGetListQuery,
+    queryKey: ["listGetQuery"]
+  })
+
+  useEffect(() => {
+    getQuery.isSuccess && setListsVal(getQuery.data) ;
+    try {
+      getQuery.isSuccess && setSelectedListVal(getQuery.data[0].name);
+    } catch (e) {
+      setSelectedListVal("");
+    }
+  }, [getQuery.isSuccess, getQuery.data]);
+
   return (
     <div>
-      <>
-        <h2>Grocery List</h2>
-        <button onClick={() => setPage("settings")}>Settings</button>
-      </>
+      <div className="bg-green">
+        <div className="flex flex-col items-center mx-3 pt-3">
+          <SelectListCustom listVal={listsVal} listFn={list => <option key={list._id}>{list.name}</option>} value={selectedListVal} setFn={(e) => setSelectedListVal(e.target.value)}/>
+          <AddItem />
+        </div>
+      </div>
 
+
+      <button className="absolute top-4 right-5" onClick={() => setPage("settings")}>Settings</button>
       {
         userVal?.houses?.length > 0 ? 
         <>
-          <ManageLists />
           <hr />
-          {
-            selectedListVal ?
-            <>
-              <AddItem />
               <SortItems />
               <ItemSettings itemsList={itemsList} setItemsList={setItemsList} />
               {
@@ -289,10 +316,6 @@ const Home = ({setPage}) => {
                   </div> 
                 )
               }
-          </>
-            :
-            ""
-          }
 
         </>
         : 
@@ -301,7 +324,7 @@ const Home = ({setPage}) => {
         <button
          onClick={() => {
           console.log(deleteMutation.isPaused, updateMutation.isPaused);
-         }}>CHeck paused</button>
+         }}>Check paused</button>
     </div>
   )
 }
