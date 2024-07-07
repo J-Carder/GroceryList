@@ -47,7 +47,6 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
       console.log("MODEL= ", await ItemModel.find());
       await ItemModel.deleteMany({completed: true})
 
-      // MAKE ROOM
       io.to(houseRequested).emit("clear", "null")
 
       res.json({msg: "Success"})
@@ -131,7 +130,6 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
       }
 
       const {id} = req.params
-      console.log("temp id=> " + req.body.tempId);
       const query = await ItemModel.findByIdAndDelete({_id: id})
       // for deleting of items that weren't assigned a proper ID yet (ie. offline)
       const query2 = await ItemModel.deleteOne({tempId: req.body.tempId})
@@ -148,11 +146,11 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
   app.post("/items/:apartOfList", checkAuthenticated, async (req, res) => {
 
     try {
-      // query param 
-      let { apartOfList } = req.params;
       // the houses the user has attached to them
       let apartOfHouses = req.user.houses;
       let houseRequested;
+
+      if (req.body.item.length < 1 || req.body.length > 100) return res.json({msg: "Item must be between 1 and 100 characters"})
 
       try {
         // the house the list they are requesting is apart of
@@ -183,9 +181,8 @@ const items = (app, checkAuthenticated, checkNotAuthenticated, io) => {
         tempApartOfList: tempApartOfList
       });
 
-      console.log(item);
       io.to(houseRequested).emit("add", item)
-      // io.to(houseRequested).emit("message", item)
+
       res.json({msg: "Success"})
     } catch (e) {
       console.log(e);

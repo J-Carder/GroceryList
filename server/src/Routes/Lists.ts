@@ -10,7 +10,7 @@ const lists = (app, checkAuthenticated, checkNotAuthenticated) => {
     try {
 
       let {house} = req.params;
-      let housesApartOf = req.user.houses
+      let housesApartOf = req.user.houses;
 
       if (!housesApartOf.includes(house)) {
         return res.json([]);
@@ -19,31 +19,38 @@ const lists = (app, checkAuthenticated, checkNotAuthenticated) => {
       let query = await ListModel.find({apartOfHouse: house})
       res.json(query)
     } catch (e) {
-      res.json([])
-    }
-  })
-
-  // TODO: this
-  app.put("/lists/:id", checkAuthenticated, async (req, res) => {
-    try {
-      const {id} = req.params
-      // const name = req.body.name
-      // const query = await PeopleModel.findByIdAndUpdate({_id: id}, {name: name})
-      res.json({success: true})
-
-    } catch (e) {
       res.json({msg: "Error"})
     }
   })
 
+  // app.put("/lists/:id", checkAuthenticated, async (req, res) => {
+  //   try {
+  //     const {id} = req.params
+  //     // const name = req.body.name
+  //     // const query = await PeopleModel.findByIdAndUpdate({_id: id}, {name: name})
+  //     res.json({success: true})
+
+  //   } catch (e) {
+  //     res.json({msg: "Error"})
+  //   }
+  // })
+
   app.delete("/lists/:id", checkAuthenticated, async (req, res) => {
     try {
+
+
       const {id} = req.params
+
+      const housesApartOf = req.user.houses;
+      const houseListApartOf = (await ListModel.findById(id)).apartOfHouse
+
+      if (!housesApartOf.includes(houseListApartOf)) return res.json({msg: "Not authorized"})
+
       const query = await ListModel.findByIdAndDelete({_id: id})
       if (req.body.tempId) {
         const query2 = await ListModel.deleteOne({tempId: req.body.tempId})
       }
-      res.json({success: true})
+      res.json({msg: "Deleted list successfully"})
 
     } catch (e) {
       res.json({msg: "Error"})
@@ -55,6 +62,8 @@ const lists = (app, checkAuthenticated, checkNotAuthenticated) => {
 
       let {house} = req.params;
       let housesApartOf = req.user.houses
+
+      if (req.body.name.length < 1 || req.body.name.length > 100) return res.json({msg: "List name must be between 1 and 100 characters"})
 
       if (!housesApartOf.includes(house)) {
         return res.json({msg: "Not authorized"});
@@ -77,9 +86,8 @@ const lists = (app, checkAuthenticated, checkNotAuthenticated) => {
         })
       }
 
-      res.json({msg: "Success"});
+      res.json({msg: "Added new list"});
     } catch (e) {
-      console.log(e)
       res.json({msg: "Error"});
     }
   })
