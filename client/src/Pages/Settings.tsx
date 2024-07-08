@@ -22,7 +22,7 @@ function Settings({setPage}) {
         <h1 className="text-white bold text-2xl text-center py-4">Settings</h1>
       </div>
       <button className="absolute top-4 right-5" onClick={() => setPage("home")}><IoHomeSharp className="text-white" /></button>
-      <div className="p-3 sm:w-[640px]">
+      <div className="p-3">
         <ManageHouses />
         <ManageLists />
         {
