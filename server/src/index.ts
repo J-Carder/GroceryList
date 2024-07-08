@@ -173,7 +173,7 @@ io.on("connection", socket => {
 });
 
 // test route
-app.get("/test", (req, res) => {
+app.get("/api/test", (req, res) => {
   res.send({msg: "Test success"})
 })
 
