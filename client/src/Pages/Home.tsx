@@ -331,7 +331,7 @@ const Home = ({setPage}) => {
     <div>
       <div className="bg-green">
         <div className="flex flex-col items-center mx-3 pt-3">
-          <SelectListCustom listVal={listsVal} listFn={list => <option key={list._id}>{list.name}</option>} value={selectedListVal} setFn={(e) => setSelectedListVal(e.target.value)}/>
+          <SelectListCustom addDefault={true} listVal={listsVal} listFn={list => <option key={list._id}>{list.name}</option>} value={selectedListVal} setFn={(e) => setSelectedListVal(e.target.value)}/>
           <AddItem />
         </div>
       </div>

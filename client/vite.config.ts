@@ -16,31 +16,31 @@ export default defineConfig({
       strategies: "generateSW",
       manifestFilename: "manifest.webmanifest",
       manifest: {
-        name: "Grocery List",
-        short_name: "Grocery List",
-        description: "Test",
-        theme_color: "#FFFFFF",
+        name: "GroceryList",
+        short_name: "GroceryList",
+        description: "An app for creating grocery lists with ease.",
+        theme_color: "#47CA4C",
         icons: [
           {
-            "src": "icons/manifest-icon-192.maskable.png",
+            "src": "public/icons/manifest-icon-192.maskable.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "any"
           },
           {
-            "src": "icons/manifest-icon-192.maskable.png",
+            "src": "public/icons/manifest-icon-192.maskable.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "maskable"
           },
           {
-            "src": "icons/manifest-icon-512.maskable.png",
+            "src": "public/icons/manifest-icon-512.maskable.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any"
           },
           {
-            "src": "icons/manifest-icon-512.maskable.png",
+            "src": "public/icons/manifest-icon-512.maskable.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"
@@ -49,14 +49,14 @@ export default defineConfig({
         screenshots: [
           {
             src: "screenshots/narrow.png",
-            sizes: "636x865",
+            sizes: "342x764",
             type: "image/png",
             form_factor: "narrow",
             label: "Screenshot of the Grocery List app"
           },
           {
             src: "screenshots/wide.png",
-            sizes: "1914x865",
+            sizes: "800x602",
             type: "image/png",
             form_factor: "wide",
             label: "Screenshot of the Grocery List app"

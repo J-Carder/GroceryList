@@ -76,9 +76,9 @@ function App() {
   return (
     <div>
       { !onlineVal ? 
-        <p>
-          <span className='red'>OFFLINE</span>
-        </p>
+        <div className="text-red-500 text-center bg-red-300">
+          <p>Offline, no connection!</p>
+        </div>
       : 
         ""
       }

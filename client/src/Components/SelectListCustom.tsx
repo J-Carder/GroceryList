@@ -12,6 +12,7 @@ const SelectListCustom = (props) => {
           : ""
         }
       { props.listVal.constructor === Array && props.listVal.map(props.listFn) }
+      { props.addDefault && props.listVal.constructor === Array && props.listVal.length == 0 ? <option>No lists</option>: ""}
       </select>
     </div>
   )
