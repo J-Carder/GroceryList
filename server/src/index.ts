@@ -90,7 +90,6 @@ const conn = mongoose.connect(process.env.DB).then(m => m.connection.getClient()
 
 app.use(jsonParserMiddleware);
 
-app.use(cors(corsOptions));
 app.use(cors({credentials: true, origin: ["https://grocerylist-1.onrender.com", "http://localhost:4173", "http://localhost:5173", "https://localhost:4433", "http://192.168.1.253:5173", "http://192.168.1.247:5173"]}));
 // app.use(cors({credentials: true, origin: "http://localhost:4173"}));
 app.use(express.json());
