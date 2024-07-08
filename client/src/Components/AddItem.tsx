@@ -149,7 +149,7 @@ function AddItem() {
   }, [peopleQuery.isSuccess, deptQuery.isSuccess]);
 
   return (
-    <div className="m-2 w-full">
+    <div className="m-2">
       <InputAdd onClick={handleAdd} type="text" placeholder="Add item" value={item} onChange={(e) => setItem(e.target.value)} onKeyDown={handleKeyDown} />
       <Status>{status}</Status>
       <div className="flex justify-center mt-4 mb-2">

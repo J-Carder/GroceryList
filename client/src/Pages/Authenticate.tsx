@@ -135,36 +135,38 @@ const Authenticate = ({setPage}) => {
   }
 
   return (
-    <div>
+    <div className="w-full">
       <div className="bg-green">
         <h1 className="text-white bold text-2xl text-center py-4">Login</h1>
       </div>
 
-      <div className="p-3">
-        { isLogin ? 
-          <p className="italic">Need an account? <button className="inline italic underline" onClick={() => {setIsLogin(false); setStatus("")}}>Register</button></p>
-            :
-          <p className="italic">Already have an account? <button className="inline italic underline" onClick={() => {setIsLogin(true); setStatus("")}}>Login</button></p>
-        }
-        <form onSubmit={(e) => {e.preventDefault(); isLogin ? handleLogin() : handleRegister()}}>
-          {isLogin ? 
-          <>
-            <InputText required={true} type="email" placeholder="email" value={loginEmail} onChange={(e) => {setLoginEmail(e.target.value)}}/>
-            <InputText required={true} type="password" placeholder="password" value={loginPwd} onChange={(e) => {setLoginPwd(e.target.value)}}/>
-            <Status>{status}</Status>
-            <Button submit={true}>Login { loginMutation.isPending ? <ImSpinner2 className="inline animate-spin" /> : ""}</Button>
-          </>
-          :
-          <>
-            <InputText minLength={1} maxLength={100} required={true} type="text" placeholder="Name" value={registerName} onChange={(e) => {setRegisterName(e.target.value)}}/>
-            <InputText minLength={1} maxLength={100} required={true} type="email" placeholder="Email" value={registerEmail} onChange={(e) => {setRegisterEmail(e.target.value)}}/>
-            <InputText minLength={5} maxLength={100} required={true} type="password" placeholder="Password" value={registerPwd} onChange={(e) => {setRegisterPwd(e.target.value)}}/>
-            <InputText minLength={5} maxLength={100} required={true} type="password" placeholder="Password again" value={registerPwdConfirm} onChange={(e) => {setRegisterPwdConfirm(e.target.value)}}/>
-            <Status>{status}</Status>
-            <Button submit={true}>Register { registerMutation.isPending ? <ImSpinner2 className="inline animate-spin" /> : ""} </Button>
-          </>
+      <div className="p-3 flex flex-col content-center flex-wrap w-full">
+        <div className="sm:w-[640px]">
+          { isLogin ?
+            <p className="italic">Need an account? <button className="inline italic underline" onClick={() => {setIsLogin(false); setStatus("")}}>Register</button></p>
+              :
+            <p className="italic">Already have an account? <button className="inline italic underline" onClick={() => {setIsLogin(true); setStatus("")}}>Login</button></p>
           }
-        </form>
+          <form onSubmit={(e) => {e.preventDefault(); isLogin ? handleLogin() : handleRegister()}}>
+            {isLogin ? 
+            <>
+              <InputText required={true} type="email" placeholder="email" value={loginEmail} onChange={(e) => {setLoginEmail(e.target.value)}}/>
+              <InputText required={true} type="password" placeholder="password" value={loginPwd} onChange={(e) => {setLoginPwd(e.target.value)}}/>
+              <Status>{status}</Status>
+              <Button submit={true}>Login { loginMutation.isPending ? <ImSpinner2 className="inline animate-spin" /> : ""}</Button>
+            </>
+            :
+            <>
+              <InputText minLength={1} maxLength={100} required={true} type="text" placeholder="Name" value={registerName} onChange={(e) => {setRegisterName(e.target.value)}}/>
+              <InputText minLength={1} maxLength={100} required={true} type="email" placeholder="Email" value={registerEmail} onChange={(e) => {setRegisterEmail(e.target.value)}}/>
+              <InputText minLength={5} maxLength={100} required={true} type="password" placeholder="Password" value={registerPwd} onChange={(e) => {setRegisterPwd(e.target.value)}}/>
+              <InputText minLength={5} maxLength={100} required={true} type="password" placeholder="Password again" value={registerPwdConfirm} onChange={(e) => {setRegisterPwdConfirm(e.target.value)}}/>
+              <Status>{status}</Status>
+              <Button submit={true}>Register { registerMutation.isPending ? <ImSpinner2 className="inline animate-spin" /> : ""} </Button>
+            </>
+            }
+          </form>
+        </div>
       </div>
       
     </div>

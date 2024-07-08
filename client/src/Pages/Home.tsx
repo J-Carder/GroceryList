@@ -330,66 +330,67 @@ const Home = ({setPage}) => {
   return (
     <div>
       <div className="bg-green">
-        <div className="flex flex-col items-center mx-3 pt-3">
+        <div className="flex flex-col justify-center mx-3 pt-3">
           <SelectListCustom addDefault={true} listVal={listsVal} listFn={list => <option key={list._id}>{list.name}</option>} value={selectedListVal} setFn={(e) => setSelectedListVal(e.target.value)}/>
           <AddItem />
         </div>
       </div>
 
       <button className="absolute top-4 right-5" onClick={() => setPage("settings")}><IoMdSettings className="text-white" /></button>
-      {
-        userVal?.houses?.length > 0 ? 
-        <>
-          <hr />
-              <SortItems />
-              {
-                itemsList.length === 0 ? 
-                <div><Status type="success">Empty, add some items!</Status></div>
-                :
-                itemsList.map((item, index) => 
-                  <div key={item._id} className="hover:bg-gray-100 transition-all">
-                    { sortByVal == "By department" && item.department != itemsList[index - 1]?.department ?
-                      <p key={textColours[dupItemsList[index].colourCount % textColours.length]} className={`${textColours[dupItemsList[index].colourCount]} bold m-1`}>{item.department}</p>  
-                      : 
-                      ""
-                  }
-                  { sortByVal == "By person" && item.wantedBy != itemsList[index - 1]?.wantedBy ?
-                      <p key={textColours[dupItemsList[index].colourCount % textColours.length]} className={`${textColours[dupItemsList[index].colourCount]} bold m-1`}>{item.wantedBy}</p>  
-                      : 
-                      ""
-                  }
-                  <div className={`border-solid border-l-8  ${ sortByVal != "Default" && sortByVal != "" && colours[dupItemsList[index].colourCount % colours.length]}`}>
-                    <div className="p-3 border-t-2"  onClick={(e) => handleEdit(item._id, !item.completed, item.tempId ? item.tempId : false, e)}>
-                      <div className="flex justify-between"> 
-                        <div>
-                          <input type="checkbox"  className="inline accent-green transform scale-150" onChange={(e) => handleEdit(item._id, e.target.checked, item.tempId ? item.tempId : false, e)} checked={item.completed} />
-                          <div className={` ${item.completed ? "line-through inline" : "inline"}`}>
-                              <span className="bold ml-3">{item.item}</span> 
-                              <div>
-                                { sortByVal != "By department" && item.department != "" && item.department != "None" ? <> <span className="italic">in {item.department}</span> </> : ""}
-                                { sortByVal != "By person" && item.wantedBy != "" && item.wantedBy != "None" ? <> <span className="italic">by {item.wantedBy}</span> </> : ""}
-                                {/* { item.department != "" && item.department != "None" ? <> <span className="italic">in {item.department}</span> </> : ""}
-                                { item.wantedBy != "" && item.wantedBy != "None" ? <> <span className="italic">by {item.wantedBy}</span> </> : ""} */}
-                              </div>
+      <div className="flex flex-col justify-center flex-wrap">
+        <div className="">
+          {
+          userVal?.houses?.length > 0 ? 
+          <>
+            <hr />
+                <SortItems />
+                {
+                  itemsList.length === 0 ? 
+                  <div><Status type="success">Empty, add some items!</Status></div>
+                  :
+                  itemsList.map((item, index) => 
+                    <div key={item._id} className="hover:bg-gray-100 transition-all">
+                      { sortByVal == "By department" && item.department != itemsList[index - 1]?.department ?
+                        <p key={textColours[dupItemsList[index].colourCount % textColours.length]} className={`${textColours[dupItemsList[index].colourCount]} bold m-1`}>{item.department}</p>  
+                        : 
+                        ""
+                    }
+                    { sortByVal == "By person" && item.wantedBy != itemsList[index - 1]?.wantedBy ?
+                        <p key={textColours[dupItemsList[index].colourCount % textColours.length]} className={`${textColours[dupItemsList[index].colourCount]} bold m-1`}>{item.wantedBy}</p>  
+                        : 
+                        ""
+                    }
+                    <div className={`border-solid border-l-8  ${ sortByVal != "Default" && sortByVal != "" && colours[dupItemsList[index].colourCount % colours.length]}`}>
+                      <div className="p-3 border-t-2 border-r-2"  onClick={(e) => handleEdit(item._id, !item.completed, item.tempId ? item.tempId : false, e)}>
+                        <div className="flex justify-between"> 
+                          <div>
+                            <input type="checkbox"  className="inline accent-green transform scale-150" onChange={(e) => handleEdit(item._id, e.target.checked, item.tempId ? item.tempId : false, e)} checked={item.completed} />
+                            <div className={` ${item.completed ? "line-through inline" : "inline"}`}>
+                                <span className="bold ml-3">{item.item}</span> 
+                                <div>
+                                  { sortByVal != "By department" && item.department != "" && item.department != "None" ? <> <span className="italic">in {item.department}</span> </> : ""}
+                                  { sortByVal != "By person" && item.wantedBy != "" && item.wantedBy != "None" ? <> <span className="italic">by {item.wantedBy}</span> </> : ""}
+                                  {/* { item.department != "" && item.department != "None" ? <> <span className="italic">in {item.department}</span> </> : ""}
+                                  { item.wantedBy != "" && item.wantedBy != "None" ? <> <span className="italic">by {item.wantedBy}</span> </> : ""} */}
+                                </div>
+                            </div>
                           </div>
+                          <button className="inline bold hover:bg-red-400 p-1 rounded transition-all" onClick={() => handleDelete(item._id, item.tempId)}><ImCross /></button>
                         </div>
-                        <button className="inline bold hover:bg-red-400 p-1 rounded transition-all" onClick={() => handleDelete(item._id, item.tempId)}><ImCross /></button>
-                      </div>
-                    </div> 
-                  </div>
-                  </div>
-                )
-              }
-              <hr />
-            <ItemSettings itemsList={itemsList} setItemsList={setItemsList} />
-        </>
-        : 
-          <Status type={"success"}>Welcome! First, head over to <button className="italic underline" onClick={() => setPage("Settings")}>Settings</button> to join a house</Status>
-        }
-        {/* <button
-         onClick={() => {
-          console.log(dupItemsList.forEach(i => console.log(i.colourCount)));
-         }}>Check paused</button> */}
+                      </div> 
+                    </div>
+                    </div>
+                  )
+                }
+                <hr />
+              <ItemSettings itemsList={itemsList} setItemsList={setItemsList} />
+          </>
+          : 
+            <Status type={"success"}>Welcome! First, head over to <button className="italic underline" onClick={() => setPage("Settings")}>Settings</button> to join a house</Status>
+          }
+        </div>
+      </div>
+
     </div>
   )
 }

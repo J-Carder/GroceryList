@@ -15,10 +15,12 @@ const users = (app, checkAuthenticated, checkNotAuthenticated, io) => {
       const userEmail = req.user.email;
       const query = await UsersModel.findOneAndUpdate({email: userEmail}, {houses: []})
       // leave rooms on socket
-      const rooms = app.socket.rooms;
-      let roomArr = Array.from(rooms);
-      for(const room of roomArr) {
-        app.socket.leave(room);
+      if (app.socket) {
+        const rooms = app.socket.rooms;
+        const roomArr = Array.from(rooms);
+        for(const room of roomArr) {
+          app.socket.leave(room);
+        }
       }
       res.json({success: true})
     } catch (e) {
@@ -34,7 +36,9 @@ const users = (app, checkAuthenticated, checkNotAuthenticated, io) => {
       
       if (passphrase == getHouse.passphrase) {
         await UsersModel.findOneAndUpdate({email: req.user.email}, {houses: [req.params.name]})
-        app.socket.join(req.params.name);
+        if (app.socket) {
+          app.socket.join(req.params.name);
+        }
       } else {
         return res.json({msg: "Wrong passphrase"})
       }

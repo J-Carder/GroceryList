@@ -90,7 +90,7 @@ const conn = mongoose.connect(process.env.DB).then(m => m.connection.getClient()
 
 app.use(jsonParserMiddleware);
 
-app.use(cors({credentials: true, origin: ["https://grocerylist.jeremycarder.ca", "https://gl.jeremycarder.ca", "https://grocerylist-1.onrender.com", "http://localhost:4173", "http://localhost:5173", "https://localhost:4433", "http://192.168.1.253:5173", "http://192.168.1.247:5173"]}));
+app.use(cors({credentials: true, origin: ["https://grocerylist.jeremycarder.ca", "https://gl.jeremycarder.ca", "https://grocerylist-1.onrender.com", "http://localhost:4173", "http://localhost:5173", "https://localhost:4433", "http://192.168.1.253:5173", "http://192.168.1.247:5173", "http://127.0.0.1:5173"]}));
 // app.use(cors({credentials: true, origin: "http://localhost:4173"}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -154,13 +154,15 @@ const checkNotAuthenticated = (req, res, next) => {
 
 io.on("connection", socket => {
   app.socket = socket;
-  items(app, checkAuthenticated, checkNotAuthenticated, io);
-  departments(app, checkAuthenticated, checkNotAuthenticated);
-  houses(app, checkAuthenticated, checkNotAuthenticated);
-  lists(app, checkAuthenticated, checkNotAuthenticated);
-  people(app, checkAuthenticated, checkNotAuthenticated);
-  auth(app, checkAuthenticated, checkNotAuthenticated, passport, io);
-  users(app, checkAuthenticated, checkNotAuthenticated, io);
+});
+
+items(app, checkAuthenticated, checkNotAuthenticated, io);
+departments(app, checkAuthenticated, checkNotAuthenticated);
+houses(app, checkAuthenticated, checkNotAuthenticated);
+lists(app, checkAuthenticated, checkNotAuthenticated);
+people(app, checkAuthenticated, checkNotAuthenticated);
+auth(app, checkAuthenticated, checkNotAuthenticated, passport, io);
+users(app, checkAuthenticated, checkNotAuthenticated, io);
 
   // app.get("/socket", (req, res) => {
   //   console.log(app.socket.rooms)
@@ -170,7 +172,6 @@ io.on("connection", socket => {
   // })
 
 
-});
 
 // test route
 app.get("/api/test", (req, res) => {

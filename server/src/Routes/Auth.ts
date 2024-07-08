@@ -11,7 +11,9 @@ const auth = function(app, checkAuthenticated, checkNotAuthenticated, passport, 
   app.delete("/logout", (req, res, next) => {
     try {
 
-      app.socket.leave(req.user.houses[0])
+      if (app.socket) {
+        app.socket.leave(req.user.houses[0])
+      }
       req.session.destroy((err) => {
         if (err) { return next(err); }
         res.clearCookie('connect.sid');
@@ -31,7 +33,7 @@ const auth = function(app, checkAuthenticated, checkNotAuthenticated, passport, 
     try {
 
       // SOCKETIO JOIN ROOM
-      if (req.user.houses.length > 0) {
+      if (req.user.houses.length > 0 && app.socket) {
         console.log(req.user.houses[0]);
         app.socket.join(req.user.houses[0])
       }
@@ -53,7 +55,7 @@ const auth = function(app, checkAuthenticated, checkNotAuthenticated, passport, 
       const email = req.body.email.toLowerCase();
       const name = req.body.name;
 
-      let emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
+      const emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
 
       if (!emailRegex.test(email)) return res.json({ msg: "Invalid email"});
       console.log(emailRegex.test(email));
@@ -77,7 +79,7 @@ const auth = function(app, checkAuthenticated, checkNotAuthenticated, passport, 
       console.log("authed");
 
       // // SOCKETIO JOIN ROOM
-      if (req.user.houses.length > 0) {
+      if (req.user.houses.length > 0 && app.socket) {
         app.socket.join(req.user.houses[0])
       }
 

@@ -36,16 +36,17 @@ function App() {
   })
 
   useEffect(() => {
-    // setAuthenticatedVal(getLocalLogin())
     if (isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated") {
-      console.log("IS AUTHED")
-      setAuthenticatedVal(true)
+      console.log("IS AUTHED");
+      setAuthenticatedVal(true);
       setUserVal(isAuthQuery.data.user)
       try {
         setSelectedHouseVal(isAuthQuery.data.user.houses[0]) 
       } catch (e) {
         setSelectedHouseVal("") 
       }
+    } else {
+      setAuthenticatedVal(false);
     }
   }, [isAuthQuery.isSuccess])
 
@@ -60,7 +61,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    console.log("splash =>", splash);
+    console.log("auth =>", authenticatedVal);
   })
 
   // only run splash if not found in local storage, ideally only once
