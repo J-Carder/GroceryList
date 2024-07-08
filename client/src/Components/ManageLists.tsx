@@ -159,7 +159,7 @@ const ManageLists = () => {
 
   return (
     selectedHouseVal ?
-    <div>
+    <form onSubmit={(e) => {e.preventDefault(); handleAdd()}}>
       <h3 className="bold">Manage lists</h3>
       {
         listsVal.length > 0 ? 
@@ -175,9 +175,9 @@ const ManageLists = () => {
 
       <div>
         <InputText type="text" placeholder="List name" value={listName} onChange={(e) => setListName(e.target.value)} onKeyDown={handleKeyDown} />
-        <Button className="!mx-0 inline px-3 mt-1" onClick={handleAdd}>Add</Button>
+        <Button submit={true} className="!mx-0 inline px-3 mt-1">Add</Button>
       </div>
-    </div>
+    </form>
     : 
     ""
   )
