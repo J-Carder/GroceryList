@@ -351,7 +351,7 @@ const Home = ({setPage}) => {
                   <div><Status type="success">Empty, add some items!</Status></div>
                   :
                   itemsList.map((item, index) => 
-                    <div key={item._id} className="hover:bg-gray-100 transition-all">
+                    <div key={item._id} className="hover:bg-gray-100 transition-all dark:hover:bg-gray-700">
                       { sortByVal == "By department" && item.department != itemsList[index - 1]?.department ?
                         <p key={textColours[dupItemsList[index].colourCount % textColours.length]} className={`${textColours[dupItemsList[index].colourCount]} bold m-1`}>{item.department}</p>  
                         : 
@@ -362,13 +362,13 @@ const Home = ({setPage}) => {
                         : 
                         ""
                     }
-                    <div className={`border-solid border-l-8  ${ sortByVal != "Default" && sortByVal != "" && colours[dupItemsList[index].colourCount % colours.length]}`}>
-                      <div className="p-3 border-t-2 border-r-2"  onClick={(e) => handleEdit(item._id, !item.completed, item.tempId ? item.tempId : false, e)}>
+                    <div className={`border-solid border-l-8 dark:border-black  ${ sortByVal != "Default" && sortByVal != "" && colours[dupItemsList[index].colourCount % colours.length]}`}>
+                      <div className="p-3 border-t-2 border-r-2 dark:border-black"  onClick={(e) => handleEdit(item._id, !item.completed, item.tempId ? item.tempId : false, e)}>
                         <div className="flex justify-between"> 
                           <div>
                             <input type="checkbox"  className="inline accent-green transform scale-150" onChange={(e) => handleEdit(item._id, e.target.checked, item.tempId ? item.tempId : false, e)} checked={item.completed} />
-                            <div className={` ${item.completed ? "line-through inline" : "inline"}`}>
-                                <span className="bold ml-3">{item.item}</span> 
+                            <div className={` ${item.completed ? "line-through inline" : "inline"} dark:decoration-white`}>
+                                <span className="bold ml-3 dark:text-white ">{item.item}</span> 
                                 <div>
                                   { sortByVal != "By department" && item.department != "" && item.department != "None" ? <> <span className="italic">in {item.department}</span> </> : ""}
                                   { sortByVal != "By person" && item.wantedBy != "" && item.wantedBy != "None" ? <> <span className="italic">by {item.wantedBy}</span> </> : ""}
@@ -377,7 +377,7 @@ const Home = ({setPage}) => {
                                 </div>
                             </div>
                           </div>
-                          <button className="inline bold hover:bg-red-400 p-1 rounded transition-all" onClick={() => handleDelete(item._id, item.tempId)}><ImCross /></button>
+                          <button className="inline bold hover:bg-red-400 p-1 rounded transition-all dark:text-white" onClick={() => handleDelete(item._id, item.tempId)}><ImCross /></button>
                         </div>
                       </div> 
                     </div>

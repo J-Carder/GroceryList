@@ -33,6 +33,7 @@ interface Props {
   order: Array<any>
   online: Array<any>
   offlineState: Array<any>
+  darkTheme: Array<any>
 }
 
 
@@ -55,6 +56,8 @@ const AppWrapper = () => {
   const [order, setOrder] = useState("Descending");
   const [online, setOnline] = useState(window.navigator.onLine);
   const [offlineState, setOfflineState] = useState<Array<any>>([]);
+  // const [darkTheme, setDarkTheme] = useState(localStorage.getItem("darkTheme") === "true"); // <--- change to false
+  const [darkTheme, setDarkTheme] = useState(false);
 
   useEffect(()=>{
     window.addEventListener('online', function(e) {
@@ -74,6 +77,10 @@ const AppWrapper = () => {
     onlineManager.setOnline(online);
   }, [online])
 
+  useEffect(() => {
+    localStorage.setItem("darkTheme", darkTheme.toString());
+  }, [darkTheme])
+
 
 return (
     <PersistQueryClientProvider
@@ -85,7 +92,7 @@ return (
       //   console.log("burh")
       // }}
     >
-      <Context.Provider value={{ offlineState: [offlineState, setOfflineState], online: [online, setOnline], order: [order, setOrder], sortBy: [sortBy, setSortBy], selectedHouse: [selectedHouse, setSelectedHouse], lists: [lists, setLists], personSelected: [personSelected, setPersonSelected], personList: [personList, setPersonList], departmentSelected: [departmentSelected, setDepartmentSelected], departmentList: [departmentList, setDepartmentList], selectedList: [selectedList, setSelectedList], user: [user, setUser], authenticated: [authenticated, setAuthenticated]}}>
+      <Context.Provider value={{ darkTheme: [darkTheme, setDarkTheme], offlineState: [offlineState, setOfflineState], online: [online, setOnline], order: [order, setOrder], sortBy: [sortBy, setSortBy], selectedHouse: [selectedHouse, setSelectedHouse], lists: [lists, setLists], personSelected: [personSelected, setPersonSelected], personList: [personList, setPersonList], departmentSelected: [departmentSelected, setDepartmentSelected], departmentList: [departmentList, setDepartmentList], selectedList: [selectedList, setSelectedList], user: [user, setUser], authenticated: [authenticated, setAuthenticated]}}>
         <QueryClientProvider client={queryClient}>
           <App />
         </QueryClientProvider>

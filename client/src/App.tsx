@@ -6,18 +6,23 @@ import Authenticate from './Pages/Authenticate';
 import Logout from './Components/Logout';
 import { Context } from './AppWrapper';
 import Splash from './Pages/Splash';
+import { FaSun, FaMoon } from "react-icons/fa";
+
+
 
 function App() {
 
   const queryClient = useQueryClient();
   const [page, setPage] = useState("home"); 
-  const {online, authenticated, user, selectedHouse, selectedList} = useContext(Context);
+  const {online, authenticated, user, selectedHouse, selectedList, darkTheme} = useContext(Context);
 
   const [onlineVal, setOnlineVal] = online;
   const [authenticatedVal, setAuthenticatedVal] = authenticated;
   const [userVal, setUserVal] = user;
   const [selectedHouseVal, setSelectedHouseVal] = selectedHouse;
   const [selectedListVal, setSelectedListVal] = selectedList;
+  const [darkThemeVal, setDarkThemeVal] = darkTheme;
+
   const [splash, setSplash] = useState(false);
 
 
@@ -75,7 +80,15 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <div className={`${darkThemeVal ? "dark" : ""} h-full dark:bg-gray-900`}>
+
+      {/* {
+        darkThemeVal ?
+          <FaSun className="absolute top-4 left-6 text-white cursor-pointer" onClick={() => setDarkThemeVal(false)}/>
+        :
+          <FaMoon className="absolute top-4 left-6 text-white cursor-pointer" onClick={() => setDarkThemeVal(true)} />
+      } */}
+
       { !onlineVal ? 
         <div className="text-red-500 text-center bg-red-300">
           <p>Offline, no connection!</p>
