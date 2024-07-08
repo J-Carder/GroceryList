@@ -5,7 +5,7 @@ import ManageLists from '../Components/ManageLists'
 import { Context } from '../AppWrapper'
 import SortItems from '../Components/SortItems'
 import ItemSettings from '../Components/ItemSettings'
-import { socket } from '../socket'
+import { socket } from '../Misc/socket'
 import SelectList from "../Components/SelectList"
 import SelectListCustom from "../Components/SelectListCustom"
 import { IoMdSettings } from "react-icons/io";
