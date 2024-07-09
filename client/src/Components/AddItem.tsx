@@ -94,6 +94,7 @@ function AddItem() {
         _id: tempId,
         tempApartOflist: tempApartOfList
       });
+      setItem("");
       return newList;
     })
   }
