@@ -29,8 +29,6 @@ function ManageDepts() {
   const {data: depts, status: deptStatus} = useQuery({
     queryFn: fetchGetQuery,
     queryKey: ["deptGetQuery"],
-    staleTime: Infinity,
-    gcTime: Infinity
   })
 
 
