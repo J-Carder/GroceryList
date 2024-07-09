@@ -120,7 +120,6 @@ const Authenticate = ({setPage}) => {
     localStorage.setItem('auth', JSON.stringify(loggedIn));
   }
 
-  const getLocalLogin = () => JSON.parse(localStorage.getItem('auth')!);
 
   const handleLogin = () => {
     loginMutation.mutate();
