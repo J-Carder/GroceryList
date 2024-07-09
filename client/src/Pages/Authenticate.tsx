@@ -137,7 +137,7 @@ const Authenticate = ({setPage}) => {
   return (
     <div className="w-full">
       <div className="bg-green">
-        <h1 className="text-white bold text-2xl text-center py-4">Login</h1>
+        <h1 className="text-white bold text-2xl text-center py-4">{isLogin ? "Login" : "Register"}</h1>
       </div>
 
       <div className="p-3 flex flex-col content-center flex-wrap w-full">
