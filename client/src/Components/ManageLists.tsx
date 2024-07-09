@@ -149,14 +149,6 @@ const ManageLists = () => {
     }
   }, [getQuery.isSuccess, getQuery.data]);
 
-  if (getQuery.status === "pending") {
-    return <h1>loading</h1>
-  }
-
-  if (getQuery.status === "error") {
-    return <h1>error!</h1>
-  }
-
   return (
     selectedHouseVal ?
     <form onSubmit={(e) => {e.preventDefault(); handleAdd()}}>
@@ -174,7 +166,7 @@ const ManageLists = () => {
       }
 
       <div>
-        <InputText type="text" placeholder="List name" value={listName} onChange={(e) => setListName(e.target.value)} onKeyDown={handleKeyDown} />
+        <InputText type="text" placeholder="List name" value={listName} onChange={(e) => setListName(e.target.value)} />
         <Button submit={true} className="!mx-0 inline px-3 mt-1">Add</Button>
       </div>
     </form>
