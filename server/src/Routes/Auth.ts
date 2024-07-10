@@ -49,7 +49,7 @@ const auth = function(app, checkAuthenticated, checkNotAuthenticated, passport, 
 
   app.post("/register", checkNotAuthenticated, async (req, res) => {
     try {
-      if (req.body.password.length < 6) return res.json({ msg: "Password to short (must be 6 or more characters)"})
+      if (req.body.password.length < 4) return res.json({ msg: "Password to short (must be 6 or more characters)"})
       if (req.body.password.length > 50) return res.json({ msg: "Password to long (over 50 characters)"})
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
       const email = req.body.email.toLowerCase();

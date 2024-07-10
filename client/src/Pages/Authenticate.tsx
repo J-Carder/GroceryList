@@ -158,8 +158,8 @@ const Authenticate = ({setPage}) => {
             <>
               <InputText minLength={1} maxLength={100} required={true} type="text" placeholder="Name" value={registerName} onChange={(e) => {setRegisterName(e.target.value)}}/>
               <InputText minLength={1} maxLength={100} required={true} type="email" placeholder="Email" value={registerEmail} onChange={(e) => {setRegisterEmail(e.target.value)}}/>
-              <InputText minLength={5} maxLength={100} required={true} type="password" placeholder="Password" value={registerPwd} onChange={(e) => {setRegisterPwd(e.target.value)}}/>
-              <InputText minLength={5} maxLength={100} required={true} type="password" placeholder="Password again" value={registerPwdConfirm} onChange={(e) => {setRegisterPwdConfirm(e.target.value)}}/>
+              <InputText minLength={4} maxLength={100} required={true} type="password" placeholder="Password" value={registerPwd} onChange={(e) => {setRegisterPwd(e.target.value)}}/>
+              <InputText minLength={4} maxLength={100} required={true} type="password" placeholder="Password again" value={registerPwdConfirm} onChange={(e) => {setRegisterPwdConfirm(e.target.value)}}/>
               <Status>{status}</Status>
               <Button submit={true}>Register { registerMutation.isPending ? <ImSpinner2 className="inline animate-spin" /> : ""} </Button>
             </>
