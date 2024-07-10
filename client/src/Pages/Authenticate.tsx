@@ -152,7 +152,7 @@ const Authenticate = ({setPage}) => {
               <InputText required={true} type="email" placeholder="email" value={loginEmail} onChange={(e) => {setLoginEmail(e.target.value)}}/>
               <InputText required={true} type="password" placeholder="password" value={loginPwd} onChange={(e) => {setLoginPwd(e.target.value)}}/>
               <Status>{status}</Status>
-              <Button submit={true}>Login { loginMutation.isPending ? <ImSpinner2 className="inline animate-spin" /> : ""}</Button>
+              <Button disabled={loginMutation.isPending} submit={true}>Login { loginMutation.isPending ? <ImSpinner2 className="inline animate-spin" /> : ""}</Button>
             </>
             :
             <>
@@ -161,7 +161,7 @@ const Authenticate = ({setPage}) => {
               <InputText minLength={4} maxLength={100} required={true} type="password" placeholder="Password" value={registerPwd} onChange={(e) => {setRegisterPwd(e.target.value)}}/>
               <InputText minLength={4} maxLength={100} required={true} type="password" placeholder="Password again" value={registerPwdConfirm} onChange={(e) => {setRegisterPwdConfirm(e.target.value)}}/>
               <Status>{status}</Status>
-              <Button submit={true}>Register { registerMutation.isPending ? <ImSpinner2 className="inline animate-spin" /> : ""} </Button>
+              <Button disabled={registerMutation.isPending} submit={true}>Register { registerMutation.isPending ? <ImSpinner2 className="inline animate-spin" /> : ""} </Button>
             </>
             }
           </form>
