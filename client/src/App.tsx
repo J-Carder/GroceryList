@@ -3,10 +3,8 @@ import Home from "./Pages/Home";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import Settings from "./Pages/Settings";
 import Authenticate from './Pages/Authenticate';
-import Logout from './Components/Logout';
 import { Context } from './AppWrapper';
 import Splash from './Pages/Splash';
-import { FaSun, FaMoon } from "react-icons/fa";
 
 
 
@@ -40,11 +38,15 @@ function App() {
     // gcTime: Infinity
   })
 
+
+  // run each time auth query changed
   useEffect(() => {
+    // if authed set auth val and user information from isAuthQuery
     if (isAuthQuery.isSuccess && isAuthQuery.data.msg == "Authenticated") {
-      console.log("IS AUTHED");
       setAuthenticatedVal(true);
       setUserVal(isAuthQuery.data.user)
+
+      // try to set the selected house
       try {
         setSelectedHouseVal(isAuthQuery.data.user.houses[0]) 
       } catch (e) {
@@ -55,21 +57,14 @@ function App() {
     }
   }, [isAuthQuery.isSuccess])
 
-  const setLocalLogin = (loggedIn : boolean) => {
-    localStorage.setItem('auth', JSON.stringify(loggedIn));
-  }
 
-  const getLocalLogin = () => JSON.parse(localStorage.getItem('auth')!);
-
+  // run the auth query each time at start/refresh
   useEffect(() => {
     queryClient.invalidateQueries({queryKey: ["isAuthQuery"]});
   }, [])
 
-  useEffect(() => {
-    console.log("auth =>", authenticatedVal);
-  })
 
-  // only run splash if not found in local storage, ideally only once
+  // only run splash screen if not found in local storage, ideally only once
   useEffect(() => {
     if (JSON.parse(localStorage.getItem("runOnce")!)) {
       setSplash(false);

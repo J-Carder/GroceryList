@@ -6,6 +6,7 @@ import Button from "./Button";
 import XButtonText from "./XButtonText";
 import Status from './Status';
 
+// CRUD operations on depts
 function ManageDepts() {
 
   const queryClient = useQueryClient()

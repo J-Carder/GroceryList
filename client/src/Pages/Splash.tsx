@@ -1,6 +1,7 @@
 import Button from "./../Components/Button";
 import logo from "../Assets/shoppingCartLogo.svg";
 
+// the splash screen
 const Splash = ({setSplash}) => {
     return (
         <div className="bg-green h-screen flex flex-col justify-center">

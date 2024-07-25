@@ -1,5 +1,6 @@
 import React from 'react'
 
+// status messages in a rounded box
 const Status = props => {
   return (
     props.children == "" ?

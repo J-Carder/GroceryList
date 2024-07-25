@@ -4,6 +4,7 @@ import { Context } from '../../AppWrapper';
 import Button from "../Button";
 import InputText from "../InputText";
 
+// options for admins
 const AdminOptions = () => {
 
   const [selectedEmail, setSelectedEmail] = useState("");

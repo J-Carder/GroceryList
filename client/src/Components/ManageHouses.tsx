@@ -6,6 +6,7 @@ import InputText from "./InputText";
 import Status from "./Status";
 
 
+// CRUD operations on houses 
 const ManageHouses = () => {
 
   const queryClient = useQueryClient();
@@ -48,7 +49,6 @@ const ManageHouses = () => {
     }
   }
 
-  /// TODO: this
   const fetchUpdateQuery = async ({id, newName}) => {
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/houses/${id}`, {
             method: 'put',

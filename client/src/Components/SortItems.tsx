@@ -3,6 +3,7 @@ import { Context } from '../AppWrapper';
 import { TbSortAscending } from "react-icons/tb";
 import { TbSortDescending } from "react-icons/tb";
 
+// sort items dropdown
 const SortItems = () => {
 
   const {sortBy, order} = useContext(Context);

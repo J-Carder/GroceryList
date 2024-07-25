@@ -5,7 +5,7 @@ import { mongoObjectId } from '../Misc/helper';
 import Button from "./Button";
 import InputText from "./InputText";
 
-
+// CRUD operations on lists component
 const ManageLists = () => {
 
   const queryClient = useQueryClient();

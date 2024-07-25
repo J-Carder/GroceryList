@@ -5,6 +5,7 @@ import InputText from "../InputText";
 import Button from "../Button";
 import Status from '../Status';
 
+// change name component
 const ChangeName = () => {
 
   const [name, setName] = useState("");

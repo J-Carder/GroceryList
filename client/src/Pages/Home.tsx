@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
 import AddItem from '../Components/AddItem'
 import { onlineManager, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import ManageLists from '../Components/ManageLists'
 import { Context } from '../AppWrapper'
 import SortItems from '../Components/SortItems'
 import ItemSettings from '../Components/ItemSettings'
 import { socket } from '../Misc/socket'
-import SelectList from "../Components/SelectList"
 import SelectListCustom from "../Components/SelectListCustom"
 import { IoMdSettings } from "react-icons/io";
 import { ImCross } from "react-icons/im";
@@ -27,8 +25,8 @@ const Home = ({setPage}) => {
   const [orderVal, setOrderVal] = order;
   const [dupItemsList, setDupItemsList] = useState<Array<any>>([]);
   const DEBUG = false;
-  let prevEntry = "";
 
+  // colours for different categories (ie. when sorted by dept or person it will go thru these colours)
   const colours = [
     "border-blue-600",
     "border-yellow-600",
@@ -51,8 +49,7 @@ const Home = ({setPage}) => {
     "text-blue-600",
   ] 
 
-  let count = 0;
-
+  // get items
   const fetchGetQuery = async () => {
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${listId}`, {
@@ -68,6 +65,7 @@ const Home = ({setPage}) => {
     gcTime: Infinity
   })
 
+  // delete an item
   const fetchDeleteQuery = async ({id, tempId}) => {
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/items/${id}`, {
@@ -84,6 +82,7 @@ const Home = ({setPage}) => {
       return req.json();
   }
 
+  // update an item
   const fetchUpdateQuery = async ({id, checked, tempId}) => {
     const listId = listsVal.filter(list => list.name == selectedListVal)[0]._id;
 
@@ -106,6 +105,7 @@ const Home = ({setPage}) => {
   }
 
 
+  // delete local (optimistic update)
   const deleteLocal = ({
       id, tempId
     }) => {
@@ -114,6 +114,7 @@ const Home = ({setPage}) => {
       });
     };  
 
+  // delete
   const deleteMutation = useMutation({
     mutationFn: fetchDeleteQuery,
     onMutate: async (payload) => {
@@ -136,6 +137,7 @@ const Home = ({setPage}) => {
     deleteMutation.mutate({id, tempId});
   }
 
+  // update locally (optimistic updates)
   const updateLocal = (
       id: string,
       completed: boolean,
@@ -159,27 +161,30 @@ const Home = ({setPage}) => {
     },
   });
 
-
+  // get the date from a mongo ID
   const dateFromObjectId = function (objectId) {
     return new Date(parseInt(objectId.substring(0, 8), 16) * 1000);
   };
 
+  // function to sort items, takes in an itemsList and returns a new list
   const refreshSort = (itemsList) => {
     const tempList = itemsList;
+
+    // sort descending
     if (orderVal == "Descending") {
-      if (sortByVal == "By department") {
+      if (sortByVal == "By department") { // by dept
         tempList.sort((a, b) => a.department < b.department ? 1 : -1)
-      } else if (sortByVal == "By person") {
+      } else if (sortByVal == "By person") { // by person
         tempList.sort((a, b) => a.wantedBy < b.wantedBy ? 1 : -1)
-      } else {
+      } else { // default (time)
         tempList.sort((a, b) => a.originalTimeCreated < b.originalTimeCreated ? 1 : -1)
       }
-    } else {
-      if (sortByVal == "By department") {
+    } else { // sort ascending
+      if (sortByVal == "By department") { // by dept
         tempList.sort((a, b) => a.department > b.department ? 1 : -1)
-      } else if (sortByVal == "By person") {
+      } else if (sortByVal == "By person") { // by person
         tempList.sort((a, b) => a.wantedBy > b.wantedBy ? 1 : -1)
-      } else {
+      } else { // default (time)
         tempList.sort((a, b) => a.originalTimeCreated > b.originalTimeCreated ? 1 : -1)
       }
     }
@@ -214,7 +219,6 @@ const Home = ({setPage}) => {
       
       setDupItemsList(tempDupList);
 
-      console.log(tempDupList)
     }
   }
 
@@ -227,6 +231,7 @@ const Home = ({setPage}) => {
     }
   }, [itemsQuery.data, itemsQuery.status])
 
+  // if dropdown for list changed
   useEffect(() => {
     // don't invalidate if offline as this will send a query which will return the cache which won't include items added offline
     if (onlineManager.isOnline()) {
@@ -235,6 +240,7 @@ const Home = ({setPage}) => {
     refreshList();
   }, [selectedListVal])
 
+  // sort or order values changed update list
   useEffect(() => {
     if (itemsQuery.status == "success" && !itemsQuery.data.msg) {
       refreshList();
@@ -246,8 +252,9 @@ const Home = ({setPage}) => {
 // ---------------------------- //
 
   useEffect(() => {
+
+    // add item
     socket.on("add", item => {
-      console.log("ADDING");
       // get current query data
       const currentData : Array<any> = queryClient.getQueryData(["getQuery"])!;
 
@@ -264,16 +271,16 @@ const Home = ({setPage}) => {
         });
       }
     })
-
+    
+    // delete item
     socket.on("delete", ({id, tempId}) => {
-      console.log("DELETING");
       queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
         return data.filter((item) => item._id != id && item.tempId != tempId);
       });
     })
 
+    // update item
     socket.on("update", ({id, tempId, completed}) => {
-      console.log("UPDATING")
       queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
         return data.map(item => {
           if (item._id == id || item.tempId == tempId) {
@@ -284,15 +291,15 @@ const Home = ({setPage}) => {
       })
     })
 
+    // clear items
     socket.on("clear", (blank) => {
-      console.log("CLEARING")
       queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
         return data.filter(item => !item.completed);
       })
     })
 
+    // fill items
     socket.on("fill", (comp) => {
-      console.log("FILLING")
       queryClient.setQueryData(["getQuery"], (data : Array<any>) => {
         return data.map(item => {
           return {...item, completed: comp};
@@ -302,7 +309,7 @@ const Home = ({setPage}) => {
   }, []);
 
 
-
+  // fetch lists
   const fetchGetListQuery = async () => {
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/lists/${userVal.houses[0]}`, 
       {

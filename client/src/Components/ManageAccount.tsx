@@ -5,6 +5,7 @@ import ChangeName from './AccountManagement/ChangeName';
 import { Context } from '../AppWrapper';
 import AdminOptions from './AccountManagement/AdminOptions';
 
+// account managment
 const ManageAccount = () => {
 
   const {user} = useContext(Context);

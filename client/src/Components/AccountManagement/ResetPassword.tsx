@@ -4,6 +4,8 @@ import InputText from "../InputText";
 import Button from "../Button";
 import Status from '../Status';
 
+
+// reset password component
 const ResetPassword = () => {
 
   const [oldPwd, setOldPwd] = useState("");

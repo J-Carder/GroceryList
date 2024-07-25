@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import React, { useContext } from 'react'
 import { Context } from '../AppWrapper'
 
+// select all/none and clear buttons
 const ItemSettings = ({itemsList, setItemsList}) => {
 
 

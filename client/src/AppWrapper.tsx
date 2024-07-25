@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import App from './App'
-import { QueryClient, QueryClientProvider, onlineManager, useQuery } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, onlineManager } from '@tanstack/react-query';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import AsyncLocalStorage from '@createnextapp/async-local-storage'
-import { PersistQueryClientProvider, persistQueryClientRestore } from '@tanstack/react-query-persist-client';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 
+
+// iniialize query client
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -19,6 +21,7 @@ const asyncStoragePersister = createAsyncStoragePersister({
   storage: AsyncLocalStorage,
 })
 
+// should be more specific!
 interface Props {
   personSelected: Array<any>
   departmentSelected: Array<any>
@@ -36,8 +39,7 @@ interface Props {
   darkTheme: Array<any>
 }
 
-
-
+// context
 export const Context = React.createContext<Props>({} as Props);
 
 
@@ -70,10 +72,6 @@ const AppWrapper = () => {
   },[])
 
   useEffect(() => {
-    if (online) {
-      // syncBackend(offlineStateVal)
-      // setOfflineStateVal([]);persistQueryClientRestore()
-    }
     onlineManager.setOnline(online);
   }, [online])
 

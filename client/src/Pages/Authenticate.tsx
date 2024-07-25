@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import React, { useContext, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { Context } from '../AppWrapper';
 import InputText from "./../Components/InputText";
 import Button from "./../Components/Button";
@@ -8,7 +8,6 @@ import { ImSpinner2 } from "react-icons/im";
 
 const Authenticate = ({setPage}) => {
   
-  const queryClient = useQueryClient();
   const [isLogin, setIsLogin] = useState(false)
 
   const [loginEmail, setLoginEmail] = useState("");
@@ -119,7 +118,6 @@ const Authenticate = ({setPage}) => {
   const setLocalLogin = (loggedIn : boolean) => {
     localStorage.setItem('auth', JSON.stringify(loggedIn));
   }
-
 
   const handleLogin = () => {
     loginMutation.mutate();

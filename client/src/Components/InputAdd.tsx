@@ -1,6 +1,7 @@
 import React from 'react'
 import { HiPlus } from "react-icons/hi";
 
+// input with add button
 const InputAdd = (props) => {
   return (
     <div className="flex">

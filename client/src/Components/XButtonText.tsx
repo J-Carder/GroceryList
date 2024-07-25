@@ -1,6 +1,7 @@
 import React from 'react'
 import { ImCross } from "react-icons/im";
 
+// button with close button it
 const XButtonText = props => {
   return (
     <div key={props.key} className="bg-gray-700 rounded-xl mt-2 mr-1 w-fit">

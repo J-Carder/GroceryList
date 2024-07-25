@@ -5,9 +5,8 @@ import InputText from "../InputText";
 import Button from "../Button";
 import Status from '../Status';
 
+// change email component
 const ChangeEmail = () => {
-
-  const QueryClient = useQueryClient();
 
   const [email, setEmail] = useState("");
 

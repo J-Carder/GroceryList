@@ -7,6 +7,7 @@ import InputAdd from "./InputAdd";
 import SelectListCustom from "./SelectListCustom";
 import Status from "./Status";
 
+// add item to list component
 function AddItem() {
 
   const queryClient = useQueryClient()

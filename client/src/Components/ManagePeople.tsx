@@ -7,7 +7,8 @@ import XButtonText from "./XButtonText";
 import Status from './Status';
 
 
-function ManagePeople() {
+// component for managing people
+const ManagePeople = () => {
 
   const queryClient = useQueryClient()
   const [peopleText, setPeopleText] = useState("");
@@ -19,6 +20,7 @@ function ManagePeople() {
   const [selectedHouseVal, setSelectedHouseVal] = selectedHouse;
   const [status, setStatus] = useState("");
 
+  // get query
   const fetchGetQuery = async () => {
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people/${selectedHouseVal}`, {
       credentials: "include",
@@ -26,6 +28,7 @@ function ManagePeople() {
     return req.json();
   }
 
+  // add query
   const fetchAddQuery = async (newName : string) => {
     if (newName != "") {
       const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people`, {
@@ -53,6 +56,7 @@ function ManagePeople() {
       return req.json();
   }
 
+  // delete query
   const fetchDeleteQuery = async (id : string) => {
     const req = await fetch(`${import.meta.env.VITE_REACT_APP_API}/people/${id}`, {
             method: 'delete',
@@ -109,6 +113,7 @@ function ManagePeople() {
   }
 
   const handleKeyDown = (e) => {
+    // if enter key pressed basically submit
     if (e.key == "Enter") {
       handleAdd();
       setPeopleText("");

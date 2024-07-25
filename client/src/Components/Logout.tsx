@@ -3,6 +3,8 @@ import React, { useContext, useEffect } from 'react'
 import { Context } from '../AppWrapper'
 import Button from "./Button";
 
+
+// logout button
 const Logout = () => {
 
   const {authenticated, user} = useContext(Context);
