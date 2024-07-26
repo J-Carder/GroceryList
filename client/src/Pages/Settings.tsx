@@ -10,6 +10,7 @@ import { IoHomeSharp } from "react-icons/io5";
 import Status from '../Components/Status'
 
 
+// settings page
 function Settings({setPage}) {
 
   const {user} = useContext(Context);

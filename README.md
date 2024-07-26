@@ -1,6 +1,6 @@
 # Grocery List App 
 
-This is a simple grocyer list app to keep track of your shopping needs.
+This is a simple grocery list app to keep track of your shopping needs.
 
 Features:
 * Offline use (PWA)
